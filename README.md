@@ -1,5 +1,32 @@
 All my plugins for [Avia client](https://github.com/AvaLilac/for-desktop)
 
+# CustomHomeButton
+
+Allows you to set a custom home button image
+
+**HOW TO USE:**
+
+After enabling the plugin, paste the following into your quick css:
+```css
+[class='homebutton']{
+    background-image:url('YOUR IMAGE URL HERE');
+    background-size:contain;
+    height:32px;
+}
+```
+
+# ForceEmojiPack
+
+Forces emojis in embeds and message reactions to use your selected emoji pack
+
+**HOW TO USE**
+
+After installing the plugin, open your user settings and click on the "appearance" tab. Once you've done that, the plugin should work. You can test it by reacting to a message with any default emoji and if the emoji is rendered from your selected emoji pack, the plugin works.
+
+# ShrinkEmojis
+
+It shrinks emojis 🤯
+
 **WARNING!**
 
 I have severe brain damage so these plugins probably have some quite serious flaws, but from my testing they work
