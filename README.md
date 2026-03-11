@@ -27,7 +27,7 @@ After installing the plugin, open your user settings and click on the "appearanc
 
 It shrinks emojis 🤯
 
-**WARNING!**
+# WARNING!
 
 I have severe brain damage so these plugins probably have some quite serious flaws, but from my testing they work
 
