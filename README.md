@@ -1,5 +1,13 @@
 All my plugins for [Avia client](https://github.com/AvaLilac/for-desktop)
 
+# CopyAttachmentLink
+
+Adds a button to non-image/video attachments to copy the attachment link
+
+**EXAMPLE:**
+
+<img src="https://cdn.stoatusercontent.com/attachments/PVa1fivgi5zuQ9VSC6pilOkI__imR-h38zO8w2GGMa/original" width="1569" height="221">
+
 # CustomHomeButton
 
 Allows you to set a custom home button image
