@@ -6,6 +6,7 @@
     const elements = document.querySelectorAll('div[class="d_flex flex-d_column flex-g_initial m_0 ai_initial jc_initial p_var(--gap-md) bdr_var(--borderRadius-md) c_var(--md-sys-color-inverse-on-surface) bg_var(--md-sys-color-inverse-surface) gap_var(--gap-md)"]')
     elements.forEach(element=>{
         const copyLinkButton = document.createElement('button')
+        copyLinkButton.name ='copylinkbutton'
         copyLinkButton.setAttribute('class','lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px')
         copyLinkButton.innerHTML = `
             <md-ripple aria-hidden="true"></md-ripple>
@@ -15,7 +16,9 @@
         copyLinkButton.addEventListener('click',()=>{
             navigator.clipboard.writeText(element.firstChild.childNodes.item(2).href)
         });
-        element.firstChild.appendChild(copyLinkButton)
+        if(!element.children.namedItem('copylinkbutton')){
+            element.firstChild.appendChild(copyLinkButton)
+        }
     });
   }
 
