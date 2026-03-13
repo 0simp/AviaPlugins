@@ -1,5 +1,13 @@
 All my plugins for [Avia client](https://github.com/AvaLilac/for-desktop)
 
+# AddToFavourites
+
+Adds a button to the image viewer to add the image to favourites. Currently no support for adding a custom title because I'm too stupid to figure out how to do it but I might add it in the future. Also for some reason the image only shows up in favourites after you refresh, no fucking clue why that is.
+
+**EXAMPLE:**
+
+<img src ='https://cdn.stoatusercontent.com/attachments/oBqekRKV2PBOEcXNgJ43U6yH6SjoNpoql7m5LNizap/original' width='1199' height ='716'>
+
 # CopyAttachmentLink
 
 Adds a button to non-image/video attachments to copy the attachment link
