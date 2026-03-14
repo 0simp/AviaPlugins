@@ -4,6 +4,7 @@
 
   function apply() {
     const thing = document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0).children[0].children[0].children[0]
+    console.log(thing)
     const collapsebutton = document.createElement('div')
     collapsebutton.ariaLabel = 'Collapse'
     collapsebutton.innerHTML = `
