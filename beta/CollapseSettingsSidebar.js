@@ -1,4 +1,3 @@
-//this shit is completely fucking broken rn, i just barely managed to make it not nuke your client
 let fuckyou = [];
 (function () {
   if (window.__COLLAPSE_SETTINGS_SIDEBAR__) return;
@@ -7,7 +6,7 @@ let fuckyou = [];
   function apply() {
     if(document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0)){
         if(fuckyou.length>1){
-            fuckyou.length = [];
+            fuckyou = [];
         }
         const thing = document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0).children[0].children[0].children[0]
         const collapsebutton = document.createElement('div')
@@ -19,7 +18,7 @@ let fuckyou = [];
             document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0).style.display ='none'
         });
         fuckyou.push(thing.children[0]!==collapsebutton)
-        if(thing.children[0]!==collapsebutton&&fuckyou.length==1){
+        if(thing.children[0]!==collapsebutton&&fuckyou.length==1&&thing.children.length<7){
             thing.insertBefore(collapsebutton,thing.children[0])
         }
     }
