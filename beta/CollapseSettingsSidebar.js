@@ -1,10 +1,9 @@
 (function () {
-  if (window.__COPY_ATTACHMENT_LINK__) return;
-  window.__COPY_ATTACHMENT_LINK__ = true;
+  if (window.__COLLAPSE_SETTINGS_SIDEBAR__) return;
+  window.__COLLAPSE_SETTINGS_SIDEBAR__ = true;
 
   function apply() {
     const thing = document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0).children[0].children[0].children[0]
-    console.log(thing)
     const collapsebutton = document.createElement('div')
     collapsebutton.ariaLabel = 'Collapse'
     collapsebutton.innerHTML = `
