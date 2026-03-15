@@ -129,7 +129,6 @@
             navigator.clipboard.readText().then(text=>{
                 const value = monaco.editor.getEditors()[0].getValue()
                 monaco.editor.getEditors()[0].setValue(value+'\n'+text)
-                localStorage.setItem('avia_quickcss',text)
             })
         });
 
