@@ -19,8 +19,22 @@ let fuckyou = [];
             document.getElementsByClassName('d_flex flex_1_0_218px pl_8px jc_flex-end').item(0).style.display ='none'
         });
         fuckyou.push(thing.children[0]!==collapsebutton)
-        if(thing.children[0]!==collapsebutton&&fuckyou.length==1&&thing.children.length<7){
-            thing.insertBefore(collapsebutton,thing.children[0])
+        if(fuckyou.length===1){
+          if(thing.children[0].className=='d_flex flex-d_column flex-g_initial m_0 ai_initial jc_initial gap_var(--gap-s)'){
+            if(thing.children[0]!==collapsebutton&&fuckyou.length==1&&thing.children.length<7){
+              thing.insertBefore(collapsebutton,thing.children[0])
+            }
+          }else{
+            if(thing.children[0].children[1].children.length==3){
+              if(thing.children.length<3){
+                thing.insertBefore(collapsebutton,thing.children[0])
+              }
+            }else{
+              if(thing.children.length<5){
+                thing.insertBefore(collapsebutton,thing.children[0])
+              }
+            }
+          }
         }
     }
   }
