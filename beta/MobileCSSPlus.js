@@ -88,7 +88,7 @@
 
         const pasteBtn = document.createElement('div');
         pasteBtn.textContent = 'Paste';
-        Object.assign(psateBtn.style,{
+        Object.assign(pasteBtn.style,{
             position:'absolute',
             top:'12px',
             right:'36px',
