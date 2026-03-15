@@ -86,23 +86,6 @@
             color:"#fff"
         });
 
-        const pasteBtn = document.createElement('div');
-        pasteBtn.textContent = 'Paste';
-        Object.assign(pasteBtn.style,{
-            position:'absolute',
-            top:'12px',
-            right:'36px',
-            curosr:'pointer',
-            color:'#fff'
-        });
-
-        pasteBtn.addEventListener('click',()=>{
-            navigator.clipboard.readText().then(text=>{
-                document.getElementsByClassName('monaco-scrollable-element editor-scrollable vs-dark').item(0).innerText=text;
-                localStorage.setItem('avia_quickcss',text)
-            })
-        });
-
         const closeBtn=document.createElement("div");
         closeBtn.textContent="✕";
         Object.assign(closeBtn.style,{
@@ -121,22 +104,40 @@
         const editorContainer=document.createElement("div");
         editorContainer.style.flex="1";
 
+        const pasteBtn = document.createElement('div');
+        pasteBtn.textContent = 'Paste';
+        Object.assign(pasteBtn.style,{
+            position:'absolute',
+            top:'12px',
+            right:'36px',
+            curosr:'pointer',
+            color:'#fff'
+        });
+
+        const editor=monaco.editor.create(editorContainer,{
+            value:localStorage.getItem("avia_quickcss")||"",
+            language:"css",
+            theme:"vs-dark",
+            automaticLayout:true,
+            minimap:{enabled:false},
+            fontSize:13,
+            scrollBeyondLastLine:false,
+            wordWrap:"on"
+        });
+
+        pasteBtn.addEventListener('click',async ()=>{
+            navigator.clipboard.readText().then(text=>{
+                const value = monaco.editor.getEditors()[0].getValue()
+                monaco.editor.getEditors()[0].setValue(value+text)
+                localStorage.setItem('avia_quickcss',text)
+            })
+        });
+
         panel.appendChild(header);
         panel.appendChild(pasteBtn)
         panel.appendChild(closeBtn);
         panel.appendChild(editorContainer);
         document.body.appendChild(panel);
-
-        const editor=monaco.editor.create(editorContainer,{
-        value:localStorage.getItem("avia_quickcss")||"",
-        language:"css",
-        theme:"vs-dark",
-        automaticLayout:true,
-        minimap:{enabled:false},
-        fontSize:13,
-        scrollBeyondLastLine:false,
-        wordWrap:"on"
-        });
 
         editor.onDidChangeModelContent(()=>{
             const value=editor.getValue();
