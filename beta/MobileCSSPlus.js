@@ -99,6 +99,7 @@
         pasteBtn.addEventListener('click',()=>{
             navigator.clipboard.readText().then(text=>{
                 document.getElementsByClassName('monaco-scrollable-element editor-scrollable vs-dark').item(0).innerText=text;
+                localStorage.setItem('avia_quickcss',text)
             })
         });
 
