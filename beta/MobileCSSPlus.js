@@ -58,7 +58,7 @@
         panel.id="avia-monaco-panel";
         Object.assign(panel.style,{
             position:"fixed",
-            bottom:"24px",
+            bottom:"12px",
             right:"0px",
             width:"336px",
             height:"272px",
@@ -73,13 +73,6 @@
             backdropFilter:"blur(12px)"
         });
 
-        panel.addEventListener('touchmove',(e)=>{
-            const touchLocation = e.targetTouches[0];
-            panel.style.left = touchLocation.pageX + 'px';
-            panel.style.top = touchLocation.pageY + 'px';
-            e.preventDefault();
-        });
-
         const header=document.createElement("div");
         header.textContent="Monaco QuickCSS";
         Object.assign(header.style,{
@@ -91,6 +84,22 @@
             borderBottom:"1px solid rgba(255,255,255,0.08)",
             cursor:"move",
             color:"#fff"
+        });
+
+        const pasteBtn = document.createElement('div');
+        pasteBtn.textContent = 'Paste';
+        Object.assign(psateBtn.style,{
+            position:'absolute',
+            top:'12px',
+            right:'36px',
+            curosr:'pointer',
+            color:'#fff'
+        });
+
+        pasteBtn.addEventListener('click',()=>{
+            navigator.clipboard.readText().then(text=>{
+                document.getElementsByClassName('monaco-scrollable-element editor-scrollable vs-dark').item(0).innerText=text;
+            })
         });
 
         const closeBtn=document.createElement("div");
@@ -112,6 +121,7 @@
         editorContainer.style.flex="1";
 
         panel.appendChild(header);
+        panel.appendChild(pasteBtn)
         panel.appendChild(closeBtn);
         panel.appendChild(editorContainer);
         document.body.appendChild(panel);
