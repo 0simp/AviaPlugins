@@ -39,6 +39,18 @@ Forces emojis in embeds and message reactions to use your selected emoji pack
 
 After installing the plugin, open your user settings and click on the "appearance" tab. Once you've done that, the plugin should work. You can test it by reacting to a message with any default emoji and if the emoji is rendered from your selected emoji pack, the plugin works.
 
+# Impersonate
+
+Adds a button to user context menus to impersonate them (set their username and avatar as a masquerade)
+
+**A few notes:**
+
+Ava's [masquerade](https://raw.githubusercontent.com/AvaLilac/Ava-s-AviaClient-Plugins/refs/heads/main/masquerade.js) plugin is required for this plugin to function
+
+Right clicking a user and pressing the impersonate button does not work. Instead, you have to left click the user you want to impersonate, click the 3 dots on their profile, then press the impersonate button.
+
+Masquerading only works in channels where you have permission. It does not currently work in dms but apparently that's gonna change at some point
+
 # ShrinkEmojis
 
 It shrinks emojis 🤯
