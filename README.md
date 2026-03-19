@@ -8,6 +8,11 @@ Adds a button to the image viewer to add the image to favourites. Currently no s
 
 <img src ='https://cdn.stoatusercontent.com/attachments/oBqekRKV2PBOEcXNgJ43U6yH6SjoNpoql7m5LNizap/original' width='1199' height ='716'>
 
+# BetterFavourites
+
+Improves avia's built in favourites system by adding a button to the image viewer to add the image to favourites, a refresh button to the favourites panel (click to make images/gifs added via the add favourites button show up) and making clicking on an image/gif put the link into the chat bar instead of copying it to the clipboard. This plugin is just a combination of AddToFavourites,FavsToChat and a new refresh button.
+
+
 # CopyAttachmentLink
 
 Adds a button to non-image/video attachments to copy the attachment link
