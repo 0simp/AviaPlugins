@@ -114,7 +114,7 @@
                         const json = await res.json()
                         originalemoji = json.name
                         document.querySelectorAll('a[href]').forEach(item=>{
-                            if(item.href.includes(json.parent.id)){
+                            if(item.href.includes(json.parent.id)&&!originalemoji.includes('from')){
                                 originalemoji = originalemoji+` from ${item.parentElement.parentElement.ariaLabel}`
                             }
                         })
