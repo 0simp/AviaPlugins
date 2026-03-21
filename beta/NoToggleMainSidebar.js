@@ -3,16 +3,17 @@
     window.__NO_TOGGLE_MAIN_SIDEBAR__ = true;
 
     function NoToggleMainSidebar() {
-        console.log('Massive fucking balls')
         const original = document.querySelector('div[aria-label="Toggle main sidebar"]')
-        const clone = original.cloneNode(true)
-        const click = original.$$click
-        clone.onclick=click
-        clone.id='togglemainsidebar'
-        const parent = original.parentElement
-        if(!document.getElementById('togglemainsidebar')){
-            parent.removeChild(original)
-            parent.insertBefore(clone,parent.firstChild)
+        if(original){
+            const clone = original.cloneNode(true)
+            const click = original.$$click
+            clone.onclick=click
+            clone.id='togglemainsidebar'
+            const parent = original.parentElement
+            if(!document.getElementById('togglemainsidebar')){
+                parent.removeChild(original)
+                parent.insertBefore(clone,parent.firstChild)
+            }
         }
     }
 
