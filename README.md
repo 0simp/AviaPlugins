@@ -36,6 +36,20 @@ After enabling the plugin, paste the following into your quick css:
 }
 ```
 
+# EmojiSounds
+
+Allows you to set sounds to be played when certain emojis are sent in chat
+
+**HOW TO USE:**
+
+After enabling the plugin, go into your user settings and click on the button that says '(Avia Emoji Sounds Settings)'. Then, paste the emoji and the direct link to the sound you want in the appropriate boxes.
+
+**IMPORTANT:**
+
+If you are adding a built in emoji, make sure it is the unicode character for that emoji, not the name surrouned by colons (eg 💩 instead of :poop:)
+
+If you are adding a custom emoji, make sure it includes colons surrounding the id (eg :01KM6WXFGF24VTEEJ4RPR56N1Q: instead of 01KM6WXFGF24VTEEJ4RPR56N1Q)
+
 # FavsToChat
 
 Makes clicking an image/gif in the favourites panel put the link in the chat bar instead of copying it to the clipboard
