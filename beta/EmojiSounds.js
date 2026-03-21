@@ -17,7 +17,13 @@
                         if(node.children[1].children[1].children[1]){
                             emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt
                         }
-                        if(emojisounds.find(emoji1=>emoji1.emoji===emoji)&&Math.floor(Date.now()/1000)-timestamp<2||isNaN(timestamp)){
+                        if(!emoji){
+                            emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].children[0].alt
+                            if(node.children[1].children[1].children[1]){
+                                emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].children[0].alt
+                            }
+                        }
+                        if((emojisounds.find(emoji1=>emoji1.emoji===emoji)&&Math.floor(Date.now()/1000)-timestamp<2)||(isNaN(timestamp))){
                             const eomijsound = emojisounds.find(emoji1=>emoji1.emoji===emoji)
                             const sound = new Audio(eomijsound.sound)
                             sound.play()
