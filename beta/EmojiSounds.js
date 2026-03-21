@@ -105,8 +105,23 @@
             edit.innerHTML=`
             <md-ripple aria-hidden="true"></md-ripple><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="m14.06 9.02.92.92L5.92 19H5v-.92zM17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29m-3.6 3.19L3 17.25V21h3.75L17.81 9.94z" fill="#F0DEDD"></path></svg>
             `
-            edit.onclick=()=>{
-                const originalemoji = edit.parentElement.previousSibling.textContent
+            edit.onclick=async ()=>{
+                let originalemoji;
+                if(edit.parentElement.previousSibling.children[0]){
+                    originalemoji=edit.parentElement.previousSibling.children[0].alt
+                    const res = await fetch(`https://stoat.chat/api/custom/emoji/${originalemoji.replaceAll(':','')}`)
+                    if(res.ok){
+                        const json = await res.json()
+                        originalemoji = json.name
+                        document.querySelectorAll('a[href]').forEach(item=>{
+                            if(item.href.includes(json.parent.id)){
+                                originalemoji = originalemoji+` from ${item.parentElement.parentElement.ariaLabel}`
+                            }
+                        })
+                    }
+                }else{
+                    originalemoji = edit.parentElement.previousSibling.textContent
+                }
                 const add = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[2].children[2]
                 const close = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[1]
                 const originalcloseclick = close.onclick
