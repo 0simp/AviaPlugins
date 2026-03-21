@@ -13,10 +13,11 @@
                         timestamp = timestamp?.substring(timestamp?.indexOf('"')+1,timestamp?.lastIndexOf('"'));
                         timestamp = Math.floor(new Date(timestamp).getTime() / 1000)
                         let emoji;
-                        emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].alt
+                        emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].alt //emoji if the message doesn't have a timestamp at the top of it
                         if(node.children[1].children[1].children[1]){
-                            emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt
+                            emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message does have a timestamp at the top of it
                         }
+                        //custom emoji support
                         if(!emoji){
                             emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].children[0].alt
                             if(node.children[1].children[1].children[1]){
@@ -67,7 +68,7 @@
         if (!content) return;
         content.innerHTML = '';
         emojisounds = JSON.parse(localStorage.getItem('emoji-sounds'))??[]
-        emojisounds.forEach((sound,index)=>{
+        emojisounds.forEach(async (sound,index)=>{
             const row = document.createElement('div');
             row.style.display = 'flex';
             row.style.justifyContent = 'space-between';
@@ -79,6 +80,12 @@
             left.style.gap = '10px';
             const emoji = document.createElement('div');
             emoji.textContent = sound.emoji;
+            const res = await fetch(`https://cdn.stoatusercontent.com/emojis/${sound.emoji.replaceAll(':','')}`)
+            if(res.ok){
+                emoji.innerHTML=`
+                <img loading="lazy" draggable="false" src="https://cdn.stoatusercontent.com/emojis/${sound.emoji.replaceAll(':','')}" alt="${sound.emoji}" class="obj-f_contain d_inline-block w_var(--emoji-size) h_var(--emoji-size) m_0_0.05em_0_0.1em va_-0.3em c_transparent [&amp;:before]:content_'_' [&amp;:before]:d_block [&amp;:before]:pos_absolute [&amp;:before]:h_50px [&amp;:before]:w_50px [&amp;:before]:bg-i_url(ishere.jpg) emoji" style="height: 24px; width: 19.97px;">
+                `
+            }
             left.appendChild(emoji);
             const controls = document.createElement('div');
             controls.style.display = 'flex';
@@ -86,7 +93,10 @@
             const play = document.createElement('button')
             play.textContent='🔊'
             play.onclick=()=>{
-                const emoji = play.parentElement.parentElement.children[0].textContent
+                let emoji = play.parentElement.parentElement.children[0].textContent
+                if(emoji.length!=2){
+                    emoji = play.parentElement.parentElement.children[0].children[0].alt
+                }
                 const eomijsound = emojisounds.find(emoji1=>emoji1.emoji===emoji)
                 const sound = new Audio(eomijsound.sound)
                 sound.play()
