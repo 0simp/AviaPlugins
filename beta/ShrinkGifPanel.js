@@ -9,7 +9,7 @@
             const gifPanel = document.getElementsByClassName('w_400px h_400px').item(0)
             gifPanel.style.setProperty('position','fixed')
             gifPanel.style.setProperty('right','0px')
-            gifPanel.sty.setProperty('bottom','12px')
+            gifPanel.style.setProperty('bottom','12px')
             gifPanel.style.setProperty('width',`${window.outerWidth-66}px`)
             gifPanel.style.setProperty('height',`${window.outerWidth-66}px`)
             document.getElementsByClassName('min-h_0 d_flex flex-d_column').item(1).children[0].setAttribute('readonly',false)
