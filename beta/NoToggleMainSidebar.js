@@ -1,65 +1,22 @@
 (function () {
-    if (window.__NO_TOGGLE_MAIN_SIDEBAR__) return;
-    window.__NO_TOGGLE_MAIN_SIDEBAR__ = true;
+  'use strict';
 
-    function NoToggleMainSidebar() {
-        const original = document.querySelector('div[aria-label="Toggle main sidebar"]');
-        if (!original) return;
+  if (window.__NO_TOGGLE_MAIN_SIDEBAR__) return;
+  window.__NO_TOGGLE_MAIN_SIDEBAR__ = true;
 
-        const parent = original.parentElement;
-        let text = parent.outerText.substring(parent.outerText.lastIndexOf('\n') + 1);
-        if(text=='note_stack'){
-            text = 'Saved notes'
-            parent.removeChild(original.nextSibling)
-        }
-        if(text=='alternate_email'){
-            text = parent.parentElement.children[1].children[0].children[2].children[0].children[1].children[0].children[1].children[0].children[0].children[1].outerText.substring(7)
-            parent.removeChild(original.nextSibling)
-        }
-        const existing = document.getElementById('togglemainsidebar');
-        if (existing) {
-            const textNode = existing.children[1].nextSibling;
-            if (textNode && textNode.nodeType === Node.TEXT_NODE) {
-                textNode.textContent = text;
-            } else {
-                existing.children[1].insertAdjacentText('afterend', text);
-            }
-            parent.childNodes.forEach(node => {
-                if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-                    node.remove();
-                }
-            });
-            return;
-        }
+  const TARGET_CLASS = 'c_white bg_black p_var(--gap-md) bdr_var(--borderRadius-md) lh_0.875rem fs_0.6875rem ls_0.03125rem fw_500';
+  const TARGET_TEXT  = 'Toggle main sidebar';
 
-        const clone = original.cloneNode(true);
-        const click = original.$$click;
-        clone.onclick = click;
-        clone.id = 'togglemainsidebar';
-        clone.children[1].insertAdjacentText('afterend', text);
-        parent.replaceChild(clone, original);
-        parent.childNodes.forEach(node => {
-            if (node.nodeType === Node.TEXT_NODE && node.textContent.trim()) {
-                node.remove();
-            }
-        });
-    }
-
-    const observer = new MutationObserver(() => {
-        NoToggleMainSidebar();
+  function removeTooltip() {
+    document.querySelectorAll('div.c_white.bg_black').forEach(el => {
+      if (el.className === TARGET_CLASS && el.textContent.trim() === TARGET_TEXT) {
+        el.remove();
+      }
     });
+  }
 
-    function init() {
-        NoToggleMainSidebar();
-        observer.observe(document.documentElement, {
-            childList: true,
-            subtree: true,
-        });
-    }
+  removeTooltip();
 
-    if (document.body) {
-        init();
-    } else {
-        requestAnimationFrame(init);
-    }
+  const observer = new MutationObserver(() => removeTooltip());
+  observer.observe(document.documentElement, { childList: true, subtree: true });
 })();
