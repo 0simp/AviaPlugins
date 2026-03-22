@@ -9,7 +9,7 @@
             const gifPanel = document.getElementsByClassName('w_400px h_400px').item(0)
             gifPanel.style.setProperty('width',`${window.outerWidth-66}px`)
             gifPanel.style.setProperty('height',`${window.outerWidth-66}px`)
-            document.getElementsByClassName('min-h_0 d_flex flex-d_column').item(1).children[0].setAttribute('contentEditable',true)
+            document.getElementsByClassName('min-h_0 d_flex flex-d_column').item(1).children[0].setAttribute('readonly',false)
             for(const child of gifPanel.children[0].children[1].children[1].children[1].children[0].children){
                 if(child.style.getPropertyValue('transform')=='translate(160px, 80px)'){
                     child.style.setProperty('transform','translate(0px, 80px)')
