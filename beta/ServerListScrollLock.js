@@ -53,7 +53,7 @@
   }
 
   function updateButtonIcon(span) {
-    span.textContent = scrollLockEnabled ? 'check' : 'history';
+    span.textContent = scrollLockEnabled ? 'check' : 'close';
 
     Object.assign(span.style, {
       color: scrollLockEnabled
@@ -76,14 +76,15 @@
 
   function inject() {
     const wrapper = document.querySelector('[aria-label="Switch back to legacy app"]');
-    if (!wrapper || wrapper.dataset.scrollLockPatched) return;
+    if (!wrapper) return;
+    const wrapper2 = wrapper.cloneNode(true)
 
-    wrapper.dataset.scrollLockPatched = 'true';
+    wrapper2.dataset.scrollLockPatched = 'true';
+    wrapper2.setAttribute('aria-label', 'Toggle server list scroll lock');
+    wrapper2.id='serverlistscrolllock'
 
-    wrapper.setAttribute('aria-label', 'Toggle server list scroll lock');
-
-    const link = wrapper.querySelector('a');
-    const span = wrapper.querySelector('span.material-symbols-outlined');
+    const link = wrapper2.querySelector('a');
+    const span = wrapper2.querySelector('span.material-symbols-outlined');
     if (!link || !span) return;
 
     link.removeAttribute('href');
@@ -102,6 +103,9 @@
         createOverlay();
       }
     });
+    if(!document.getElementById('serverlistscrolllock')){
+      wrapper.parentElement.insertBefore(wrapper2,wrapper.parentElement.children[3])
+    }
   }
 
   const observer = new MutationObserver(() => {
