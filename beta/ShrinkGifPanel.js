@@ -8,6 +8,8 @@
         if(document.getElementsByClassName('w_400px h_400px').item(0).children[0].className=='w_100% h_100% us_none d_flex flex-d_column gap_var(--gap-md) ai_stretch ov_hidden p_var(--gap-md)_0 bdr_var(--borderRadius-lg) c_var(--md-sys-color-on-surface) fill_var(--md-sys-color-on-surface) bx-sh_0_0_3px_var(--md-sys-color-shadow) bg_var(--md-sys-color-surface-container)'){
             const gifPanel = document.getElementsByClassName('w_400px h_400px').item(0)
             gifPanel.style.setProperty('position','fixed')
+            gifPanel.style.removeProperty('left')
+            gifPanel.style.removeProperty('top')
             gifPanel.style.setProperty('right','0px')
             gifPanel.style.setProperty('bottom','12px')
             gifPanel.style.setProperty('width',`${window.outerWidth-66}px`)
