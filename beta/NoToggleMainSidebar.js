@@ -8,6 +8,7 @@
 
         const parent = original.parentElement;
         let text = parent.outerText.substring(parent.outerText.lastIndexOf('\n') + 1);
+        console.log(text)
         if(text=='note_stack'){
             text = 'Saved notes'
             parent.removeChild(original.nextSibling)
