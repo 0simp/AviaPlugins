@@ -56,22 +56,41 @@
         
         panel=document.createElement("div");
         panel.id="avia-monaco-panel";
-        Object.assign(panel.style,{
-            position:"fixed",
-            bottom:"12px",
-            right:"0px",
-            width:`${window.outerWidth-66}px`,
-            height:`${window.outerWidth-130}px`,
-            background:"var(--md-sys-color-surface,#1e1e1e)",
-            borderRadius:"16px",
-            boxShadow:"0 8px 28px rgba(0,0,0,0.35)",
-            zIndex:"999999",
-            display:"flex",
-            flexDirection:"column",
-            overflow:"hidden",
-            border:"1px solid rgba(255,255,255,0.08)",
-            backdropFilter:"blur(12px)"
-        });
+        if(window.outerWidth<716){
+            Object.assign(panel.style,{
+                position:"fixed",
+                bottom:"12px",
+                right:"0px",
+                width:`${window.outerWidth-66}px`,
+                height:`${window.outerWidth-130}px`,
+                background:"var(--md-sys-color-surface,#1e1e1e)",
+                borderRadius:"16px",
+                boxShadow:"0 8px 28px rgba(0,0,0,0.35)",
+                zIndex:"999999",
+                display:"flex",
+                flexDirection:"column",
+                overflow:"hidden",
+                border:"1px solid rgba(255,255,255,0.08)",
+                backdropFilter:"blur(12px)"
+            });
+        }else{
+            Object.assign(panel.style,{
+                position:"fixed",
+                bottom:"12px",
+                right:"0px",
+                width:`650px`,
+                height:`420px`,
+                background:"var(--md-sys-color-surface,#1e1e1e)",
+                borderRadius:"16px",
+                boxShadow:"0 8px 28px rgba(0,0,0,0.35)",
+                zIndex:"999999",
+                display:"flex",
+                flexDirection:"column",
+                overflow:"hidden",
+                border:"1px solid rgba(255,255,255,0.08)",
+                backdropFilter:"blur(12px)"
+            });
+        }
 
         const header=document.createElement("div");
         header.textContent="Monaco QuickCSS";
