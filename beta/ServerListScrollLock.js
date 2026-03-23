@@ -3,9 +3,11 @@
 
   let scrollLockEnabled = false;
   let overlay = null;
+  let channellistoverlay = null;
 
   function createOverlay() {
     const serverList = document.querySelector('[aria-disabled][role="list"]');
+    const channelList = document.querySelectorAll('[aria-disabled][role="list"]').item(1)
     if (!serverList) return;
 
     const parent = serverList.parentElement;
@@ -43,12 +45,52 @@
     if (computedPos === 'static') parent.style.position = 'relative';
 
     parent.appendChild(overlay);
+
+    if(channelList){
+      const channelListParent = channelList.parentElement
+      channellistoverlay = document.createElement('div')
+      channellistoverlay.id = 'revolt-scroll-lock-overlay2';
+
+      Object.assign(channellistoverlay.style, {
+        position:       'absolute',
+        top:            channelList.offsetTop + 'px',
+        left:           channelList.offsetLeft + 'px',
+        width:          channelList.offsetWidth + 'px',
+        height:         channelList.offsetHeight + 'px',
+        zIndex:         '9999',
+        background:     'transparent',
+        touchAction:    'pan-y',
+        pointerEvents:  'all',
+        cursor:         'default',
+      });
+
+      channellistoverlay.addEventListener('touchmove', (e) => {
+      const scrollable = channelList.closest('.will-change_transform') || channelList.parentElement;
+      if (scrollable) {
+        scrollable.scrollTop += e.touches[0]?.clientY
+          ? 0
+          : 0; 
+      }
+    }, { passive: true });
+
+      channellistoverlay.addEventListener('pointerdown', (e) => e.stopPropagation());
+      channellistoverlay.addEventListener('mousedown',   (e) => e.stopPropagation());
+
+      const computedPos = getComputedStyle(parent).position;
+      if (computedPos === 'static') parent.style.position = 'relative';
+
+      channelListParent.appendChild(channellistoverlay);
+    }
   }
 
   function removeOverlay() {
     if (overlay) {
       overlay.remove();
       overlay = null;
+    }
+    if(channellistoverlay){
+      channellistoverlay.remove();
+      channellistoverlay = null;
     }
   }
 
