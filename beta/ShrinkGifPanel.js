@@ -12,14 +12,20 @@
             gifPanel.style.removeProperty('top')
             gifPanel.style.setProperty('right','0px')
             gifPanel.style.setProperty('bottom','12px')
-            gifPanel.style.setProperty('width',`${window.outerWidth-66}px`)
-            gifPanel.style.setProperty('height',`${window.outerWidth-66}px`)
-            document.getElementsByClassName('min-h_0 d_flex flex-d_column').item(1).children[0].setAttribute('readonly',false)
-            for(const child of gifPanel.children[0].children[1].children[1].children[1].children[0].children){
-                if(child.style.getPropertyValue('transform')=='translate(160px, 80px)'){
-                    child.style.setProperty('transform','translate(0px, 80px)')
+            if(window.outerWidth<466){
+                gifPanel.style.setProperty('width',`${window.outerWidth-66}px`)
+                gifPanel.style.setProperty('height',`${window.outerWidth-66}px`)
+                for(const child of gifPanel.children[0].children[1].children[1].children[1].children[0].children){
+                    if(child.className=='d_flex ai_center px_var(--gap-md) w_calc(40px_*_10)!'){
+                        const list = child.style.getPropertyValue('transform').substring(9).replaceAll('(','').replaceAll(')','').replaceAll('px','').split(', ')
+                        if(list[0]!=0){
+                            list[0]=0
+                            child.style.setProperty('transform',`translate(${list.map(item=>`${item}px`).join(', ')})`)
+                        }
+                    }
                 }
             }
+            document.getElementsByClassName('min-h_0 d_flex flex-d_column').item(1).children[0].setAttribute('readonly',false)
         }
     }
   }
