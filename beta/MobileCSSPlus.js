@@ -123,6 +123,16 @@
         const editorContainer=document.createElement("div");
         editorContainer.style.flex="1";
 
+        const clearBtn = document.createElement('div');
+        clearBtn.textContent = 'Clear';
+        Object.assign(pasteBtn.style,{
+            position:'absolute',
+            top:'12px',
+            right:'56px',
+            curosr:'pointer',
+            color:'#fff'
+        });
+
         const pasteBtn = document.createElement('div');
         pasteBtn.textContent = 'Paste';
         Object.assign(pasteBtn.style,{
@@ -149,6 +159,10 @@
                 const value = monaco.editor.getEditors()[0].getValue()
                 monaco.editor.getEditors()[0].setValue(value+'\n'+text)
             })
+        });
+
+        clearBtn.addEventListener('click',async ()=>{
+            monaco.editor.getEditors()[0].setValue('')
         });
 
         panel.appendChild(header);
