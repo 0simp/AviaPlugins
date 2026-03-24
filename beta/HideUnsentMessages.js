@@ -46,6 +46,7 @@
     }
     const observer1 = new MutationObserver(hideUnsentMessages);
     observer1.observe(targetNode, config)
+    hideUnsentMessages()
 
     function injectSettingsButton(){
         const themes = document.getElementById('avia-themes-btn')
