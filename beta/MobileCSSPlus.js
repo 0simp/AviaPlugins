@@ -166,6 +166,7 @@
         });
 
         panel.appendChild(header);
+        panel.appendChild(clearBtn)
         panel.appendChild(pasteBtn)
         panel.appendChild(closeBtn);
         panel.appendChild(editorContainer);
