@@ -125,7 +125,7 @@
 
         const clearBtn = document.createElement('div');
         clearBtn.textContent = 'Clear';
-        Object.assign(pasteBtn.style,{
+        Object.assign(clearBtn.style,{
             position:'absolute',
             top:'12px',
             right:'56px',
