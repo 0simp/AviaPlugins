@@ -54,19 +54,37 @@
             const settingsbutton = document.createElement('a')
             settingsbutton.className='pos_relative min-w_0 d_flex ai_center p_6px_8px bdr_8px fw_500 me_12px fs_15px us_none trs_background-color_0.1s_ease-in-out c_var(--md-sys-color-on-surface) fill_var(--md-sys-color-on-surface) bg_unset [&_svg]:flex-sh_0'
             settingsbutton.id='hideunsentmessages'
-            settingsbutton.innerHTML=`
-            <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Hide Unsent Messages</span></div></div></div>
-            `
+            if(localStorage.getItem('hideunsentmessages')=='true'){
+                settingsbutton.innerHTML=`
+                <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Show Unsent Messages</span></div></div></div>
+                `
+            }else{
+                settingsbutton.innerHTML=`
+                <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Hide Unsent Messages</span></div></div></div>
+                `
+            }
             setIcon(settingsbutton,'delete')
 
             settingsbutton.onclick=()=>{
                 if(!localStorage.getItem('hideunsentmessages')){
                     localStorage.setItem('hideunsentmessages','true')
+                    settingsbutton.innerHTML=`
+                    <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Show Unsent Messages</span></div></div></div>
+                    `
+                    setIcon(settingsbutton,'delete')
                 }else{
                     if(localStorage.getItem('hideunsentmessages')=='false'){
                         localStorage.setItem('hideunsentmessages','true')
+                        settingsbutton.innerHTML=`
+                        <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Show Unsent Messages</span></div></div></div>
+                        `
+                        setIcon(settingsbutton,'delete')
                     }else{
                         localStorage.setItem('hideunsentmessages','false')
+                        settingsbutton.innerHTML=`
+                        <md-ripple aria-hidden="true"></md-ripple><div class="d_flex ai_center gap_8px flex-g_1 min-w_0 pe_8px"><div class="min-w_0 d_flex flex-d_column"><div class="ov_hidden white-space_nowrap tov_ellipsis [&amp;_*]:ov_hidden [&amp;_*]:white-space_nowrap [&amp;_*]:tov_ellipsis"><span style="color: var(--md-sys-color-error);">(Avia) Hide Unsent Messages</span></div></div></div>
+                        `
+                        setIcon(settingsbutton,'delete')
                     }
                 }
             };
