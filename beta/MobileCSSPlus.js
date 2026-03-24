@@ -128,8 +128,8 @@
         Object.assign(clearBtn.style,{
             position:'absolute',
             top:'12px',
-            right:'56px',
-            curosr:'pointer',
+            right:'86px',
+            cursor:'pointer',
             color:'#fff'
         });
 
@@ -139,7 +139,7 @@
             position:'absolute',
             top:'12px',
             right:'36px',
-            curosr:'pointer',
+            cursor:'pointer',
             color:'#fff'
         });
 
