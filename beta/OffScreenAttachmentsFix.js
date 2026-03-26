@@ -5,8 +5,8 @@
   function offScreenAttachmentsFix() {
     const elements = document.querySelectorAll('div[class="d_flex flex-d_column flex-g_initial m_0 ai_initial jc_initial p_var(--gap-md) bdr_var(--borderRadius-md) c_var(--md-sys-color-inverse-on-surface) bg_var(--md-sys-color-inverse-surface) gap_var(--gap-md)"]')
     elements.forEach(element=>{
-        if(element.children[0].children[1].children[0].textContent.includes(' ')){
-            element.children[0].children[1].children[0].textContent = element.children[0].children[1].children[0].textContent.replaceAll(' ','-')
+        if(element.children[0].children[1].children[0].textContent.includes(' ')||element.children[0].children[1].children[0].textContent.includes('_')){
+            element.children[0].children[1].children[0].textContent = element.children[0].children[1].children[0].textContent.replaceAll(' ','-').replaceAll('_','-')
         }
     });
   }
