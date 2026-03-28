@@ -12,6 +12,9 @@ Adds a button to the image viewer to add the image to favourites. Currently no s
 
 Improves avia's built in favourites system by adding a button to the image viewer to add the image to favourites, a refresh button to the favourites panel (click to make images/gifs added via the add favourites button show up) and making clicking on an image/gif put the link into the chat bar instead of copying it to the clipboard. This plugin is just a combination of AddToFavourites,FavsToChat and a new refresh button.
 
+# ButtonFix
+
+Fixes avia buttons injecting in channels where you can't send messages. I'm sure a fix for this will be integrated at some point, but if you're impatient like me here's a fix for in the meantime
 
 # CopyAttachmentLink
 
