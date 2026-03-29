@@ -16,6 +16,26 @@ Improves avia's built in favourites system by adding a button to the image viewe
 
 Fixes avia buttons injecting in channels where you can't send messages. I'm sure a fix for this will be integrated at some point, but if you're impatient like me here's a fix for in the meantime
 
+# ChunkyMembers
+
+Makes the member and pinned message lists cover the chat entirely. I recommend combining it with the following css:
+
+```css
+/*Add a background image to member and pinned messages list*/
+[class='will-change_transform scr-bar-c_var(--md-sys-color-primary)_transparent ov-y_auto ov-x_hidden ov_hidden! scr-bar-g_stable flex-sh_0 w_var(--layout-width-channel-sidebar) bdr_var(--borderRadius-lg)']{
+background-image: url("YOUR IMAGE URL HERE");
+background-size: cover;
+position:relative;
+right:32px;
+}
+[class='will-change_transform scr-bar-c_var(--md-sys-color-primary)_transparent ov-y_auto ov-x_hidden ov_hidden! scr-bar-g_stable flex-sh_0 w_var(--layout-width-channel-sidebar) bdr_var(--borderRadius-lg) ov-y_scroll! ov-x_hidden!']{
+    background-image: url("YOUR IMAGE URL HERE");
+    background-size: cover;
+    position:relative;
+    right:32px;
+}
+```
+
 # CopyAttachmentLink
 
 Adds a button to non-image/video attachments to copy the attachment link
