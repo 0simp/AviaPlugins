@@ -86,6 +86,10 @@ Forces emojis in embeds and message reactions to use your selected emoji pack
 After installing the plugin, open your user settings and click on the "appearance" tab. Once you've done that, the plugin should work. You can test it by reacting to a message with any default emoji and if the emoji is rendered from your selected emoji pack, the plugin works.
 
 
+# GifFix
+
+Fixes gifs and animated emojis not animating when they should
+
 # ShrinkEmojis
 
 It shrinks emojis 🤯
