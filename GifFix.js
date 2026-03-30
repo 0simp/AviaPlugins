@@ -1,11 +1,11 @@
 (function () {
-  if (window.__FART_CLICK__) return;
-  window.__FART_CLICK__ = true;
+  if (window.__GIF_FIX__) return;
+  window.__GIF_FIX__ = true;
 
   function GifFix() {
     const images = document.querySelectorAll('img')
     images.forEach(image=>{
-        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.src.includes('blob:')){
+        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.src.includes('blob:')&&!image.src.includes('proxy.stoatusercontent.com')){
             image.src=image.src+'/original'
         }
     })
