@@ -90,6 +90,14 @@ After installing the plugin, open your user settings and click on the "appearanc
 
 Fixes gifs and animated emojis not animating when they should
 
+# HideImageLinks
+
+Hides image links if they're the only content in the message
+
+**EXAMPLE:**
+
+<img src ='https://cdn.stoatusercontent.com/attachments/UIrGkC6ipDiOpd0t3FHHzMAaIH9sG8_-tqc93RbHB0/original' width='1330' height='420'>
+
 # ShrinkEmojis
 
 It shrinks emojis 🤯
