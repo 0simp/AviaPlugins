@@ -5,7 +5,7 @@
   function GifFix() {
     const images = document.querySelectorAll('img')
     images.forEach(image=>{
-        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')){
+        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.includes('blob:')){
             image.src=image.src+'/original'
         }
     })
