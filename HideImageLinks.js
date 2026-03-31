@@ -12,7 +12,7 @@
         const text = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]?.textContent
         const image = message.children[1]?.children[1]?.children[1]?.children[1]?.children[0]
 
-        if((link==text)&&image){
+        if((link==text)&&image?.tagName=='IMG'){
             linkElement.style.display='none'
         }
     }
@@ -23,7 +23,7 @@
         const text = message.children[1]?.children[1]?.children[0]?.children[0]?.textContent
         const image = message.children[1]?.children[1]?.children[0]?.children[1]?.children[0]
 
-        if((link==text)&&image){
+        if((link==text)&&image?.tagName=='IMG'){
             linkElement.style.display='none'
         }
     }
