@@ -8,14 +8,18 @@
         mutationsList.forEach((mutation) => {
             if (mutation.type === 'childList') {
                 for (let node of mutation.addedNodes) {
-                    if(node.className=='group pos_relative d_flex flex-d_column p_2px_0 bg_transparent bdr_var(--borderRadius-md) min-h_1em trs_background-color_var(--transitions-fast) [&_a:hover]:td_underline [&:hover_.Toolbar]:d_flex mt_var(--message-group-spacing)! [&:hover]:bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface)'||(node.id&&node.children[0].className=='top_-18px right_16px pos_absolute ai_center d_none ov_hidden bdr_var(--borderRadius-xs) bx-sh_0_0_3px_var(--md-sys-color-shadow) fill_var(--md-sys-color-on-secondary-container) bg_var(--md-sys-color-secondary-container) Toolbar')){
+                    if((node.className=='group pos_relative d_flex flex-d_column p_2px_0 bg_transparent bdr_var(--borderRadius-md) min-h_1em trs_background-color_var(--transitions-fast) [&_a:hover]:td_underline [&:hover_.Toolbar]:d_flex mt_var(--message-group-spacing)! [&:hover]:bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface)'||(node.id&&node.children[0].className=='top_-18px right_16px pos_absolute ai_center d_none ov_hidden bdr_var(--borderRadius-xs) bx-sh_0_0_3px_var(--md-sys-color-shadow) fill_var(--md-sys-color-on-secondary-container) bg_var(--md-sys-color-secondary-container) Toolbar'))&&node.getBoundingClientRect().y>0){
                         let timestamp = node.children[1]?.children[1]?.children[0]?.children[1]?.children[0]?.children[1]?.innerHTML
                         timestamp = timestamp?.substring(timestamp?.indexOf('"')+1,timestamp?.lastIndexOf('"'));
                         timestamp = Math.floor(new Date(timestamp).getTime() / 1000)
                         let emoji;
-                        emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].alt //emoji if the message doesn't have a timestamp at the top of it
-                        if(node.children[1].children[1].children[1]){
-                            emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message does have a timestamp at the top of it
+                        if(node.children[2]){
+                            emoji = node.children[2].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message is a reply
+                        }else{
+                            emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].alt //emoji if the message doesn't have a timestamp at the top of it
+                            if(node.children[1].children[1].children[1]){
+                                emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message does have a timestamp at the top of it
+                            }
                         }
                         //custom emoji support
                         if(!emoji){
