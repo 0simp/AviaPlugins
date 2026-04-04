@@ -3,16 +3,11 @@
   window.__GIF_FIX__ = true;
 
   function GifFix() {
-    const images = document.querySelectorAll('img[src]')
+    const images = document.querySelectorAll('img')
     images.forEach(image=>{
-        fetch(image.src+'/original').then(res=>{
-          if(res.ok&&!image.src.includes('/original')){
+        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.src.includes('blob:')&&!image.src.includes('proxy.stoatusercontent.com')){
             image.src=image.src+'/original'
-            console.log(image)
-          }
-        }).catch(e=>{
-
-        })
+        }
     })
   }
 
