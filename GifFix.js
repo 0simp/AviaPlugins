@@ -6,6 +6,7 @@
     const images = document.querySelectorAll('img')
     images.forEach(image=>{
         if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.src.includes('blob:')&&!image.src.includes('proxy.stoatusercontent.com')){
+            if(image.parentElement.parentElement.parentElement.parentElement.parentElement.id=='avia-masq-panel') return;
             image.src=image.src+'/original'
         }
     })
