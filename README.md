@@ -102,6 +102,18 @@ Hides image links if they're the only content in the message
 
 It shrinks emojis 🤯
 
+# UpdateChecker
+
+Adds an update checker for local plugins and the ability to install any updates it finds
+
+**IMPORTANT:**
+
+- The update checker requires a url to be present for the plugin in order to check for updates. This means it won't work for local plugins you added before installing unless you uninstall and reinstall them
+
+- Because of this, the plugin mandates a url when adding new local plugins. This url should be the **DIRECT** link to the plugin's js file, the same one you would use if you were adding it as a non local plugin
+
+- Installed updates require a restart of the client to take effect
+
 # WARNING!
 
 I have severe brain damage so these plugins probably have some quite serious flaws, but from my testing they work
