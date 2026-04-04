@@ -5,9 +5,14 @@
   function GifFix() {
     const images = document.querySelectorAll('img')
     images.forEach(image=>{
-        if(!image.src.includes('original')&&!image.src.includes('default_avatar')&&!image.src.includes('cdn.jsdelivr.net')&&!image.src.includes('blob:')&&!image.src.includes('proxy.stoatusercontent.com')&&!image.src.includes('cdn.stoatusercontent.com/avatars')){
+        fetch(image.src+'/original').then(res=>{
+          if(res.ok&&!image.src.includes('/original')){
             image.src=image.src+'/original'
-        }
+            console.log(image)
+          }
+        }).catch(e=>{
+
+        })
     })
   }
 
