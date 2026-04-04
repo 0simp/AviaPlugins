@@ -13,6 +13,28 @@
                 </span>
             `;
         copyLinkButton.addEventListener('click',()=>{
+            const toast = document.createElement('div')
+            toast.textContent='Copied!'
+            Object.assign(toast.style, {
+                position: "absolute",
+                bottom: "6px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "rgba(0,0,0,0.85)",
+                padding: "6px 10px",
+                borderRadius: "8px",
+                fontSize: "11px",
+                opacity: "0",
+                transition: "opacity 0.2s",
+                pointerEvents: "none"
+            });
+            copyLinkButton.appendChild(toast);
+            requestAnimationFrame(() => toast.style.opacity = "1");
+            setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 200);
+            }, 2000);
+
             navigator.clipboard.writeText(element.firstChild.childNodes.item(2).href)
         });
         if(!element.firstChild.children.item(3)){
