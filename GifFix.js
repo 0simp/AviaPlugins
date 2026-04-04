@@ -3,7 +3,7 @@
   window.__GIF_FIX__ = true;
 
   function GifFix() {
-    const images = document.querySelectorAll('img')
+    const images = document.querySelectorAll('img[src]')
     images.forEach(image=>{
         fetch(image.src+'/original').then(res=>{
           if(res.ok&&!image.src.includes('/original')){
