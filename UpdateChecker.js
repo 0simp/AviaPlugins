@@ -341,10 +341,16 @@
     urlinput.id = 'localurlinput';
 
     if (!document.getElementById('localurlinput')) {
-      nameinput.parentElement.insertBefore(urlinput, nameinput.parentElement.lastChild);
+      nameinput.parentElement.insertBefore(urlinput, nameinput.nextSibling);
     }
 
-    const addbutton = nameinput.parentElement.lastChild;
+    let addbutton;
+    for(const child of nameinput.parentElement.children){
+      if(child.textContent=='+ New'){
+        addbutton = child
+      }
+    }
+
     addbutton.onclick = function () {
       const urlinput = document.getElementById('localurlinput');
       const name = nameinput.value.trim();
