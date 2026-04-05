@@ -2,6 +2,12 @@
   if (window.__UPDATE_CHECKER__) return;
   window.__UPDATE_CHECKER__ = true;
 
+  function killme(){
+    let check = false;
+    (function(a){if(/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino|android|ipad|playbook|silk/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))) check = true;})(navigator.userAgent||navigator.vendor||window.opera);
+    return check;
+  }
+
   const getLocalPlugins = () => JSON.parse(localStorage.getItem('avia_local_plugins') || "[]");
   const setLocalPlugins = (data) => localStorage.setItem('avia_local_plugins', JSON.stringify(data));
   const runningLocalPlugins = {};
@@ -58,162 +64,168 @@
   }
 
   async function openEditorPanel(plugin, onSave) {
-    await preloadMonaco();
+        await preloadMonaco();
 
-    const existing = document.getElementById("avia-local-editor-panel");
-    if (existing) existing.remove();
+        const existing = document.getElementById("avia-local-editor-panel");
+        if (existing) existing.remove();
 
-    const panel = document.createElement("div");
-    panel.id = "avia-local-editor-panel";
-    Object.assign(panel.style, {
-      position: "fixed",
-      bottom: "24px",
-      left: "24px",
-      width: "680px",
-      height: "460px",
-      background: "var(--md-sys-color-surface, #1e1e1e)",
-      borderRadius: "16px",
-      boxShadow: "0 8px 28px rgba(0,0,0,0.35)",
-      zIndex: "9999999",
-      display: "flex",
-      flexDirection: "column",
-      overflow: "hidden",
-      border: "1px solid rgba(255,255,255,0.08)",
-      backdropFilter: "blur(12px)"
-    });
+        const panel = document.createElement("div");
+        panel.id = "avia-local-editor-panel";
+        if(window.outerWidth<746){
+            Object.assign(panel.style, {
+                position: "fixed",
+                bottom: "24px",
+                left: "24px",
+                width: `${window.outerWidth-66}px`,
+                height: `${window.outerWidth-130}px`,
+                background: "var(--md-sys-color-surface, #1e1e1e)",
+                borderRadius: "16px",
+                boxShadow: "0 8px 28px rgba(0,0,0,0.35)",
+                zIndex: "9999999",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(12px)"
+            });
+        }else{
+            Object.assign(panel.style, {
+                position: "fixed",
+                bottom: "24px",
+                left: "24px",
+                width: "680px",
+                height: "460px",
+                background: "var(--md-sys-color-surface, #1e1e1e)",
+                borderRadius: "16px",
+                boxShadow: "0 8px 28px rgba(0,0,0,0.35)",
+                zIndex: "9999999",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
+                border: "1px solid rgba(255,255,255,0.08)",
+                backdropFilter: "blur(12px)"
+            });
+        }
 
-    const header = document.createElement("div");
-    header.textContent = `Editing: ${plugin.name}`;
-    Object.assign(header.style, {
-      padding: "14px 16px",
-      fontWeight: "600",
-      fontSize: "14px",
-      background: "var(--md-sys-color-surface-container, rgba(255,255,255,0.04))",
-      borderBottom: "1px solid rgba(255,255,255,0.08)",
-      cursor: "move",
-      color: "#fff",
-      flex: "0 0 auto"
-    });
+        const header = document.createElement("div");
+        header.textContent = `Editing: ${plugin.name}`;
+        Object.assign(header.style, {
+            padding: "14px 16px",
+            fontWeight: "600",
+            fontSize: "14px",
+            background: "var(--md-sys-color-surface-container, rgba(255,255,255,0.04))",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            cursor: "move",
+            color: "#fff",
+            flex: "0 0 auto"
+        });
 
-    const closeBtn = document.createElement("div");
-    closeBtn.textContent = "✕";
-    Object.assign(closeBtn.style, {
-      position: "absolute",
-      top: "12px",
-      right: "16px",
-      cursor: "pointer",
-      opacity: "0.7",
-      color: "#fff",
-      zIndex: "1"
-    });
-    closeBtn.onmouseenter = () => closeBtn.style.opacity = "1";
-    closeBtn.onmouseleave = () => closeBtn.style.opacity = "0.7";
-    closeBtn.onclick = () => panel.remove();
+        const closeBtn = document.createElement("div");
+        closeBtn.textContent = "✕";
+        Object.assign(closeBtn.style, {
+            position: "absolute",
+            top: "12px",
+            right: "16px",
+            cursor: "pointer",
+            opacity: "0.7",
+            color: "#fff",
+            zIndex: "1"
+        });
+        closeBtn.onmouseenter = () => closeBtn.style.opacity = "1";
+        closeBtn.onmouseleave = () => closeBtn.style.opacity = "0.7";
+        closeBtn.onclick = () => panel.remove();
 
-    const toolbar = document.createElement("div");
-    Object.assign(toolbar.style, {
-      padding: "8px 16px",
-      display: "flex",
-      gap: "8px",
-      borderBottom: "1px solid rgba(255,255,255,0.08)",
-      flex: "0 0 auto"
-    });
+        const clearBtn = document.createElement('div');
+        clearBtn.textContent = 'Clear';
+        Object.assign(clearBtn.style,{
+            position:'absolute',
+            top:'12px',
+            right:'86px',
+            cursor:'pointer',
+            color:'#fff'
+        });
 
-    const saveBtn = document.createElement("button");
-    saveBtn.textContent = "💾 Save";
-    styleEditorBtn(saveBtn, "#2d6a4f");
+        const pasteBtn = document.createElement('div');
+        pasteBtn.textContent = 'Paste';
+        Object.assign(pasteBtn.style,{
+            position:'absolute',
+            top:'12px',
+            right:'36px',
+            cursor:'pointer',
+            color:'#fff'
+        });
 
-    const saveRunBtn = document.createElement("button");
-    saveRunBtn.textContent = "▶ Save & Run";
-    styleEditorBtn(saveRunBtn, "#1b4332");
+        pasteBtn.addEventListener('click',async ()=>{
+            navigator.clipboard.readText().then(text=>{
+                const value = monaco.editor.getEditors()[0].getValue()
+                monaco.editor.getEditors()[0].setValue(value+'\n'+text)
+            })
+        });
 
-    toolbar.appendChild(saveBtn);
-    toolbar.appendChild(saveRunBtn);
+        clearBtn.addEventListener('click',async ()=>{
+            monaco.editor.getEditors()[0].setValue('')
+        });
 
-    const editorContainer = document.createElement("div");
-    editorContainer.style.flex = "1";
+        const toolbar = document.createElement("div");
+        Object.assign(toolbar.style, {
+            padding: "8px 16px",
+            display: "flex",
+            gap: "8px",
+            borderBottom: "1px solid rgba(255,255,255,0.08)",
+            flex: "0 0 auto"
+        });
 
-    panel.appendChild(header);
-    panel.appendChild(closeBtn);
-    panel.appendChild(toolbar);
-    panel.appendChild(editorContainer);
-    document.body.appendChild(panel);
+        const saveBtn = document.createElement("button");
+        saveBtn.textContent = "💾 Save";
+        styleEditorBtn(saveBtn, "#2d6a4f");
 
-    const editor = monaco.editor.create(editorContainer, {
-      value: plugin.code || "// Write your plugin code here\n",
-      language: "javascript",
-      theme: "vs-dark",
-      automaticLayout: true,
-      minimap: { enabled: false },
-      fontSize: 13,
-      scrollBeyondLastLine: false,
-      wordWrap: "on"
-    });
+        const saveRunBtn = document.createElement("button");
+        saveRunBtn.textContent = "▶ Save & Run";
+        styleEditorBtn(saveRunBtn, "#1b4332");
 
-    saveBtn.onclick = () => {
-      onSave(editor.getValue(), false);
-      saveBtn.textContent = "✓ Saved";
-      setTimeout(() => saveBtn.textContent = "💾 Save", 1200);
-    };
+        toolbar.appendChild(saveBtn);
+        toolbar.appendChild(saveRunBtn);
 
-    saveRunBtn.onclick = () => {
-      onSave(editor.getValue(), true);
-      saveRunBtn.textContent = "✓ Ran!";
-      setTimeout(() => saveRunBtn.textContent = "▶ Save & Run", 1200);
-    };
+        const editorContainer = document.createElement("div");
+        editorContainer.style.flex = "1";
 
-    enableEditorDrag(panel, header);
-  }
+        panel.appendChild(header);
+        const mobile = await killme()
+        if(mobile){
+          panel.appendChild(clearBtn)
+          panel.appendChild(pasteBtn)
+        }
+        panel.appendChild(closeBtn);
+        panel.appendChild(toolbar);
+        panel.appendChild(editorContainer);
+        document.body.appendChild(panel);
 
-  function runLocalPlugin(plugin) {
-    stopLocalPlugin(plugin);
-    try {
-      const script = document.createElement("script");
-      script.textContent = plugin.code || "";
-      script.dataset.localPluginId = plugin.id;
-      document.body.appendChild(script);
-      runningLocalPlugins[plugin.id] = script;
-      delete localPluginErrors[plugin.id];
-    } catch (e) {
-      localPluginErrors[plugin.id] = true;
+        const editor = monaco.editor.create(editorContainer, {
+            value: plugin.code || "// Write your plugin code here\n",
+            language: "javascript",
+            theme: "vs-dark",
+            automaticLayout: true,
+            minimap: { enabled: false },
+            fontSize: 13,
+            scrollBeyondLastLine: false,
+            wordWrap: "on"
+        });
+
+        saveBtn.onclick = () => {
+            onSave(editor.getValue(), false);
+
+            saveBtn.textContent = "✓ Saved";
+            setTimeout(() => saveBtn.textContent = "💾 Save", 1200);
+        };
+
+        saveRunBtn.onclick = () => {
+            onSave(editor.getValue(), true);
+            saveRunBtn.textContent = "✓ Ran!";
+            setTimeout(() => saveRunBtn.textContent = "▶ Save & Run", 1200);
+        };
+
+        enableEditorDrag(panel, header);
     }
-    renderLocalPanel();
-  }
-
-  function stopLocalPlugin(plugin) {
-    const script = runningLocalPlugins[plugin.id];
-    if (!script) return;
-    script.remove();
-    delete runningLocalPlugins[plugin.id];
-    delete localPluginErrors[plugin.id];
-    renderLocalPanel();
-  }
-
-  function styleLocalInput(input) {
-    Object.assign(input.style, {
-      padding: "6px 8px",
-      borderRadius: "8px",
-      border: "1px solid rgba(255,255,255,0.1)",
-      background: "rgba(255,255,255,0.05)",
-      color: "#fff",
-      fontSize: "13px"
-    });
-  }
-
-  function styleLocalBtn(btn, bg) {
-    Object.assign(btn.style, {
-      padding: "5px 12px",
-      borderRadius: "8px",
-      border: "none",
-      background: bg || "rgba(255,255,255,0.08)",
-      color: "#fff",
-      cursor: "pointer",
-      fontSize: "12px",
-      whiteSpace: "nowrap"
-    });
-    btn.onmouseenter = () => btn.style.opacity = "0.75";
-    btn.onmouseleave = () => btn.style.opacity = "1";
-  }
 
   function renderLocalPanel() {
     const content = document.getElementById("avia-local-plugins-content");
@@ -245,6 +257,9 @@
         background: "rgba(255,255,255,0.04)",
         border: "1px solid rgba(255,255,255,0.06)"
       });
+      if(window.outerWidth<508){
+          row.style.width = `${window.outerWidth-52}px`
+      }
 
       const left = document.createElement("div");
       Object.assign(left.style, { display: "flex", alignItems: "center", gap: "10px" });
@@ -350,7 +365,6 @@
         addbutton = child
       }
     }
-
     addbutton.onclick = function () {
       const urlinput = document.getElementById('localurlinput');
       const name = nameinput.value.trim();
