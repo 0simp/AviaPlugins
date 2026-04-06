@@ -108,7 +108,9 @@ Adds an update checker for local plugins and the ability to install any updates 
 
 **IMPORTANT:**
 
-Don't fucking use this, it's a buggy mess and I haven't got a fucking clue how to fix it because im retarded
+- The update checker requires a url to be present for the plugin in order to check for updates. This means it won't work for local plugins you added before installing unless you uninstall and reinstall them
+
+- This url should be the **DIRECT** link to the plugin's js file, the same one you would use if you were adding it as a non local plugin
 
 # WARNING!
 
