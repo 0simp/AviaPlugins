@@ -53,10 +53,11 @@
       const fuckityfuckfuck = fuckingendme.lastChild.firstChild.onclick
         fuckingendme.lastChild.firstChild.onclick = async function(){
           await fuckityfuckfuck()
-          const editor = monaco.editor.getEditors()[0]
           const plugins = JSON.parse(localStorage.getItem('avia_local_plugins') || "[]");
           const pluginname = child.firstChild.textContent
           const plugin = plugins.find(pl=>pl.name==pluginname)
+          const editor = monaco.editor.getEditors().find(editor=>editor.getValue()==`${plugin.code}`||editor.getValue().includes(`${pluginname}`))
+          console.log(editor)
           editor.setValue(plugin.code)
         }
     }
