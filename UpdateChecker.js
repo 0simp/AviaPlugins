@@ -3,6 +3,39 @@
   window.__UPDATE_CHECKER__ = true;
   const normalize = s => s.replace(/\r\n/g, '\n').trim();
 
+  function normalizeCodebergUrl(url) {
+        try {
+            const u = new URL(url);
+
+            if (u.hostname === "raw.codeberg.page") return url;
+
+            if (u.hostname === "codeberg.org") {
+                const parts = u.pathname.split("/").filter(Boolean);
+
+                if (parts.length >= 5 && (parts[2] === "raw" || parts[2] === "src")) {
+                    const user       = parts[0];
+                    const repo       = parts[1];
+                    const branchType = parts[3]; // "branch", "commit", "tag", or bare name
+                    const isQualified = branchType === "branch" || branchType === "commit" || branchType === "tag";
+                    const branchName = isQualified ? parts[4] : parts[3];
+                    const fileStart  = isQualified ? 5 : 4;
+                    const filePath   = parts.slice(fileStart).join("/");
+                    return `https://raw.codeberg.page/${user}/${repo}/@${branchName}/${filePath}`;
+                }
+
+                // Fallback: /user/repo/raw/branchname/file.js (no type qualifier)
+                if (parts.length >= 4 && parts[2] === "raw") {
+                    const user       = parts[0];
+                    const repo       = parts[1];
+                    const branchName = parts[3];
+                    const filePath   = parts.slice(4).join("/");
+                    return `https://raw.codeberg.page/${user}/${repo}/@${branchName}/${filePath}`;
+                }
+            }
+        } catch (_) {}
+        return url;
+    }
+
   function addUrlInput() {
     const localpluginspanel = document.getElementById('avia-local-plugins-panel');
     if (!localpluginspanel) return;
@@ -24,11 +57,15 @@
       }
     }
     const oldclick = addbutton.onclick
-    addbutton.onclick = function () {
+    addbutton.onclick = async function () {
       oldclick()
       const urlinput = document.getElementById('localurlinput');
-      const url = urlinput.value.trim();
+      let url = urlinput.value.trim();
       if(!url) return;
+
+      if(url.includes('codeberg')){
+        url = await normalizeCodebergUrl(url)
+      }
 
       fetch(url).then(res => res.text()).then(fetchedCode => {
         const plugins = JSON.parse(localStorage.getItem('avia_local_plugins') || "[]");
