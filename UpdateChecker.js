@@ -57,7 +57,6 @@
           const pluginname = child.firstChild.textContent
           const plugin = plugins.find(pl=>pl.name==pluginname)
           const editor = monaco.editor.getEditors().find(editor=>editor.getValue()==`${plugin.code}`||editor.getValue().includes(`${pluginname}`))
-          console.log(editor)
           editor.setValue(plugin.code)
         }
     }
