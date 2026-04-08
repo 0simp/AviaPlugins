@@ -41,7 +41,11 @@
     if (!localpluginspanel) return;
     const nameinput = document.querySelector('input[placeholder=\'Plugin name\']');
     if (!nameinput) return;
-    nameinput.style.setProperty('width', `${nameinput.clientWidth / 2}px`);
+    
+    if(!nameinput.style.width){
+      nameinput.style.setProperty('width', `${(nameinput.clientWidth /2)}px`);
+    }
+    
     const urlinput = nameinput.cloneNode(true);
     urlinput.setAttribute('placeholder', 'Plugin URL');
     urlinput.id = 'localurlinput';
