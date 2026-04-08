@@ -98,6 +98,10 @@ Hides image links if they're the only content in the message
 
 <img src ='https://cdn.stoatusercontent.com/attachments/UIrGkC6ipDiOpd0t3FHHzMAaIH9sG8_-tqc93RbHB0/original' width='1330' height='420'>
 
+# NoAnnoyingToolTips
+
+Removes annoying tooltips (eg toggle main sidebar)
+
 # ShrinkEmojis
 
 It shrinks emojis 🤯
