@@ -9,10 +9,11 @@
     for(const message of messages){
         const linkElement = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]
         const link = linkElement?.title
-        const text = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]?.textContent
+        const textElement = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]
+        const text = textElement?.textContent
         const image = message.children[1]?.children[1]?.children[1]?.children[1]?.children[0]
 
-        if((link==text)&&image?.tagName=='IMG'){
+        if((link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
             linkElement.style.display='none'
         }
     }
@@ -23,7 +24,7 @@
         const text = message.children[1]?.children[1]?.children[0]?.children[0]?.textContent
         const image = message.children[1]?.children[1]?.children[0]?.children[1]?.children[0]
 
-        if((link==text)&&image?.tagName=='IMG'){
+        if((link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
             linkElement.style.display='none'
         }
     }
