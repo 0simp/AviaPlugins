@@ -114,10 +114,6 @@ Removes annoying tooltips (eg toggle main sidebar)
 
 Makes timestamps on messages older than 1 week show the time the message was sent next to them
 
-**NOTE:**
-
-The time displayed will be off by 1 hour for messages sent after the clocks changed in your country. For example, a message sent on the 20th of April at 4:20 PM would show as 3:20 PM
-
 # ShrinkEmojis
 
 It shrinks emojis 🤯
