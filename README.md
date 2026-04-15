@@ -118,6 +118,10 @@ Makes timestamps on messages older than 1 week show the time the message was sen
 
 It shrinks emojis 🤯
 
+# Slowmode
+
+Allows you to set slowmode for channels (IN SECONDS)
+
 # UpdateChecker
 
 Adds an update checker for local plugins and the ability to install any updates it finds
