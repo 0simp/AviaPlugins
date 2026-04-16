@@ -122,6 +122,10 @@ It shrinks emojis 🤯
 
 Allows you to set slowmode for channels (IN SECONDS)
 
+**IMPORTANT:**
+
+Typing in the slowmode input box will not enable the save and reset buttons. To get around this, type something into one of the other boxes (eg description) and press backspace in that box to undo it
+
 # UpdateChecker
 
 Adds an update checker for local plugins and the ability to install any updates it finds
