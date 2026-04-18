@@ -126,7 +126,7 @@ It shrinks emojis 🤯
 
 Allows you to set slowmode for channels (IN SECONDS). Also adds a popup for channels with slowmode, as seen below:
 
-<img src ='https://cdn.stoatusercontent.com/attachments/hIPm_6blGKYWWSgJw3sNY5nmFDLM3E0c3bn7F0ofxC/original' width ='1586' height='99'>
+<img src ='https://cdn.stoatusercontent.com/attachments/hIPm_6blGKYWWSgJw3sNY5nmFDLM3E0c3bn7F0ofxC/original' width ='1279' height='79'>
 
 **IMPORTANT:**
 
