@@ -146,7 +146,7 @@
 
     const thirtyminutes = document.createElement('mdui-menu-item')
     thirtyminutes.innerText='30 minutes'
-    twominutes.setAttribute('value',1800)
+    thirtyminutes.setAttribute('value',1800)
 
     const onehour = document.createElement('mdui-menu-item')
     onehour.innerText='1 hour'
