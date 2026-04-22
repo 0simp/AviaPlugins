@@ -22,8 +22,33 @@
         `
 
         favouriteButton.addEventListener('click',()=>{
+          const toast = document.createElement('div')
+          Object.assign(toast.style, {
+              position: "absolute",
+              bottom: "6px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(0,0,0,0.85)",
+              padding: "6px 10px",
+              borderRadius: "8px",
+              fontSize: "11px",
+              opacity: "0",
+              transition: "opacity 0.2s",
+              pointerEvents: "none"
+          });
+
           if(localStorage.getItem('avia_favorites')){
             let favourites = JSON.parse(localStorage.getItem('avia_favorites'))
+            if(favourites.find(fav=>fav.url==element.parentElement.parentElement.parentElement.children[1].src)){
+              toast.textContent = 'Already in favourites'
+              favouriteButton.appendChild(toast);
+              requestAnimationFrame(() => toast.style.opacity = "1");
+              setTimeout(() => {
+                  toast.style.opacity = "0";
+                  setTimeout(() => toast.remove(), 200);
+              }, 2000);
+              return;
+            }
             favourites.push({
               'url':`${element.parentElement.parentElement.parentElement.children[1].src}`,
               'title':``,
@@ -39,6 +64,13 @@
             })
             localStorage.setItem('avia_favorites',JSON.stringify(favourites))
           }
+          toast.textContent = 'Added to favourites'
+              favouriteButton.appendChild(toast);
+              requestAnimationFrame(() => toast.style.opacity = "1");
+              setTimeout(() => {
+                  toast.style.opacity = "0";
+                  setTimeout(() => toast.remove(), 200);
+              }, 2000);
         });
 
         element.appendChild(favouriteButton)
@@ -49,32 +81,8 @@
     if(panel){
       const header = panel.children[0]
       const grid = panel.children[2]
-      for(const child of panel.children[2].children){
-        child.onclick=()=>{
-          let textinput = document.getElementsByClassName('md-text').item(0)
-          if(textinput){
-            textinput.innerText=textinput.innerText+` ${child.children[1].src}`
-          }else{
-            const editor = document.getElementsByClassName('cm-editor ͼ1 ͼ2 ͼ5 ͼ4 ͼ8 ͼ6 ͼ7').item(0)
-            textinput = document.createElement('span')
-            textinput.className='md-text'
-            textinput.innerText=`${child.children[1].src}`
-            editor.children[1].children[0].children[0].appendChild(textinput)
-          }
-        }
-      }
+      function render() {
 
-      const refreshButton = document.createElement('div')
-      refreshButton.textContent='↺'
-      refreshButton.id='favsrefresh'
-      Object.assign(refreshButton.style,{
-          position:'absolute',
-          right:'36px',
-          top:'16px',
-          cursor:'pointer'
-      });
-
-      refreshButton.onclick=()=>{
         grid.innerHTML = "";
         const favorites = getFavorites();
 
@@ -182,8 +190,52 @@
                 card.appendChild(titleOverlay);
             }
 
+            card.onclick = () => {
+                const doToast = () => showToast(card);
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(item.url)
+                        .then(doToast)
+                        .catch(() => {
+                            fallbackCopy(item.url);
+                            doToast();
+                        });
+                } else {
+                    fallbackCopy(item.url);
+                    doToast();
+                }
+            };
+
             grid.appendChild(card);
         });
+      }
+
+      for(const child of panel.children[2].children){
+        child.onclick=()=>{
+          let textinput = document.getElementsByClassName('md-text').item(0)
+          if(textinput){
+            textinput.innerText=textinput.innerText+` ${child.children[1].src}`
+          }else{
+            const editor = document.getElementsByClassName('cm-editor ͼ1 ͼ2 ͼ5 ͼ4 ͼ8 ͼ6 ͼ7').item(0)
+            textinput = document.createElement('span')
+            textinput.className='md-text'
+            textinput.innerText=`${child.children[1].src}`
+            editor.children[1].children[0].children[0].appendChild(textinput)
+          }
+        }
+      }
+
+      const refreshButton = document.createElement('div')
+      refreshButton.textContent='↺'
+      refreshButton.id='favsrefresh'
+      Object.assign(refreshButton.style,{
+          position:'absolute',
+          right:'36px',
+          top:'16px',
+          cursor:'pointer'
+      });
+
+      refreshButton.onclick=()=>{
+        render()
       };
 
       if(!document.getElementById('favsrefresh')){
