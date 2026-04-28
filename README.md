@@ -110,6 +110,16 @@ Hides image links if they're the only content in the message
 
 <img src ='https://cdn.stoatusercontent.com/attachments/UIrGkC6ipDiOpd0t3FHHzMAaIH9sG8_-tqc93RbHB0/original' width='1330' height='420'>
 
+# KickMembersFromGC
+
+Adds a context menu button to kick members from group chats
+
+**WARNING:**
+
+This plugin contains a token grabber because your token is required to kick members from group chats. You can read through the code to verify that it is safe, or if you still don't feel comfortable with it just don't use the plugin
+
+Also note that the button will not show if you click onto a group chat as soon as you load into stoat. If you do that, scroll up in the channel to load more messages, then it should show.
+
 # NoAnnoyingToolTips
 
 Removes annoying tooltips (eg toggle main sidebar)
