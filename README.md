@@ -132,6 +132,10 @@ Makes timestamps on messages older than 1 week show the time the message was sen
 
 It shrinks emojis 🤯
 
+# SilentLeaveGCs
+
+Allows you to leave group chats silently (without notifying other members)
+
 # Slowmode
 
 Allows you to set slowmode for channels (IN SECONDS). Also adds a popup for channels with slowmode, as seen below:
