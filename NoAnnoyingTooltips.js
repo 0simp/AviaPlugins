@@ -9,7 +9,7 @@
   function removeTooltip() {
     document.querySelectorAll('div.c_white.bg_black').forEach(el => {
       if (el.className === TARGET_CLASS && el.textContent){
-        if(!el.firstChild?.firstChild?.outerHTML?.includes('emoji-size')){
+        if(!el.firstChild?.firstChild?.outerHTML?.includes('emoji-size')&&!el.style?.color&&!el.firstChild?.style?.color){
           el.remove()
         }
       }
