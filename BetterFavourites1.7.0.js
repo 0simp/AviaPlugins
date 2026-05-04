@@ -11,6 +11,14 @@
     return match ? match[1] : null;
   }
 
+  function updateBadge() {
+    const badge = document.getElementById("avia-favorites-badge");
+    if (!badge) return;
+    const count = getFavorites().length;
+    badge.textContent = count;
+    badge.style.display = count > 0 ? "flex" : "none";
+  }
+
   function apply() {
     document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{
       if(element.childElementCount===4&&element.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
@@ -55,6 +63,7 @@
               'addedAt':Date.now()
             })
             localStorage.setItem('avia_favorites',JSON.stringify(favourites))
+            updateBadge()
           }else{
             let favourites = [];
             favourites.push({
@@ -63,6 +72,7 @@
               'addedAt':Date.now()
             })
             localStorage.setItem('avia_favorites',JSON.stringify(favourites))
+            updateBadge()
           }
           toast.textContent = 'Added to favourites'
               favouriteButton.appendChild(toast);
