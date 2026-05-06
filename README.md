@@ -71,6 +71,10 @@ After enabling the plugin, paste the following into your quick css:
 }
 ```
 
+# DeleteMessagesOnBan
+
+Allows you to delete a user's messages from up to the past 7 days when banning them
+
 # EmojiSounds
 
 Allows you to set sounds to be played when certain emojis are sent in chat
