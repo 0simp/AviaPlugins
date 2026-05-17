@@ -128,6 +128,26 @@ Also note that the button will not show if you click onto a group chat as soon a
 
 Removes annoying tooltips (eg toggle main sidebar)
 
+# RoleIcons
+
+Adds client side support for adding and displaying role icons
+
+**HOW TO ADD ROLE ICONS:**
+
+Go into server settings, click on "Roles" then click on the role you want to add an icon to. Click the empty circle towards the top of the page, which should open a file selection window. Select the image you want to use as an icon, then press the "upload" button. Finally, type something in the role name box to enable the save button (you can undo whatever you typed in there afterwards), then click the save button.
+
+**A FEW THINGS TO NOTE:**
+
+1) This plugin contains a token grabber because your token is required to use the apis this plugin uses. You can check through the code to make sure it's safe if you don't trust me, or if you STILL don't trust me then just don't use it
+
+2) Role icons will only be displayed if you have already triggered some requests. The easiest way to do this is to click on a random dm after loading stoat
+
+3) Displaying role icons in a server also requires fetching the members. If you have the member list open all the time, this will happen automatically whenever you click on a channel. Otherwise, you will have to open the member list briefly each time you click on a channel.
+
+4) Finally, displaying role icons also requires loading messages in the channel so the code knows which messages to display icons next to. To do this, simply scroll up in the channel until you load new messages, then the icons should display
+
+5) Icons are also not displayed in the role editor ui even if the role does have an icon. I may release an update in the future to change this
+
 # ShowOldMessageTimes
 
 Makes timestamps on messages older than 1 week show the time the message was sent next to them
