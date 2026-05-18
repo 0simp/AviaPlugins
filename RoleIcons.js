@@ -68,6 +68,19 @@
                                         roles[url.substring(url.indexOf('/servers/')+9,url.indexOf('/members'))] = []
                                     }
                                     roles[url.substring(url.indexOf('/servers/')+9,url.indexOf('/members'))].push(json)
+                                    const fuckyshit = roles[url.substring(url.indexOf('/servers/')+9,url.indexOf('/members'))]
+                                    const sortedroles = fuckyshit.sort((a, b) => {
+                                        const rankA = a.rank; 
+                                        const rankB = b.rank; 
+                                        if (rankA < rankB) {
+                                            return -1;
+                                        }
+                                        if (rankA > rankB) {
+                                            return 1;
+                                        }
+                                        return 0;
+                                    });
+                                    roles[url.substring(url.indexOf('/servers/')+9,url.indexOf('/members'))] = sortedroles
                                 }
                             } catch (error) {
                                 
