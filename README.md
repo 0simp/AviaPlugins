@@ -1,6 +1,6 @@
 All my plugins for [Avia client](https://github.com/AvaLilac/for-desktop)
 
-Plugins marked as (REDUNDANT) are no longer needed because their fucntionality exists in either normal stoat or avia and will therefore not receive updates
+Plugins marked as (REDUNDANT) are no longer needed because their functionality exists in either normal stoat or avia and will therefore not receive updates
 
 Plugins marked as (DISCONTINUED) will no longer recieve updates, either because they have been replaced by something else or because I can't be bothered
 
@@ -62,7 +62,9 @@ Adds a button to non-image/video attachments to copy the attachment link
 
 # CopyRoleID
 
-Makes it possible to copy role ids without needing the manage roles permission. Note that the member list for each server needs to be loaded in order for this plugin to work, so if you try to copy a role's id and see text that says "Couldn't copy role id", briefly open the member list then try again
+Makes it possible to copy role ids without needing the manage roles permission. Note that the member list for each server needs to be loaded in order for this plugin to work, so if you try to copy a role's id and see text that says "Couldn't copy role id", briefly open the member list then try again. To use simply press the "copy role id" button in the user roles modal
+
+<img src="https://cdn.stoatusercontent.com/attachments/JLnHARt9_PFodEJsLOMsGsQd8W1ZJcyND7GvNYq8pJ/original">
 
 # CustomHomeButton
 
