@@ -127,12 +127,22 @@
             zIndex: "1"
         });
 
-      card.$$click = async function(){
-        buttonelement = card.lastChild
-        imgurl = card.firstChild.src
-        setTimeout(() => {
-          img.$$click()
-        }, 100);
+      if(img.onclick){
+        card.onclick = async function(){
+          buttonelement = card.lastChild
+          imgurl = card.firstChild.src
+          setTimeout(() => {
+            img.onclick()
+          }, 100);
+        }
+      }else{
+        card.$$click = async function(){
+          buttonelement = card.lastChild
+          imgurl = card.firstChild.src
+          setTimeout(() => {
+            img.$$click()
+          }, 100);
+        }
       }
 
       card.appendChild(clone)
