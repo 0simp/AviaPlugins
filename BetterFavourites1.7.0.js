@@ -88,8 +88,14 @@
 
   function apply() {
     document.querySelectorAll('img.cursor_pointer').forEach(img=>{ //add favourites button to images in chat
+      let message = img.parentElement.parentElement.parentElement.parentElement.parentElement
+      if(!message.id){
+        message= img.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+      }
+      
       const card = document.createElement('div')
       card.className='fuckshit'
+      card.id=`fuckshit${message.id}`
        Object.assign(card.style, {
             position: "relative",
             borderRadius: "10px",
@@ -144,11 +150,10 @@
       card.appendChild(clone)
       card.appendChild(starBtn)
 
-      if([...document.querySelectorAll('img.cursor_pointer')].length!=[...document.getElementsByClassName('fuckshit')].length){
+      if(!document.getElementById(`fuckshit${message.id}`)){
         img.parentElement.replaceChild(card,img)
       }
     });
-
 
     document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{ //add favourites button to image viewer toolbar
       if(element.childElementCount===4&&element.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
