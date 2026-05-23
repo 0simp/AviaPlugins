@@ -180,6 +180,18 @@ Allows you to set slowmode for channels (IN SECONDS). Also adds a popup for chan
 
 Typing in the slowmode input box will not enable the save and reset buttons. To get around this, type something into one of the other boxes (eg description) and press backspace in that box to undo it
 
+# StoatImageFix
+
+Fixes images hosted on cdn.stoatusercontent.com not embedding
+
+**WITHOUT THE PLUGIN:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/jmfJdjMbFRjm_Ui0Bs24JiVF5wlD4verfZtAjJYjhZ/original'>
+
+**WITH THE PLUGIN:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/2Pe9wK7SiYic3YiTAERR3eO1qg4q3k0eTETzp-HYEV/original'>
+
 # UpdateChecker
 
 Adds an update checker for local plugins and the ability to install any updates it finds
