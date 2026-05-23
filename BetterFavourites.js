@@ -77,6 +77,11 @@
 
   function apply() {
     document.querySelectorAll('img.cursor_pointer').forEach(img=>{ //add favourites button to images in chat
+      let message = img.parentElement.parentElement.parentElement.parentElement.parentElement
+      if(!message.id){
+        message= img.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+      }
+      
       const card = document.createElement('div')
       card.className='fuckshit'
        Object.assign(card.style, {
@@ -133,7 +138,7 @@
       card.appendChild(clone)
       card.appendChild(starBtn)
 
-      if([...document.querySelectorAll('img.cursor_pointer')].length!=[...document.getElementsByClassName('fuckshit')].length){
+      if(!document.getElementById(`fuckshit${message.id}`)){
         img.parentElement.replaceChild(card,img)
       }
     });
