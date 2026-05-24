@@ -13,6 +13,14 @@
     return match ? match[1] : null;
   }
 
+  function updateBadge() {
+    const badge = document.getElementById("avia-favorites-badge");
+    if (!badge) return;
+    const count = getFavorites().length;
+    badge.textContent = count;
+    badge.style.display = count > 0 ? "flex" : "none";
+  }
+
   function tryToAdd(button,url,balls){
     const toast = document.createElement('div')
     Object.assign(toast.style, {
@@ -34,6 +42,7 @@
       if(favourites.find(fav=>fav.url==url)){
         favourites = favourites.filter(f => f.url!==url)
         localStorage.setItem('avia_favorites',JSON.stringify(favourites))
+        updateBadge()
         button.style.color=getFavorites().some(f=>f.url==url)? "#f5c518" : "#fff"
         if(!balls){
           toast.textContent = 'Removed from favourites'
@@ -53,6 +62,7 @@
         'addedAt':Date.now()
       })
       localStorage.setItem('avia_favorites',JSON.stringify(favourites))
+      updateBadge()
       button.style.color=getFavorites().some(f=>f.url==url)? "#f5c518" : "#fff"
     }else{ //if favourites storage key doesn't exist
       let favourites = [];
@@ -62,6 +72,7 @@
         'addedAt':Date.now()
       })
       localStorage.setItem('avia_favorites',JSON.stringify(favourites))
+      updateBadge()
       button.style.color=getFavorites().some(f=>f.url==url)? "#f5c518" : "#fff"
     }
     if(!balls){
@@ -84,6 +95,7 @@
       
       const card = document.createElement('div')
       card.className='fuckshit'
+      card.id=`fuckshit${message.id}`
        Object.assign(card.style, {
             position: "relative",
             borderRadius: "10px",
@@ -153,7 +165,7 @@
       }
     });
 
-    document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{
+    document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{ //add favourites button to image viewer toolbar
       if(element.childElementCount===4&&element.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
         const favouriteButton = document.createElement('button')
         favouriteButton.setAttribute('class','lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px')
@@ -169,7 +181,6 @@
             buttonelement.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
           }
         } 
-
         element.appendChild(favouriteButton)
       }
     })
@@ -305,7 +316,7 @@
             grid.appendChild(card);
         });
       }
-
+      
       for(const child of panel.children[2].children){
         child.onclick=()=>{
           let textinput = document.getElementsByClassName('md-text').item(0)
