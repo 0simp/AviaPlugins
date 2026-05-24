@@ -27,7 +27,7 @@
     document.querySelectorAll(`a[title*='cdn.stoatusercontent.com']`).forEach(element=>{
         const parent = element.parentElement.parentElement.parentElement.parentElement
 
-        if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)){
+        if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)&&element.getBoundingClientRect().y>0){
             const div = document.createElement('div')
             div.className='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'
             div.dataset.src=element.textContent
@@ -219,6 +219,7 @@
                   video.src=element.textContent
                   video.preload='metadata'
                   video.controls=true
+                  video.loading='lazy'
                   const dims = await getVideoDimensionsOf(video.src)
                   if(dims.width>420){
                     const ballsack = dims.width/420
