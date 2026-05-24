@@ -95,7 +95,7 @@
       
       const card = document.createElement('div')
       card.className='fuckshit'
-      card.id=`fuckshit${message.id}`
+      card.dataset.src=img.src
        Object.assign(card.style, {
             position: "relative",
             borderRadius: "10px",
@@ -160,7 +160,7 @@
       card.appendChild(clone)
       card.appendChild(starBtn)
 
-      if(!document.getElementById(`fuckshit${message.id}`)){
+      if(!message.querySelector(`div[class='fuckshit'][data-src='${img.src}']`)){
         img.parentElement.replaceChild(card,img)
       }
     });
