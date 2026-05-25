@@ -11,6 +11,7 @@
   function getVideoDimensionsOf(url){
     return new Promise(resolve => {
         const video = document.createElement('video');
+        video.loading='lazy'
 
         video.addEventListener( "loadedmetadata", function () {
             const height = this.videoHeight;
@@ -212,6 +213,11 @@
                       if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)){
                           div.appendChild(img)
                           parent.appendChild(div)
+
+                          if(div.clientWidth!=Number(div.style.width.replace('px',''))){
+                            const fart = div.style.width.replace('px','')/div.clientWidth
+                            div.style.height=`${Number(div.style.height.replace('px',''))/fart}px`
+                          }
                       }
                   }
                 }else if(contentType.includes('video')){
@@ -233,6 +239,11 @@
                   if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)){
                     div.appendChild(video)
                     parent.appendChild(div)
+
+                    if(div.clientWidth!=Number(div.style.width.replace('px',''))){
+                      const fart = div.style.width.replace('px','')/div.clientWidth
+                      div.style.height=`${Number(div.style.height.replace('px',''))/fart}px`
+                    }
                   }
                 }
               }
