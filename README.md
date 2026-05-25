@@ -85,6 +85,14 @@ After enabling the plugin, paste the following into your quick css:
 
 Allows you to delete a user's messages from up to the past 7 days when banning them. This plugin is now redundant because its functionality exists in normal stoat
 
+# EditEmojis
+
+Adds client side support for renaming emojis. Note that even if the emoji is successfully renamed, the new name will not show up client side until you refresh. This is a stoat issue that I don't think I can do anything about
+
+**Screenshot of the ui for renaming emojis:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/LueCbA5ZrhQPhunndpWQvH_nCAo8cyGLJg1roiT64E/original'>
+
 # EmojiSounds
 
 Allows you to set sounds to be played when certain emojis are sent in chat
