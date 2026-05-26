@@ -147,7 +147,7 @@
 
                     const imgelement = document.createElement('img')
                     imgelement.className='min-h_0 as_center obj-f_contain bg_rgba(0,_0,_0,_0.6)'
-                    imgelement.style=`aspect-ratio: ${imgwidth} / ${imgheight}; cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none; transform: scale(1) translate(0px,0px);`
+                    imgelement.style=`aspect-ratio: ${imgwidth} / ${imgheight}; cursor: move; user-select: none; touch-action: none; transform-origin: 50% 50%; transition: none; transform: scale(1) translate(0px,1px);`
                     imgelement.src=imgurl
 
                     imgelement.onmousedown = function(e){
@@ -173,6 +173,52 @@
                         const oldtranslate = transform.substring(transform.indexOf('translate'),transform.lastIndexOf(')')+1)
                         const newtranslate = `translate(${x}px, ${y}px)`
                         imgelement.style.transform=imgelement.style.transform.replace(oldtranslate,newtranslate)
+                      }
+                    }
+
+                    imgelement.ontouchstart = function(e){
+                      e.preventDefault()
+                      dragging=true
+                    }
+
+                    imgelement.ontouchend = function(e){
+                      e.preventDefault()
+                      dragging=false
+                      previousx = null
+                      previousy = null
+                    }
+
+                    let previousx = null
+                    let previousy = null;
+
+                    imgelement.ontouchmove = function(e){
+                      e.preventDefault()
+                      if(dragging){
+                        const touch = e.touches[0]
+                        const currentx = touch.clientX;
+                        const currenty = touch.clientY;
+
+                        if(!previousx){
+                          previousx = currentx
+                          previousy = currenty;
+                        }
+
+                        const movementx = currentx - previousx;
+                        const movementy = currenty - previousy;
+
+                        const transform = imgelement.style.transform
+                        const translate = transform.substring(transform.indexOf('translate('),transform.lastIndexOf(')')).replace('translate(','').split(',')
+                        let x = Number(translate[0].replace('px',''))
+                        let y = Number(translate[1].replace('px',''))
+                        x = x+movementx
+                        y = y+movementy
+
+                        const oldtranslate = transform.substring(transform.indexOf('translate'),transform.lastIndexOf(')')+1)
+                        const newtranslate = `translate(${x}px, ${y}px)`
+                        imgelement.style.transform=imgelement.style.transform.replace(oldtranslate,newtranslate)
+
+                        previousx = currentx
+                        previousy = currenty
                       }
                     }
 
