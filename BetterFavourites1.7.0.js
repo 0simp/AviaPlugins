@@ -167,6 +167,50 @@
 
     document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{ //add favourites button to image viewer toolbar
       if(element.childElementCount===4&&element.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
+        const copylinkbtn = document.createElement('button')
+        copylinkbtn.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px'
+
+        const mdripple = document.createElement('md-ripple')
+        mdripple.ariaHidden=true
+
+        const copylinkspan = document.createElement('span')
+        copylinkspan.className='material-symbols-outlined fs_inherit fw_undefined!'
+        copylinkspan.style.fontFeatureSettings='"FILL" 0, "wght" 400, "GRAD" 0'
+        copylinkspan.textContent='link'
+
+        copylinkbtn.appendChild(mdripple)
+        copylinkbtn.appendChild(copylinkspan)
+
+        copylinkbtn.onclick = function(){
+          let text = 'Copied!'
+          navigator.clipboard.writeText(element.parentElement.parentElement.parentElement.children[1].src).catch(err=>{
+            text = 'Couldn\'t copy'
+          })
+
+          const toast = document.createElement('div')
+          Object.assign(toast.style, {
+              position: "absolute",
+              bottom: "6px",
+              left: "50%",
+              transform: "translateX(-50%)",
+              background: "rgba(0,0,0,0.85)",
+              padding: "6px 10px",
+              borderRadius: "8px",
+              fontSize: "11px",
+              opacity: "0",
+              transition: "opacity 0.2s",
+              pointerEvents: "none",
+          });
+          toast.textContent=text
+
+          copylinkbtn.appendChild(toast);
+          requestAnimationFrame(() => toast.style.opacity = "1");
+              setTimeout(() => {
+                toast.style.opacity = "0";
+                setTimeout(() => toast.remove(), 200);
+            }, 2000);
+        }
+
         const favouriteButton = document.createElement('button')
         favouriteButton.setAttribute('class','lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px')
         favouriteButton.innerHTML = `
@@ -181,6 +225,7 @@
             buttonelement.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
           }
         } 
+        element.insertBefore(copylinkbtn,element.lastChild)
         element.appendChild(favouriteButton)
       }
     })
