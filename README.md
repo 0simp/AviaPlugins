@@ -200,6 +200,16 @@ Fixes images hosted on cdn.stoatusercontent.com not embedding
 
 <img src='https://cdn.stoatusercontent.com/attachments/2Pe9wK7SiYic3YiTAERR3eO1qg4q3k0eTETzp-HYEV/original'>
 
+# Timeout
+
+Adds a button for adding and removing timeouts from members
+
+**EXAMPLE:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/_HCbe-9PdjfTxbeZL4iMWggF-tKsGZGIzY8k7zkUKQ/original'>
+
+Also note that the timeout button gets added if either the ban or kick buttons are present in the member context menu, therefore it may incorrectly get added if you have permission to either ban or kick, but not timeout or it may incorrectly not get added if you have permission to timeout, but not ban or kick.
+
 # UpdateChecker
 
 Adds an update checker for local plugins and the ability to install any updates it finds
