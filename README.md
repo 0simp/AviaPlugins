@@ -52,6 +52,14 @@ right:16px;
 }
 ```
 
+# ClickSounds
+
+Plays a sound effect whenever you click on a button.
+
+**UI FOR SETTING THE CLICK SOUND (accessed via user settings):**
+
+<img src='https://cdn.stoatusercontent.com/attachments/g-fRAhuhIAt0QL6e3Mgo72bY3ar7F4Z7TGtNszdzXw/original'>
+
 # CopyAttachmentLink
 
 Adds a button to non-image/video attachments to copy the attachment link
