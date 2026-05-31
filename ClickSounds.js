@@ -150,7 +150,7 @@
     const fileinput = document.createElement('input')
     fileinput.type='file'
     fileinput.style.display='none'
-    fileinput.accept='audio/*'
+    fileinput.accept='audio/*,audio/mpeg,audio/ogg'
 
     fileinput.onchange = function(e){
         if(fileinput.files[0]){
@@ -196,7 +196,7 @@
         flexShrink: '0',
     });
     saveBtn.onclick = () => {
-        if(!selectedFile) return;
+        if(!selectedFile||!selectedFile.type.includes('audio')) return;
         const infoobject = {
           name:`${selectedFile.name}`,
           size:`${(selectedFile.size / 1024).toFixed(1)+ ' KB'}`
@@ -286,7 +286,7 @@
 
     if(!localStorage.getItem('avia_click_sound_data')) return;
     document.querySelectorAll('a,div,button').forEach(e=>{
-      if((e.$$click||e.onclick||e.id?.includes('stoat-fake')||e.id?.includes('avia'))
+      if((e.$$click||e.onclick||((e.id?.includes('stoat-fake')||e.id?.includes('avia'))&&!e.id?.includes('panel')))
       &&!e.dataset.patched&&!e.firstChild?.dataset?.patched&&!e.parentElement?.dataset?.patched&&!e.textContent?.includes('Test')){
         e.addEventListener('click',async()=>{
           const sound = new Audio(`${localStorage.getItem('avia_click_sound_data')}`)
