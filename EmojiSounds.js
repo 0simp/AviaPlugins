@@ -9,26 +9,42 @@
             if (mutation.type === 'childList') {
                 for (let node of mutation.addedNodes) {
                     if((node.className=='group pos_relative d_flex flex-d_column p_2px_0 bg_transparent bdr_var(--borderRadius-md) min-h_1em trs_background-color_var(--transitions-fast) [&_a:hover]:td_underline [&:hover_.Toolbar]:d_flex mt_var(--message-group-spacing)! [&:hover]:bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface)'||(node.id&&node.children[0].className=='top_-18px right_16px pos_absolute ai_center d_none ov_hidden bdr_var(--borderRadius-xs) bx-sh_0_0_3px_var(--md-sys-color-shadow) fill_var(--md-sys-color-on-secondary-container) bg_var(--md-sys-color-secondary-container) Toolbar'))&&node.getBoundingClientRect().y>0){
-                        let timestamp = node.children[1]?.children[1]?.children[0]?.children[1]?.children[0]?.children[1]?.innerHTML
+                        let timestamp = node.children[1]?.children[1]?.children[0]?.children[1]?.children[0]?.children[1]?.innerHTML //if timestamp is above message
+
+                        if(!timestamp){
+                            if(node.children[2]){
+                                timestamp = node.children[2].children[1].children[0].children[1].children[0].children[1].innerHTML //if message is reply
+                            }else{
+                                timestamp = node.children[1].children[0].children[0].innerHTML //if timestamp is on left of message
+                            }
+                        }
+
                         timestamp = timestamp?.substring(timestamp?.indexOf('"')+1,timestamp?.lastIndexOf('"'));
                         timestamp = Math.floor(new Date(timestamp).getTime() / 1000)
                         let emoji;
-                        if(node.children[2]){
+                        if(node.children[2]&&node.children[2].children[1].children[1].children[0].children[0].children[0]){
                             emoji = node.children[2].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message is a reply
-                        }else{
+                        }else if(node.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]){
                             emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].alt //emoji if the message doesn't have a timestamp at the top of it
-                            if(node.children[1].children[1].children[1]){
+                            if(node.children[1].children[1].children[1]&&node.children[1].children[1].children[1].children[0].children[0].children[0]){
                                 emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message does have a timestamp at the top of it
                             }
                         }
-                        //custom emoji support
+                        //custom emoji support (replies are fucking broken still)
                         if(!emoji){
-                            emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].children[0].alt
-                            if(node.children[1].children[1].children[1]){
-                                emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].children[0].alt
+                            if(node.children[2]){ //if message is a reply
+                                emoji = node.children[2]?.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]?.alt
+                            }else{
+                                if(node.children[1].children[1].children[1]&&node.children[1].children[1].children[1].children[0].children[0].children[0]){ //if message does have timestamp above it
+                                    emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].children[0].alt
+                                }
+
+                                if(node.children[1].children[1].children[0]?.children[0]?.children[0]?.children[0]?.children[0]){ //if message doesn't have timestamp above it
+                                    emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].children[0].alt
+                                }   
                             }
                         }
-                        if((emojisounds.find(emoji1=>emoji1.emoji===emoji)&&Math.floor(Date.now()/1000)-timestamp<2)||(isNaN(timestamp))){
+                        if((emojisounds.find(emoji1=>emoji1.emoji===emoji)&&(Math.floor(Date.now()/1000)-timestamp<2))){
                             const eomijsound = emojisounds.find(emoji1=>emoji1.emoji===emoji)
                             const sound = new Audio(eomijsound.sound)
                             sound.play()
