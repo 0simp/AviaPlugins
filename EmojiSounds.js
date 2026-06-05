@@ -30,7 +30,7 @@
                                 emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].alt //emoji if the message does have a timestamp at the top of it
                             }
                         }
-                        //custom emoji support (replies are fucking broken still)
+                        //custom emoji support
                         if(!emoji){
                             if(node.children[2]){ //if message is a reply
                                 emoji = node.children[2]?.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]?.alt
@@ -39,7 +39,7 @@
                                     emoji = node.children[1].children[1].children[1].children[0].children[0].children[0].children[0].alt
                                 }
 
-                                if(node.children[1].children[1].children[0]?.children[0]?.children[0]?.children[0]?.children[0]){ //if message doesn't have timestamp above it
+                                if(!emoji&&node.children[1].children[1].children[0]?.children[0]?.children[0]?.children[0]?.children[0]){ //if message doesn't have timestamp above it
                                     emoji = node.children[1].children[1].children[0].children[0].children[0].children[0].children[0].alt
                                 }   
                             }
@@ -137,21 +137,35 @@
             const controls = document.createElement('div');
             controls.style.display = 'flex';
             controls.style.gap = '6px';
+
             const play = document.createElement('button')
-            play.textContent='🔊'
+            play.style.cursor='pointer'
             play.onclick=()=>{
                 let emoji = play.parentElement.parentElement.children[0].textContent
-                if(emoji.length!=2){
+                if(emoji.length!=2&&play.parentElement.parentElement.children[0].children[0]){
                     emoji = play.parentElement.parentElement.children[0].children[0].alt
                 }
                 const eomijsound = emojisounds.find(emoji1=>emoji1.emoji===emoji)
                 const sound = new Audio(eomijsound.sound)
                 sound.play()
             };
+
+            const ripple = document.createElement('md-ripple')
+            ripple.ariaHidden=true
+
+            const span = document.createElement('span')
+            span.className='material-symbols-outlined'
+            span.style='display: block; font-size:16px; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0; font-size: 24px;'
+            span.textContent='volume_up'
+
+            play.appendChild(ripple)
+            play.appendChild(span)
+            
             const edit = document.createElement('button')
             edit.innerHTML=`
             <md-ripple aria-hidden="true"></md-ripple><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24"><path d="m14.06 9.02.92.92L5.92 19H5v-.92zM17.66 3c-.25 0-.51.1-.7.29l-1.83 1.83 3.75 3.75 1.83-1.83a.996.996 0 0 0 0-1.41l-2.34-2.34c-.2-.2-.45-.29-.71-.29m-3.6 3.19L3 17.25V21h3.75L17.81 9.94z" fill="#F0DEDD"></path></svg>
             `
+            edit.style.cursor='pointer'
             edit.onclick=async ()=>{
                 let originalemoji;
                 if(edit.parentElement.previousSibling.children[0]){
@@ -177,32 +191,50 @@
                 add.textContent='Save'
                 const originalclick = add.onclick
                 add.onclick=()=>{
-                    const emoji = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[2].children[0].value.trim()
-                    const url = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[2].children[1].value.trim()
-                    if(!emoji||!url) return;
-                    if(!emojisounds.find(emoji1=>emoji1.emoji===emoji)){
-                        emojisounds.splice(emojisounds.indexOf(emojisounds.find(emoji=>emoji.emoji===originalemoji)),1)
-                        emojisounds.push({emoji:emoji,sound:url})
-                        localStorage.setItem('emoji-sounds',JSON.stringify(emojisounds))
+                    let emoji = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[2].children[0].value.trim()
+                    const file = edit.parentElement.parentElement.parentElement.parentElement.parentElement.children[2].children[1].children[2].files[0]
+                    if(!emoji){
+                        emoji = originalemoji
+                    }
+                    
+                    if(!emoji&&!file) return;
+                    if(emojisounds.find(emoji1=>emoji1.emoji===emoji)){
+                        const reader = new FileReader()
+                        reader.onload = ()=>{
+                            emojisounds.splice(emojisounds.indexOf(emojisounds.find(emoji=>emoji.emoji===originalemoji)),1)
+                            const url = reader.result;
+                            emojisounds.push({emoji:emoji,sound:url})
+                            localStorage.setItem('emoji-sounds',JSON.stringify(emojisounds))
+                        };
+                        reader.readAsDataURL(file);
                     }
                     renderPanel();
                     add.parentElement.previousSibling.previousSibling.textContent='Emoji Sounds Settings'
                     add.textContent='Add'
                     add.onclick=originalclick
                     add.previousSibling.previousSibling.value=''
-                    add.previousSibling.value=''
+                    add.previousSibling.lastChild.value=''
+                    add.previousSibling.firstChild.textContent='Click to browse'
+                    add.previousSibling.children[1].textContent='Any audio file'
+                    add.previousSibling.style.borderColor='rgba(255,255,255,0.5)'
+                    add.previousSibling.style.removeProperty('background')
                 };
                 close.onclick=()=>{
                     add.parentElement.previousSibling.previousSibling.textContent='Emoji Sounds Settings'
                     add.textContent='Add'
                     add.onclick=originalclick
                     add.previousSibling.previousSibling.value=''
-                    add.previousSibling.value=''
+                    add.previousSibling.lastChild.value=''
+                    add.previousSibling.firstChild.textContent='Click to browse'
+                    add.previousSibling.children[1].textContent='Any audio file'
+                    add.previousSibling.style.borderColor='rgba(255,255,255,0.5)'
+                    add.previousSibling.style.removeProperty('background')
                     close.onclick=originalcloseclick
                 };
             };
             const remove = document.createElement('button');
             remove.textContent = '✕';
+            remove.style.cursor='pointer'
             remove.onclick = () => {
                 emojisounds.splice(index, 1);
                 localStorage.setItem('emoji-sounds',JSON.stringify(emojisounds))
@@ -266,6 +298,7 @@
                 controlsBar.style.alignItems = 'center';
                 controlsBar.style.borderBottom = '1px solid rgba(255,255,255,0.08)';
                 controlsBar.style.flex = '0 0 auto';
+                controlsBar.style.flexDirection='column'
                 const content = document.createElement('div');
                 content.id = 'emoji-sounds-settings-content';
                 content.style.flex = '1';
@@ -274,28 +307,86 @@
                 const emojiInput = document.createElement('input');
                 emojiInput.placeholder = 'Emoji';
                 styleInput(emojiInput);
-                emojiInput.style.width = '110px';
-                const urlInput = document.createElement('input');
-                urlInput.placeholder = 'Sound URL';
-                styleInput(urlInput);
-                urlInput.style.flex = '1';
+                emojiInput.style.width = '100%';
+
+                const filebutton = document.createElement('div')
+                Object.assign(filebutton.style,{
+                    width: '100%',
+                    boxSizing: 'border-box',
+                    border: '2px dashed rgba(255,255,255,0.15)',
+                    borderRadius: '12px',
+                    padding: '28px 16px',
+                    textAlign: 'center',
+                    cursor: 'pointer',
+                    transition: 'border-color 0.15s, background 0.15s',
+                    color: 'rgba(255,255,255,0.5)',
+                    fontSize: '0.875rem'
+                })
+
+                const filetext = document.createElement('div')
+                filetext.style.marginBottom='6px'
+                filetext.textContent='Click to browse'
+
+                const filesub = document.createElement('div');
+                Object.assign(filesub.style, { fontSize: '11px', opacity: '0.5' });
+                filesub.textContent='Any audio file'
+
+                const fileinput = document.createElement('input')
+                fileinput.type='file'
+                fileinput.style.display='none'
+                fileinput.accept='audio/*,audio/mpeg,audio/ogg'
+
+                fileinput.onchange = function(e){
+                    if(fileinput.files[0]){
+                        fileSelect(fileinput.files[0])
+                    }
+                }
+
+                let selectedFile = null;
+
+                function fileSelect(file){
+                    selectedFile = file;
+                    filetext.textContent = file.name;
+                    filesub.textContent = (file.size / 1024).toFixed(1) + ' KB';
+                    filebutton.style.borderColor = 'var(--md-sys-color-primary, rgba(103,80,164,0.9))';
+                    filebutton.style.background = 'rgba(103,80,164,0.08)';
+                }
+
+                filebutton.appendChild(filetext)
+                filebutton.appendChild(filesub)
+                filebutton.appendChild(fileinput)
+
+                filebutton.onclick = function(){
+                    fileinput.click()
+                }
+
                 const addBtn = document.createElement('button');
                 addBtn.textContent = 'Add';
+                addBtn.style.cursor='pointer'
                 addBtn.onclick = () => {
                     emojisounds = JSON.parse(localStorage.getItem('emoji-sounds'))??[]
                     const emoji = emojiInput.value.trim();
-                    const soundurl = urlInput.value.trim();
-                    if (!emoji || !soundurl) return;
+                    let soundurl;
+                    if (!emoji || !selectedFile) return;
                     if(!emojisounds.find(emoji1=>emoji1.emoji===emoji)){
-                        emojisounds.push({emoji:emoji,sound:soundurl})
-                        localStorage.setItem('emoji-sounds',JSON.stringify(emojisounds))
+                        const reader = new FileReader()
+                        reader.onload = ()=>{
+                            soundurl = reader.result;
+                            emojisounds.push({emoji:emoji,sound:soundurl})
+                            localStorage.setItem('emoji-sounds',JSON.stringify(emojisounds))
+                            emojiInput.value=''
+                            fileinput.value=''
+                            fileinput.previousSibling.previousSibling.textContent='Click to browse'
+                            fileinput.previousSibling.textContent='Any audio file'
+                            filebutton.style.borderColor='rgba(255,255,255,0.5)'
+                            filebutton.style.removeProperty('background')
+                            renderPanel()
+                        };
+                        reader.readAsDataURL(selectedFile);
                     }
-                    emojiInput.value=''
-                    urlInput.value=''
-                    renderPanel()
                 };
                 controlsBar.appendChild(emojiInput);
-                controlsBar.appendChild(urlInput);
+                controlsBar.appendChild(filebutton)
                 controlsBar.appendChild(addBtn);
                 panel.appendChild(header);
                 panel.appendChild(closeBtn);
