@@ -107,7 +107,7 @@ Allows you to set sounds to be played when certain emojis are sent in chat
 
 **HOW TO USE:**
 
-After enabling the plugin, go into your user settings and click on the button that says '(Avia Emoji Sounds Settings)'. Then, paste the emoji and the direct link to the sound you want in the appropriate boxes.
+After enabling the plugin, go into your user settings and click on the button that says '(Avia Emoji Sounds Settings)'. Then, paste the emoji into the emoji box and upload a sound file
 
 **IMPORTANT:**
 
