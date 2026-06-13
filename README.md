@@ -28,6 +28,16 @@ Prevents download buttons from opening new tabs (BROWSER ONLY, on desktop this p
 
 Improves avia's built in favourites system by adding a button to the image viewer to add the image to favourites, a refresh button to the favourites panel (click to make images/gifs added via the add favourites button show up) and making clicking on an image/gif put the link into the chat bar instead of copying it to the clipboard. This plugin is just a combination of AddToFavourites,FavsToChat and a new refresh button. 
 
+# BetterImageViewer
+
+Improves stoat's image viewer by adding a button to view the image in a new tab. Also fixes the bar thing with all the buttons on it going off the screen on phones
+
+**EXAMPLE:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/EkENTrjbMWB8msgwi8TIu8Jr32-yoX-MptCWvVpbpG/original'>
+
+(it's the third button from the left)
+
 # ButtonFix (REDUNDANT)
 
 Fixes avia buttons injecting in channels where you can't send messages. This plugin is now redundant because it has been integrated into avia (I can technically say I contributed something to avia now 😎)
