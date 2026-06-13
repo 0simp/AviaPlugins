@@ -165,8 +165,10 @@
       }
     });
 
-    document.querySelectorAll('div[class=\'z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)\']').forEach(element=>{ //add favourites button to image viewer toolbar
-      if(element.childElementCount===4&&element.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
+    const bars = [...document.getElementsByClassName('z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)')]
+    const bar = bars.find(bar=>bar.firstChild?.tagName=='BUTTON')
+    if(bar){
+      if(![...bar.children].find(child=>[...child.children].find(child=>child.textContent=='star'))&&bar.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
         const copylinkbtn = document.createElement('button')
         copylinkbtn.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px'
 
@@ -183,7 +185,7 @@
 
         copylinkbtn.onclick = function(){
           let text = 'Copied!'
-          navigator.clipboard.writeText(element.parentElement.parentElement.parentElement.children[1].src).catch(err=>{
+          navigator.clipboard.writeText(bar.parentElement.parentElement.parentElement.children[1].src).catch(err=>{
             text = 'Couldn\'t copy'
           })
 
@@ -225,10 +227,10 @@
             buttonelement.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
           }
         } 
-        element.insertBefore(copylinkbtn,element.lastChild)
-        element.appendChild(favouriteButton)
+        bar.insertBefore(copylinkbtn,bar.lastChild)
+        bar.appendChild(favouriteButton)
       }
-    })
+    }
 
     const panel = document.getElementById('avia-favorites-panel')
     if(panel){
