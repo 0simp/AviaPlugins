@@ -24,6 +24,19 @@
     });
   }
 
+  function removeDuplicates(){
+    document.querySelectorAll(`a[title*='cdn.stoatusercontent.com']`).forEach(element=>{
+      const parent = element.parentElement.parentElement.parentElement.parentElement
+      const proxyurl = element.textContent.replaceAll(':','%3A').replaceAll('/','%2F')
+      
+      if(parent.querySelector(`img[src*='proxy.stoatusercontent.com/proxy?url=${proxyurl}']`)?.src){
+        parent.querySelectorAll(`img[src*='proxy.stoatusercontent.com/proxy?url=${proxyurl}']`).forEach(dupe=>{
+          dupe.parentElement.remove()
+        })
+      }
+    })
+  }
+
   function StoatImageFix() {
     document.querySelectorAll(`a[title*='cdn.stoatusercontent.com']`).forEach(element=>{
         const parent = element.parentElement.parentElement.parentElement.parentElement
@@ -302,6 +315,7 @@
 
   const observer = new MutationObserver(() => {
     StoatImageFix();
+    removeDuplicates();
   });
 
   function init() {
