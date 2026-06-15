@@ -11,7 +11,7 @@
         const link = linkElement?.title
         const textElement = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]
         const text = textElement?.textContent
-        const image = message.children[1]?.children[1]?.children[1]?.children[1]?.children[0]
+        const image = message.children[1]?.children[1]?.querySelector(`img[class=cursor_pointer]`)
 
         if((link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
             linkElement.style.display='none'
@@ -22,7 +22,7 @@
         const linkElement = message.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]?.children[0]
         const link = linkElement?.title
         const text = message.children[1]?.children[1]?.children[0]?.children[0]?.textContent
-        const image = message.children[1]?.children[1]?.children[0]?.children[1]?.children[0]
+        const image = message.children[1]?.children[1]?.querySelector(`img[class=cursor_pointer]`)
 
         if((link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
             linkElement.style.display='none'
