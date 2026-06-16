@@ -5,7 +5,31 @@
   function BetterDownoladButton() {
     const downloadbuttons = document.querySelectorAll('a[download]')
     downloadbuttons.forEach(button=>{
-        button.setAttribute('target','_self')
+        if(typeof window.showSaveFilePicker!='function'){
+          button.setAttribute('target','_self')
+        }else{
+          const url = button.getAttribute('href')
+          const download = button.getAttribute('download')
+          button.removeAttribute('target')
+          button.removeAttribute('href')
+          button.removeAttribute('download')
+
+          button.firstChild.$$click = async function(){
+            try {
+              const filepicker = await window.showSaveFilePicker({
+                suggestedName:download,
+              });
+
+              const writable = await filepicker.createWritable()
+              const res = await fetch(url)
+              await res.body.pipeTo(writable)
+            } catch (error) {
+              if (error.name !== 'AbortError') {
+                console.log(error);        
+              }
+            }
+          }
+        }
     });
   }
 
