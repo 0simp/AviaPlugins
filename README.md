@@ -22,7 +22,9 @@ This plugin is a bit buggy and sometimes collapsing a category will do fuck all.
 
 # BetterDownloadButton
 
-Prevents download buttons from opening new tabs (BROWSER ONLY, on desktop this plugin makes the download button do nothing)
+Prevents download buttons from opening new tabs. If your browser supports it (all major browsers apart from firefox and safari do, the desktop app also does), clicking download buttons will display a window like the one shown below that lets you choose where to save the file, otherwise it will save to your downloads folder
+
+<img src='https://cdn.stoatusercontent.com/attachments/Jz6-gTxWA4nCOmOLwRI-y9l3mEPO3qTVHP1vnjC8TK/original'>
 
 # BetterFavourites
 
