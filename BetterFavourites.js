@@ -364,7 +364,7 @@
         });
       }
       
-      for(const child of panel.children[2].children){
+      for(const child of panel.children[2].firstChild.children){
         child.onclick=()=>{
           let textinput = document.getElementsByClassName('md-text').item(0)
           if(textinput){
@@ -377,24 +377,6 @@
             editor.children[1].children[0].children[0].appendChild(textinput)
           }
         }
-      }
-
-      const refreshButton = document.createElement('div')
-      refreshButton.textContent='↺'
-      refreshButton.id='favsrefresh'
-      Object.assign(refreshButton.style,{
-          position:'absolute',
-          right:'36px',
-          top:'16px',
-          cursor:'pointer'
-      });
-
-      refreshButton.onclick=()=>{
-        render()
-      };
-
-      if(!document.getElementById('favsrefresh')){
-        header.appendChild(refreshButton)
       }
     }
   }
