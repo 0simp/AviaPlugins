@@ -198,11 +198,13 @@ It shrinks emojis 🤯
 
 Allows you to leave group chats silently (without notifying other members)
 
-# Slowmode
+# Slowmode (REDUNDANT)
 
 Allows you to set slowmode for channels (IN SECONDS). Also adds a popup for channels with slowmode, as seen below:
 
 <img src ='https://cdn.stoatusercontent.com/attachments/hIPm_6blGKYWWSgJw3sNY5nmFDLM3E0c3bn7F0ofxC/original' width ='1279' height='79'>
+
+This plugin is now redundant because its functionality is integrated into stoat
 
 **IMPORTANT:**
 
