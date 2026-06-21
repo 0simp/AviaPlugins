@@ -1,3 +1,4 @@
+//maybe add multi reply support
 (function () {
   if (window.__EMOJI_SOUNDS__) return;
   window.__EMOJI_SOUNDS__ = true;
@@ -329,12 +330,12 @@
 
                 const filesub = document.createElement('div');
                 Object.assign(filesub.style, { fontSize: '11px', opacity: '0.5' });
-                filesub.textContent='Any audio file'
+                filesub.textContent='.ogg file'
 
                 const fileinput = document.createElement('input')
                 fileinput.type='file'
                 fileinput.style.display='none'
-                fileinput.accept='audio/*,audio/mpeg,audio/ogg'
+                fileinput.accept='audio/ogg'
 
                 fileinput.onchange = function(e){
                     if(fileinput.files[0]){
