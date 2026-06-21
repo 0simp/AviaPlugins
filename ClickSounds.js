@@ -136,7 +136,7 @@
     if(localStorage.getItem('avia_click_sound_info')){
       fileDropText.textContent=`${JSON.parse(localStorage.getItem('avia_click_sound_info')).name}`
     }else{
-      fileDropText.textContent = 'Drop an audio file here or click to browse';
+      fileDropText.textContent = 'Drop a .ogg file here or click to browse';
     }
 
     const fileDropSub = document.createElement('div');
@@ -144,13 +144,13 @@
     if(localStorage.getItem('avia_click_sound_info')){
       fileDropSub.textContent=`${JSON.parse(localStorage.getItem('avia_click_sound_info')).size}`
     }else{
-      fileDropSub.textContent = 'Any audio file';
+      fileDropSub.textContent = '.Ogg file';
     }
 
     const fileinput = document.createElement('input')
     fileinput.type='file'
     fileinput.style.display='none'
-    fileinput.accept='audio/*,audio/mpeg,audio/ogg'
+    fileinput.accept='.ogg,audio/ogg'
 
     fileinput.onchange = function(e){
         if(fileinput.files[0]){
