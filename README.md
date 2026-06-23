@@ -12,6 +12,10 @@ Adds a button to the image viewer to add the image to favourites. Currently no s
 
 <img src ='https://cdn.stoatusercontent.com/attachments/oBqekRKV2PBOEcXNgJ43U6yH6SjoNpoql7m5LNizap/original' width='1199' height ='716'>
 
+# AnimateServerIcons
+
+Adds client side support for rendering animated server icons
+
 # BetterCategories (DISCONTINUED)
 
 Makes collapsing categories fully collapse them because for some reason that isn't a thing by default (sometimes). This plugin has been discontinued because it is a buggy fucking mess. I may recontinue it at some point if I feel like it
