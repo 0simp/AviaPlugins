@@ -242,6 +242,10 @@ Adds an update checker for local plugins and the ability to install any updates 
 
 - This url should be the **DIRECT** link to the plugin's js file, the same one you would use if you were adding it as a non local plugin
 
+# WebhookProfiles
+
+Gives webhooks profile popups just like regular users. The main reason you'd want this is to view its pfp in higher quality and/or download it.
+
 # WARNING!
 
 I have severe brain damage so these plugins probably have some quite serious flaws, but from my testing they work
