@@ -10,9 +10,7 @@
         }else{
           const url = button.getAttribute('href')
           const download = button.getAttribute('download')
-          button.removeAttribute('target')
           button.removeAttribute('href')
-          button.removeAttribute('download')
 
           button.firstChild.$$click = async function(){
             try {
