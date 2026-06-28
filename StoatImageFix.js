@@ -103,7 +103,7 @@
                       let number = Number(transform.substring(transform.indexOf('(')+1,transform.indexOf(')')))
                       if(!isNaN(number)){
                         number = number-0.1
-                        imgelement.style.transform=`scale(${number}) translate(0px, 0px)`
+                        imgelement.style.transform=`scale(${number}) translate(0px, 1px)`
                       }
                     }
 
@@ -123,7 +123,7 @@
                       let number = Number(transform.substring(transform.indexOf('(')+1,transform.indexOf(')')))
                       if(!isNaN(number)){
                         number = number+0.1
-                        imgelement.style.transform=`scale(${number}) translate(0px, 0px)`
+                        imgelement.style.transform=`scale(${number}) translate(0px, 1px)`
                       }
                     }
 
@@ -169,6 +169,11 @@
                     }
 
                     imgelement.onmouseup = function(e){
+                      e.preventDefault()
+                      dragging=false
+                    }
+
+                    imgelement.onmouseleave = function(e){
                       e.preventDefault()
                       dragging=false
                     }
