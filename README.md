@@ -135,6 +135,14 @@ If you are adding a custom emoji, make sure it includes colons surrounding the i
 
 Makes clicking an image/gif in the favourites panel put the link in the chat bar instead of copying it to the clipboard. This plugin has been discontinued in favour of BetterFavourites
 
+# FileSizeWarnings
+
+Adds warning popups for when files are too large to be uploaded as icons, banners or emojis
+
+**EXAMPLE OF WHAT I'M BANGING ON ABOUT:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/-_fcjm19Z_sNWM2cU1Wlg-Ot5UgqyjHZDZRXoL-K6d/original'>
+
 # ForceEmojiPack (REDUNDANT)
 
 Forces emojis in embeds and message reactions to use your selected emoji pack. This plugin is now redundant because its functionality exists in normal stoat
