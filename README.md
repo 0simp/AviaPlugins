@@ -84,6 +84,14 @@ Adds a button to non-image/video attachments to copy the attachment link
 
 <img src="https://cdn.stoatusercontent.com/attachments/PVa1fivgi5zuQ9VSC6pilOkI__imR-h38zO8w2GGMa/original" width="1569" height="221">
 
+# CopyFileContents
+
+Adds a button to text file attachments to copy their contents
+
+**EXAMPLE:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/gF6J_7-P4ds7T6DhikVB9ylNFx4LItw87fisGC65I1/original'> (3rd button)
+
 # CopyRoleID
 
 Makes it possible to copy role ids without needing the manage roles permission. Note that the member list for each server needs to be loaded in order for this plugin to work, so if you try to copy a role's id and see text that says "Couldn't copy role id", briefly open the member list then try again. To use simply press the "copy role id" button in the user roles modal
