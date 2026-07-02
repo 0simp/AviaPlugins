@@ -373,7 +373,7 @@
             const editor = document.getElementsByClassName('cm-editor ͼ1 ͼ2 ͼ5 ͼ4 ͼ8 ͼ6 ͼ7').item(0)
             textinput = document.createElement('span')
             textinput.className='md-text'
-            textinput.innerText=`${child.children[1].src}`
+            textinput.innerText=`${child.dataset.favUrl}`
             editor.children[1].children[0].children[0].appendChild(textinput)
           }
         }
