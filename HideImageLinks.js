@@ -23,10 +23,11 @@
     }
 
     for(const message of messages2){
-        const linkElement = message.children[1]?.children[1]?.children[0]?.children[0]?.children[0]?.children[0]?.children[0]
+        const linkElement = message.querySelector(`a[title][class='cursor_pointer c_var(--md-sys-color-primary)!']`)
         const link = linkElement?.title
-        const text = message.children[1]?.children[1]?.children[0]?.children[0]?.textContent
-        const image = message.children[1]?.children[1]?.querySelector(`img[class=cursor_pointer]`)
+        const textElement = message.querySelector(`[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_initial jc_initial']`).children[1].firstChild.querySelector(`div[class='wb_break-word [&_.math]:ov-x_auto [&_.math]:ov-y_hidden [&_.math]:max-h_100vh']`)
+        const text = textElement?.textContent
+        const image = message.querySelector(`img[class=cursor_pointer]`)
         const embed = message.children[1]?.children[1]?.querySelector(`div[class='d_flex flex-d_column flex-g_1 m_0 ai_initial jc_initial min-w_0 gap_var(--gap-md)']`)
 
         if((linkElement&&link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
