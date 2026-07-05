@@ -76,6 +76,10 @@ Plays a sound effect whenever you click on a button.
 
 <img src='https://cdn.stoatusercontent.com/attachments/g-fRAhuhIAt0QL6e3Mgo72bY3ar7F4Z7TGtNszdzXw/original'>
 
+# ColouredText
+
+Adds a ui to make typing coloured text easier
+
 # CopyAttachmentLink
 
 Adds a button to non-image/video attachments to copy the attachment link
