@@ -235,6 +235,14 @@
                         x = x+movementx
                         y = y+movementy
 
+                        if(x==0){
+                          x=1
+                        }
+
+                        if(y==0){
+                          y=1
+                        }
+
                         const oldtranslate = transform.substring(transform.indexOf('translate'),transform.lastIndexOf(')')+1)
                         const newtranslate = `translate(${x}px, ${y}px)`
                         imgelement.style.transform=imgelement.style.transform.replace(oldtranslate,newtranslate)
@@ -277,6 +285,12 @@
                           div.style.width=`${this.width}px`
                           div.style.height=`${this.height}px`
                       }
+
+                      if(this.height>420){
+                        const boobs = this.height/420
+                        div.style.height=`420px`
+                        div.style.width = `${this.width/boobs}px`
+                      }
                       
                       if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)){
                           div.appendChild(img)
@@ -302,6 +316,12 @@
                   }else{
                     div.style.width=`${dims.width}px`
                     div.style.height=`${dims.height}px`
+                  }
+
+                  if(dims.height>420){
+                    const boobs = dims.height/420
+                    div.style.height=`420px`
+                    div.style.width=`${dims.width/boobs}px`
                   }
 
                   if(!parent.querySelector(`div[class='d_grid h_auto max-w_100% ov_hidden bdr_var(--borderRadius-md) grid-tc_1fr grid-tr_1fr [&_>_*]:grid-area_1_/_1_/_2_/_2 [&_>_*]:w_100% [&_>_*]:h_100% [&_>_*]:min-h_0 [&_>_*]:obj-f_contain'][data-src='${element.textContent}']`)){
