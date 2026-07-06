@@ -273,6 +273,14 @@
             x = x+movementx
             y = y+movementy
 
+            if(x==0){
+                x=1
+            }
+
+            if(y==0){
+                y=1
+            }
+
             const oldtranslate = transform.substring(transform.indexOf('translate'),transform.lastIndexOf(')')+1)
             const newtranslate = `translate(${x}px, ${y}px)`
             imgelement.style.transform=imgelement.style.transform.replace(oldtranslate,newtranslate)
