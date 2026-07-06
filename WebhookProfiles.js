@@ -137,8 +137,10 @@
         const transform = imgelement.style.transform
         let number = Number(transform.substring(transform.indexOf('(')+1,transform.indexOf(')')))
         if(!isNaN(number)){
-        number = number-0.1
-        imgelement.style.transform=`scale(${number}) translate(0px, 1px)`
+            number = number-0.1
+            const oldscale = transform.substring(0,transform.indexOf(')')+1)
+            const newscale = `scale(${number})`
+            imgelement.style.transform=imgelement.style.transform.replace(oldscale,newscale)
         }
     }
 
@@ -157,8 +159,10 @@
         const transform = imgelement.style.transform
         let number = Number(transform.substring(transform.indexOf('(')+1,transform.indexOf(')')))
         if(!isNaN(number)){
-        number = number+0.1
-        imgelement.style.transform=`scale(${number}) translate(0px, 1px)`
+            number = number+0.1
+            const oldscale = transform.substring(0,transform.indexOf(')')+1)
+            const newscale = `scale(${number})`
+            imgelement.style.transform=imgelement.style.transform.replace(oldscale,newscale)
         }
     }
 
