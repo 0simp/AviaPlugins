@@ -11,6 +11,7 @@
           button.setAttribute('target','_self')
           const url = button.getAttribute('href')
           const download = button.getAttribute('download')
+          button.removeAttribute('href')
           
           button.firstChild.$$click = async function(){
             try {
