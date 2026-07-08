@@ -154,7 +154,6 @@
                     }
 
                     input.onchange = function(e){
-                        console.log(type)
                         if(input.files[0].size>type.size){
                             createFileSizeWarning(`${type.type}`,input.files[0].name,input.files[0].size)
                             input.value=''
