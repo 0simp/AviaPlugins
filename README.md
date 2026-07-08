@@ -12,9 +12,9 @@ Adds a button to the image viewer to add the image to favourites. Currently no s
 
 <img src ='https://cdn.stoatusercontent.com/attachments/oBqekRKV2PBOEcXNgJ43U6yH6SjoNpoql7m5LNizap/original' width='1199' height ='716'>
 
-# AnimateServerIcons
+# AnimateIcons
 
-Adds client side support for rendering animated server icons
+Adds client side support for rendering animated icons
 
 # BetterCategories (DISCONTINUED)
 
