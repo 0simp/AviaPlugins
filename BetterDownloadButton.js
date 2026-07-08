@@ -12,7 +12,10 @@
           const url = button.getAttribute('href')
           const download = button.getAttribute('download')
           
-          button.firstChild.$$click = async function(){
+          button.firstChild.$$click = async function(e){
+            e.preventDefault()
+            e.stopPropagation()
+            e.stopImmediatePropagation()
             try {
               const filepicker = await window.showSaveFilePicker({
                 suggestedName:download,
