@@ -44,6 +44,18 @@ Improves stoat's image viewer by adding a button to view the image in a new tab.
 
 (it's the third button from the left)
 
+# BetterStatuses
+
+Fixes custom emojis not rendering in the status card and adds the ability to reply to people's statuses
+
+**WITHOUT VS WITH THE PLUGIN:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/M7UuxuujeRxQ_t1SM8FezzJlPhuULMOgyDpeuxoH1w/original'>
+
+<img src='https://cdn.stoatusercontent.com/attachments/v2yLPXaLDcvqQkdbXEk8TMAMP44OtBHt7Lo7aJm_HD/original'>
+
+(first image is without, second image is with)
+
 # ButtonFix (REDUNDANT)
 
 Fixes avia buttons injecting in channels where you can't send messages. This plugin is now redundant because it has been integrated into avia (I can technically say I contributed something to avia now 😎)
