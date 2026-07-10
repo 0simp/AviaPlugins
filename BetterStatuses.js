@@ -46,6 +46,7 @@
   }
 
   function addReplyButton(statuscard){
+    const username = statuscard.parentElement.firstChild.lastChild.lastChild.lastChild.textContent
     const statusheader = statuscard.firstChild
     const clone = statusheader.cloneNode(true)
 
@@ -81,7 +82,7 @@
 
       const span = document.createElement('span')
       span.style='line-height: 2rem; font-size: 1.5rem; letter-spacing: 0px; font-weight: 400; color: var(--md-sys-color-on-surface);'
-      span.textContent=`Reply`
+      span.textContent=`Reply to ${username}'s status`
 
       const div = document.createElement('div')
       div.style='display: flex; flex-direction: column; gap: 4px;'
@@ -118,8 +119,13 @@
       sendbutton.onclick = function(){
         const editor = document.querySelector(".cm-content[contenteditable='true']")
         if(editor&&input.value){
-          const username = statuscard.parentElement.firstChild.lastChild.lastChild.lastChild.textContent
-          const reply = `> *${username}'s status*\n> ${statuscard.lastChild.textContent}\n${input.value}`
+          let status = ''
+          const regex = /[A-Z0-9]{26}/;
+          for(const child of statuscard.lastChild.children){
+            status = status+child.textContent||`:${regex.exec(child.src)[0]}:`
+          }
+          
+          const reply = `> *${username}'s status*\n> ${status}\n${input.value}`
 
           editor.lastChild.textContent=reply
           cancelbutton.click()
@@ -160,6 +166,7 @@
           e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
           &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
           &&[...e.querySelectorAll(`span`)].length==2
+          &&!e.querySelector(`img[aria-label]`)
       )
         
       if(!statuscard) return;
