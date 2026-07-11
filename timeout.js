@@ -5,27 +5,29 @@
 
   let capturedToken = null;
   let fetchedUsers = [];
-  const originalFetch = window.fetch.bind(window);
-  window.fetch = async function (resource, config = {}) {
+  function openDB() {
+    return new Promise((resolve, reject) => {
+        const r = indexedDB.open("localforage");
+        r.onsuccess = () => resolve(r.result);
+        r.onerror = () => reject(r.error);
+    });
+  }
+
+  async function getToken(){
     try {
-      const options = config;
-      const headers = options?.headers;
-      if (headers) {
-        if (typeof headers.get === "function") {
-          const t = headers.get("X-Session-Token") || headers.get("x-session-token");
-          if (t) capturedToken = t;
-        } else {
-          const t = headers["X-Session-Token"] || headers["x-session-token"];
-          if (t) capturedToken = t;
-        }
-      }
-    } catch (_) {}
-    return originalFetch(resource,config);
-  };
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const r = db.transaction("keyvaluepairs", "readonly")
+        .objectStore("keyvaluepairs").get("auth");
+        r.onsuccess = () => resolve(r.result?.session?.token || null);
+        r.onerror = () => reject(r.error);
+      });
+    } catch { return null; }
+  }
 
   async function apiReq(url, method, body) {
     if(!capturedToken) return;
-    const res = await originalFetch(url, {
+    const res = await fetch(url, {
       method,
       headers: { "Content-Type": "application/json", "X-Session-Token": capturedToken },
       body: JSON.stringify(body),
@@ -36,6 +38,7 @@
   }
 
   async function timeout() {
+    capturedToken = await getToken()
     if(!capturedToken) return;
     if(!document.baseURI.includes('/server')) return;
 
@@ -69,260 +72,177 @@
         timeoutButton.appendChild(text)
 
         timeoutButton.onclick = async function(){
-            const copyidsvg = document.querySelector(`path[d='M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2m-9 0V4h2v5h-2zm9 13H4V9h5c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2h5z']`)
-            if(copyidsvg){
-                await copyidsvg.parentElement.parentElement.click()
-                navigator.clipboard.readText().then(async text=>{
-                    if(!fetchedUsers.find(user=>user._id==text)){
-                        const user = await apiReq(`https://stoat.chat/api/users/${text}`,'GET')
-                        fetchedUsers.push(user.body)
-                    }
-                    const user = fetchedUsers.find(user=>user._id==text)
+          const copyidsvg = document.querySelector(`path[d='M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2m-9 0V4h2v5h-2zm9 13H4V9h5c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2h5z']`)
+          if(copyidsvg){
+              await copyidsvg.parentElement.parentElement.click()
+              navigator.clipboard.readText().then(async text=>{
+                  if(!fetchedUsers.find(user=>user._id==text)){
+                      const user = await apiReq(`https://stoat.chat/api/users/${text}`,'GET')
+                      fetchedUsers.push(user.body)
+                  }
+                  const user = fetchedUsers.find(user=>user._id==text)
+
+                  const style = document.createElement('div')
+                  style.style='opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
+                        
+                  const popup = document.createElement('div')
+                  popup.className='p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)'
+
+                  const span = document.createElement('span')
+                  span.className='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px'
+                  span.textContent='Timeout Member'
+
+                  const div = document.createElement('div')
+                  div.className='c_var(--md-sys-color-on-surface-variant) lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
+
+                  const divchild = document.createElement('div')
+                  divchild.className='d_flex flex-d_column flex-g_initial m_0 ai_center jc_initial gap_var(--gap-md)'
+
+                  const svg = document.createElement('svg')
+                  svg.setAttribute('viewBox','0 0 32 32')
+                  svg.className='flex-sh_0 us_none cursor_inherit'
+                  svg.style='width: 64px; height: 64px;'
+                  svg.innerHTML=`<g><foreignObject x="0" y="0" width="32" height="32" class="trs_var(--transitions-fast)_filter"><div class="ov_hidden w_100% h_100% bdr_var(--borderRadius-circle)"><img src="https://cdn.stoatusercontent.com/avatars/${user.avatar._id}/original" draggable="false" class="w_100% h_100% obj-f_cover"></div></foreignObject></g>`
+
+                  const span2 = document.createElement('span')
+                  span2.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
+                  span2.textContent=`You are about to timeout ${user.username}`
+
+                  const durationbutton = document.createElement('button')
+                  durationbutton.className='d_flex ai_center jc_space-between w_100% min-h_56px p_8px_16px bdr_4px_4px_0_0 bd_none bd-b_1px_solid_var(--md-sys-color-outline) bg_var(--md-sys-color-surface-container-highest) c_var(--md-sys-color-on-surface) cursor_pointer pos_relative ta_left fs_16px ff_inherit trs_border-color_0.2s [&:hover]:bd-b-c_var(--md-sys-color-on-surface) [&:focus]:ring_none [&:focus]:bd-b-c_var(--md-sys-color-primary) [&:focus]:bd-b-w_2px'
+
+                  const durationlabel = document.createElement('label')
+                  durationlabel.className='pos_absolute trs_ease-in-out_0.2s left_16px c_var(--md-sys-color-on-surface-variant) pointer-events_none trf-o_left_top top_8px fs_12px trf_translateY(0)'
+                  durationlabel.textContent='Duration'
+                  durationbutton.appendChild(durationlabel)
+
+                  const durationspan = document.createElement('span')
+                  durationspan.className='flex_1 ov_hidden tov_ellipsis white-space_nowrap pt_16px'
+                  durationspan.textContent='1 hour'
+                  durationbutton.appendChild(durationspan)
+
+                  const durationbuttonmdripple = document.createElement('md-ripple')
+                  durationbuttonmdripple.ariaHidden=true
+                  durationbutton.appendChild(durationbuttonmdripple)
+
+                  const durationbuttonspan = document.createElement('span')
+                  durationbuttonspan.className='material-symbols-outlined fs_inherit fw_undefined!'
+                  durationbuttonspan.style='display: block; font-size: 16px;'
+                  durationbuttonspan.textContent='arrow_drop_down'
+                  durationbutton.appendChild(durationbuttonspan)
+
+                  let menuopen = false;
+                  function toggleMenu(){
+                    const rect = durationbutton.getBoundingClientRect()
+                    const x = Number(rect.x.toFixed(3))
+                    const y = Number(rect.y.toFixed(3))
 
                     const style = document.createElement('div')
-                    style.style='opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
-                        
-                    const popup = document.createElement('div')
-                    popup.className='p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)'
+                    style.style=`position: absolute; top: ${y+60}px; left: ${x}px; z-index: 1000; opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY)); min-width: 266px;`
 
-                    const span = document.createElement('span')
-                    span.className='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px'
-                    span.textContent='Timeout Member'
+                    const selectmenu = document.createElement('div')
+                    selectmenu.className='d_flex flex-d_column max-h_40vh ov-y_auto scr-bar-w_none bdr_4px bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface) bx-sh_0_2px_8px_rgba(0,_0,_0,_0.2) p_8px_0 [&_mdui-menu-item]:cursor_pointer [&_mdui-menu-item]:p_0px_1.5rem [&_mdui-menu-item]:trs_background_0.2s [&_mdui-menu-item]:h_3rem [&_mdui-menu-item]:[&:hover]:bg_color-mix(in_srgb,_var(--md-sys-color-on-surface)_8%,_transparent)'
 
-                    const div = document.createElement('div')
-                    div.className='c_var(--md-sys-color-on-surface-variant) lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
-
-                    const divchild = document.createElement('div')
-                    divchild.className='d_flex flex-d_column flex-g_initial m_0 ai_center jc_initial gap_var(--gap-md)'
-
-                    const span2 = document.createElement('span')
-                    span2.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
-                    span2.textContent=`You are about to timeout ${user.username}`
-
-                    const durationdiv = document.createElement('div')
-                    durationdiv.style='display: flex; flex-direction: column; gap: 8px;'
-
-                    const durationdiv2 = document.createElement('div')
-                    durationdiv2.style='display: flex; gap: 6px; align-items: center;'
-
-                    const durationspan = document.createElement('span')
-                    durationspan.style='font-size: 0.75rem; letter-spacing: 0.025rem; color: var(--md-sys-color-on-surface-variant); margin-right: 4px;'
-                    durationspan.textContent='Duration'
-
-                    durationdiv2.appendChild(durationspan)
-                    durationdiv.appendChild(durationdiv2)
-
-                    const durationdiv3 = document.createElement('div')
-                    durationdiv3.style='display: flex; flex-wrap: wrap; gap: 6px;'
-
-                    const button1minute = document.createElement('button')
-                    button1minute.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                    button1minute.textContent='1 minute'
-                    button1minute.setAttribute('value',60000)
-                    button1minute.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!button1minute.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button1minute).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          button1minute.setAttribute('clicked',true)
-                          button1minute.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                          value = new Date(Date.now()+Number(button1minute.getAttribute('value'))).toISOString()
-                      }else{
-                          button1minute.removeAttribute('clicked')
-                          button1minute.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                      }
-                  }
-
-                    const button5minutes = document.createElement('button')
-                    button5minutes.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                    button5minutes.textContent='5 minutes'
-                    button5minutes.setAttribute('value',300000)
-                    button5minutes.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!button5minutes.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button5minutes).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          button5minutes.setAttribute('clicked',true)
-                          button5minutes.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                          value = new Date(Date.now()+Number(button5minutes.getAttribute('value'))).toISOString()
-                      }else{
-                          button5minutes.removeAttribute('clicked')
-                          button5minutes.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                      }
-                  }
-
-                    const button10minutes = document.createElement('button')
-                    button10minutes.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                    button10minutes.textContent='10 minutes'
-                    button10minutes.setAttribute('value',600000)
-                    button10minutes.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!button10minutes.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button10minutes).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          button10minutes.setAttribute('clicked',true)
-                          button10minutes.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                          value = new Date(Date.now()+Number(button10minutes.getAttribute('value'))).toISOString()
-                      }else{
-                          button10minutes.removeAttribute('clicked')
-                          button10minutes.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                      }
-                  }
-
-                    const button1hour = document.createElement('button')
-                    button1hour.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                    button1hour.textContent='1 hour'
-                    button1hour.setAttribute('value',3600000)
-                    button1hour.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!button1hour.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button1hour).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          button1hour.setAttribute('clicked',true)
-                          button1hour.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                          value = new Date(Date.now()+Number(button1hour.getAttribute('value'))).toISOString()
-                      }else{
-                          button1hour.removeAttribute('clicked')
-                          button1hour.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                      }
-                  }
-
-                  const button1day = document.createElement('button')
-                  button1day.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                  button1day.textContent='1 day'
-                  button1day.setAttribute('value',86400000)
-                  button1day.onclick = function(e){
-                    e.preventDefault()
-                    e.stopPropagation()
-                    e.stopImmediatePropagation()
-                    if(!button1day.getAttribute('clicked')){
-                        [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button1day).forEach(button=>{
-                          button.removeAttribute('clicked')
-                          button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                        })
-                        button1day.setAttribute('clicked',true)
-                        button1day.style.background='black'
-                        document.getElementById('customtimeoutduration').disabled=true
-                        document.getElementById('customtimeoutduration').value=''
-                        span.textContent=`Timeout member`
-                        span2.textContent=`You are about to timeout ${user.username}`
-                        timeoutbutton.textContent='Timeout'
-                        value = new Date(Date.now()+Number(button1day.getAttribute('value'))).toISOString()
-                    }else{
-                        button1day.removeAttribute('clicked')
-                        button1day.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                        document.getElementById('customtimeoutduration').disabled=false
+                    const oneminute = document.createElement('mdui-menu-item')
+                    oneminute.value=60000
+                    oneminute.textContent='1 minute'
+                    oneminute.onclick = function(){
+                      durationspan.textContent=`1 minute`
+                      value = new Date(Date.now()+60000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
                     }
-                }
 
-                  const button1week = document.createElement('button')
-                  button1week.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                  button1week.textContent='1 week'
-                  button1week.setAttribute('value',604800000)
-                  button1week.setAttribute('value',604800000)
-                  button1week.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!button1week.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=button1week).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          button1week.setAttribute('clicked',true)
-                          button1week.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                          value = new Date(Date.now()+Number(button1week.getAttribute('value'))).toISOString()
-                      }else{
-                          button1week.removeAttribute('clicked')
-                          button1week.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                      }
+                    const fiveminutes = document.createElement('mdui-menu-item')
+                    fiveminutes.value=300000
+                    fiveminutes.textContent='5 minutes'
+                    fiveminutes.onclick = function(){
+                      durationspan.textContent=`5 minutes`
+                      value = new Date(Date.now()+300000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
+                    }
+
+                    const tenminutes = document.createElement('mdui-menu-item')
+                    tenminutes.value=600000
+                    tenminutes.textContent='10 minutes'
+                    tenminutes.onclick = function(){
+                      durationspan.textContent=`10 minutes`
+                      value = new Date(Date.now()+600000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
+                    }
+
+                    const onehour = document.createElement('mdui-menu-item')
+                    onehour.value=3600000
+                    onehour.textContent='1 hour'
+                    onehour.onclick = function(){
+                      durationspan.textContent=`1 hour`
+                      value = new Date(Date.now()+3600000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
+                    }
+
+                    const oneday = document.createElement('mdui-menu-item')
+                    oneday.value=86400000
+                    oneday.textContent='1 day'
+                    oneday.onclick = function(){
+                      durationspan.textContent=`1 day`
+                      value = new Date(Date.now()+86400000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
+                    }
+
+                    const oneweek = document.createElement('mdui-menu-item')
+                    oneweek.value=604800000
+                    oneweek.textContent='1 week'
+                    oneweek.onclick = function(){
+                      durationspan.textContent=`1 week`
+                      value = new Date(Date.now()+604800000).toISOString()
+                      span2.textContent=`You are about to timeout ${user.username}`
+                      timeoutbutton.textContent=`Timeout`
+                      toggleMenu()
+                    }
+
+                    const remove = document.createElement('mdui-menu-item')
+                    remove.value=0
+                    remove.textContent='Remove'
+                    remove.onclick = function(){
+                      durationspan.textContent=`Remove`
+                      value = new Date(Date.now()).toISOString()
+                      span2.textContent=`You are about to remove ${user.username}'s timeout`
+                      timeoutbutton.textContent=`Remove timeout`
+                      toggleMenu()
+                    }
+
+                    selectmenu.appendChild(oneminute)
+                    selectmenu.appendChild(fiveminutes)
+                    selectmenu.appendChild(tenminutes)
+                    selectmenu.appendChild(onehour)
+                    selectmenu.appendChild(oneday)
+                    selectmenu.appendChild(oneweek)
+                    selectmenu.appendChild(remove)
+                    style.appendChild(selectmenu)
+                    if(!menuopen){
+                      const floating = document.getElementById('floating')
+                      floating.lastChild.appendChild(style)
+                      menuopen = true
+                      durationbuttonspan.textContent='arrow_drop_up'
+                    }else{
+                      floating.lastChild.lastChild.remove()
+                      menuopen = false
+                      durationbuttonspan.textContent='arrow_drop_down'
+                    }
                   }
 
-                  const buttonremove = document.createElement('button')
-                  buttonremove.style='display: flex; align-items: center; gap: 6px; padding: 5px 10px 5px 6px; border: 1px solid color-mix(in srgb, 18% var(--md-sys-color-on-surface), transparent); border-radius: 999px; cursor: pointer; background: color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent); color: var(--md-sys-color-on-surface); font-size: 0.8rem; font-family: inherit; transition: border-color 0.15s, background 0.15s; white-space: nowrap;'
-                  buttonremove.textContent='Remove'
-                  buttonremove.setAttribute('value',0)
-                  buttonremove.setAttribute('value',0)
-                  buttonremove.onclick = function(e){
-                      e.preventDefault()
-                      e.stopPropagation()
-                      e.stopImmediatePropagation()
-                      if(!buttonremove.getAttribute('clicked')){
-                          [...document.querySelectorAll`button[clicked]`].filter(e=>e!=buttonremove).forEach(button=>{
-                            button.removeAttribute('clicked')
-                            button.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          })
-                          buttonremove.setAttribute('clicked',true)
-                          buttonremove.style.background='black'
-                          document.getElementById('customtimeoutduration').disabled=true
-                          document.getElementById('customtimeoutduration').value=''
-                          span.textContent='Remove timeout'
-                          span2.textContent=`You are about to remove ${user.username}\'s timeout`
-                          timeoutbutton.textContent='Remove timeout'
-                          value = new Date(Date.now()+Number(buttonremove.getAttribute('value'))).toISOString()
-                      }else{
-                          buttonremove.removeAttribute('clicked')
-                          buttonremove.style.background='color-mix(in srgb, 6% var(--md-sys-color-on-surface), transparent)'
-                          document.getElementById('customtimeoutduration').disabled=false
-                          span.textContent=`Timeout member`
-                          span2.textContent=`You are about to timeout ${user.username}`
-                          timeoutbutton.textContent='Timeout'
-                      }
+                  durationbutton.onclick = function(){
+                      toggleMenu()
                   }
-
-                  durationdiv3.appendChild(button1minute)
-                  durationdiv3.appendChild(button5minutes)
-                  durationdiv3.appendChild(button10minutes)
-                  durationdiv3.appendChild(button1hour)
-                  durationdiv3.appendChild(button1day)
-                  durationdiv3.appendChild(button1week)
-                  durationdiv3.appendChild(buttonremove)
 
                   const custom = document.createElement('mdui-text-field')
                   custom.id='customtimeoutduration'
@@ -391,9 +311,9 @@
                   popup.appendChild(span)
                   popup.appendChild(div)
                   div.appendChild(divchild)
+                  divchild.appendChild(svg)
                   divchild.appendChild(span2)
-                  divchild.appendChild(durationdiv)
-                  divchild.appendChild(durationdiv3)
+                  divchild.appendChild(durationbutton)
                   divchild.appendChild(custom)
                   popup.appendChild(buttons)
                   buttons.appendChild(cancelbutton)
