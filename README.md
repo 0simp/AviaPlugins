@@ -270,7 +270,7 @@ Adds a button for adding and removing timeouts from members
 
 **EXAMPLE:**
 
-<img src='https://cdn.stoatusercontent.com/attachments/_HCbe-9PdjfTxbeZL4iMWggF-tKsGZGIzY8k7zkUKQ/original'>
+<img src='https://cdn.stoatusercontent.com/attachments/ey6kir6sQiRAVK-0z-ioFuOrmLSm0BYUr7b4ZSra4l/original'>
 
 Also note that the timeout button gets added if either the ban or kick buttons are present in the member context menu, therefore it may incorrectly get added if you have permission to either ban or kick, but not timeout or it may incorrectly not get added if you have permission to timeout, but not ban or kick.
 
