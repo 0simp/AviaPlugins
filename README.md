@@ -135,7 +135,7 @@ Allows you to delete a user's messages from up to the past 7 days when banning t
 
 # EditEmojis
 
-Adds client side support for renaming emojis. Note that even if the emoji is successfully renamed, the new name will not show up client side until you refresh. 
+Adds client side support for renaming emojis.
 
 **IMPORTANT:**
 
