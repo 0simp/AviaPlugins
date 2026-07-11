@@ -124,6 +124,10 @@
           for(const child of statuscard.lastChild.children){
             status = status+child.textContent||`:${regex.exec(child.src)[0]}:`
           }
+
+          if(!status){
+            status = statuscard.lastChild.textContent
+          }
           
           const reply = `> *${username}'s status*\n> ${status}\n${input.value}`
 
