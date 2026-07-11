@@ -2,25 +2,28 @@
   if (window.__EDIT_EMOJIS__) return;
   window.__EDIT_EMOJIS__ = true;
   let capturedToken = null;
+  let response = {};
+  let updatedemojis = [];
 
-  const originalFetch = window.fetch.bind(window);
-    window.fetch = async function (resource, config = {}) {
-        try {
-            const url = resource?.toString?.() || "";
-            const options = config;
-            const headers = options?.headers;
-            if (headers) {
-                if (typeof headers.get === "function") {
-                const t = headers.get("X-Session-Token") || headers.get("x-session-token");
-                if (t) capturedToken = t;
-                } else {
-                const t = headers["X-Session-Token"] || headers["x-session-token"];
-                if (t) capturedToken = t;
-                }
-            }
-        } catch (_) {}
-        return originalFetch(resource,config);
-    };
+  function openDB() {
+    return new Promise((resolve, reject) => {
+        const r = indexedDB.open("localforage");
+        r.onsuccess = () => resolve(r.result);
+        r.onerror = () => reject(r.error);
+    });
+  }
+
+  async function getToken(){
+    try {
+        const db = await openDB();
+        return new Promise((resolve, reject) => {
+            const r = db.transaction("keyvaluepairs", "readonly")
+            .objectStore("keyvaluepairs").get("auth");
+            r.onsuccess = () => resolve(r.result?.session?.token || null);
+            r.onerror = () => reject(r.error);
+        });
+    } catch { return null; }
+  }
 
   async function editEmoji(id,name){
     if(!capturedToken){
@@ -29,7 +32,7 @@
 
     let success = null;
     try {
-        const res = await originalFetch(`https://stoat.chat/api/custom/emoji/${id}`,{
+        const res = await fetch(`https://stoat.chat/api/custom/emoji/${id}`,{
             method:"PATCH",
             headers:{
                 "X-Session-Token":capturedToken
@@ -39,13 +42,50 @@
 
         success = res.ok
 
+        if(success){
+            response = await res.json()
+            const existing = updatedemojis.find(e=>e._id==response._id)
+            if(existing){
+                updatedemojis.splice(updatedemojis.indexOf(existing),1)
+            }
+            updatedemojis.push(response)
+        }
+
     } catch (error) {
+        console.log(error)
         success = false
     }
     return success;
   }
 
-  function editEmojis() {
+  function updateAutoComplete(){
+    const emojiautocomplete = document.getElementsByClassName('cm-tooltip-autocomplete autocomplete-tooltip autocomplete-tooltip-emoji will-change_transform scr-bar-c_var(--md-sys-color-primary)_transparent ov-y_auto ov-x_hidden cm-tooltip cm-tooltip-above').item(0)
+    if(emojiautocomplete){
+        for(const emoji of emojiautocomplete.firstChild.children){
+            const regex = /[A-Z0-9]{26}/;
+            if(regex.test(emoji.firstChild.src)&&updatedemojis.find(e=>e._id==regex.exec(emoji.firstChild.src)[0])&&emoji.lastChild.textContent!=`:${updatedemojis.find(e=>e._id==regex.exec(emoji.firstChild.src)[0]).name}:`){
+                emoji.lastChild.textContent=`:${updatedemojis.find(e=>e._id==regex.exec(emoji.firstChild.src)[0]).name}:`
+            }
+        }
+    }
+  }
+
+  function updateEmojiList(){
+    const emojis = document.querySelectorAll(`a[class='pos_relative gap_16px p_13px bdr_var(--borderRadius-md) us_none cursor_pointer trs_background-color_0.1s_ease-in-out d_flex ai_center flex-d_row c_var(--color) fill_var(--color) bg_var(--md-sys-color-secondary-container) --color_var(--md-sys-color-on-secondary-container)']:has(img[src*='https://cdn.stoatusercontent.com/emojis'])`)
+    emojis.forEach(emoji=>{
+        const img = emoji.querySelector(`img`)
+        const regex = /[A-Z0-9]{26}/;
+        if(regex.test(img.src)&&updatedemojis.find(e=>e._id==regex.exec(img.src)[0])){
+            const id = regex.exec(img.src)[0]
+            if(emoji.lastChild.firstChild.firstChild.firstChild.innerHTML!=`:${updatedemojis.find(e=>e._id==id).name}<!---->:`){
+                emoji.lastChild.firstChild.firstChild.firstChild.innerHTML= `:${updatedemojis.find(e=>e._id==id).name}<!---->:`
+            }
+        }
+    });
+  }
+
+  async function editEmojis() {
+    capturedToken = await getToken()
     const image = document.getElementsByClassName('c_var(--md-sys-color-on-surface-variant) lh_1.25rem fs_0.875rem ls_0.015625rem fw_400').item(0)
     if(!image) return;
     const emojiid = image.firstChild.firstChild.firstChild.firstChild.firstChild.src.substring(image.firstChild.firstChild.firstChild.firstChild.firstChild.src.lastIndexOf('/')+1)
@@ -81,6 +121,11 @@
         if(success==true){
             textfield.value=''
             savebutton.previousSibling.click()
+            const emoji = document.querySelector(`a[class='pos_relative gap_16px p_13px bdr_var(--borderRadius-md) us_none cursor_pointer trs_background-color_0.1s_ease-in-out d_flex ai_center flex-d_row c_var(--color) fill_var(--color) bg_var(--md-sys-color-secondary-container) --color_var(--md-sys-color-on-secondary-container)']:has(img[src*='${response._id}'])`)
+            if(emoji){
+                emoji.lastChild.firstChild.firstChild.firstChild.innerHTML = `:${response.name}<!---->:`
+            }
+            response = {}
         }else{
             let text = '';
 
@@ -114,6 +159,8 @@
 
   const observer = new MutationObserver(() => {
     editEmojis();
+    updateAutoComplete();
+    updateEmojiList();
   });
 
   function init() {
