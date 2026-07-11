@@ -135,7 +135,13 @@ Allows you to delete a user's messages from up to the past 7 days when banning t
 
 # EditEmojis
 
-Adds client side support for renaming emojis. Note that even if the emoji is successfully renamed, the new name will not show up client side until you refresh. This is a stoat issue that I don't think I can do anything about
+Adds client side support for renaming emojis. Note that even if the emoji is successfully renamed, the new name will not show up client side until you refresh. 
+
+**IMPORTANT:**
+
+- Emoji names will only update if YOU changed them. If someone else did it, you still have to refresh your client to see the change
+
+- The new name still won't autocomplete until you refresh your client. For example, if the emoji used to be named fuck, and you renamed it to shit, "sh" won't show the emoji as an autocomplete option, but "fu" will
 
 **Screenshot of the ui for renaming emojis:**
 
