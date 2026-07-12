@@ -55,9 +55,6 @@
         timeoutButton.id='timeout'
         timeoutButton.className='d_flex gap_var(--gap-md) ai_center p_var(--gap-md)_var(--gap-lg) [&:hover]:bg_color-mix(in_srgb,_var(--md-sys-color-on-surface)_8%,_transparent) [&_span]:flex-g_1 [&_span]:mt_1px cursor_pointer fill_var(--md-sys-color-error) c_var(--md-sys-color-error) tt_capitalize'
         
-        const mdripple = document.createElement('md-ripple')
-        mdripple.ariaHidden=true
-
         const icon = document.createElement('span')
         icon.className='material-symbols-outlined fs_inherit fw_undefined!'
         icon.style='display: block; font-size:16px; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0;'
@@ -67,7 +64,6 @@
         text.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
         text.textContent='Timeout member'
 
-        timeoutButton.appendChild(mdripple)
         timeoutButton.appendChild(icon)
         timeoutButton.appendChild(text)
 
@@ -325,6 +321,12 @@
                   thing.style='--background: rgba(0, 0, 0, 0.6);'
                   floating.lastChild.appendChild(thing)
                   thing.appendChild(style)
+                  thing.onclick = function(e){
+                    if(e.target==thing){
+                      if(menuopen) toggleMenu()
+                      thing.remove()
+                    }
+                  }
 
                   cancelbutton.onclick = function(){
                     thing.remove()
