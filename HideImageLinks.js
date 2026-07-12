@@ -13,9 +13,10 @@
         const textElement = message.children[1]?.children[1]?.children[1]?.children[0]?.children[0]
         const text = textElement?.textContent
         const image = message.children[1]?.children[1]?.querySelector(`img[class=cursor_pointer]`)
+        const video = message.querySelector(`video[class*='cursor']`)
         const embed = message.children[1]?.children[1]?.querySelector(`div[class='d_flex flex-d_column flex-g_1 m_0 ai_initial jc_initial min-w_0 gap_var(--gap-md)']`)
 
-        if((linkElement&&link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
+        if((linkElement&&link==text)&&(image?.tagName=='IMG'&&!linkElement.alt||video&&!linkElement.alt)){
             if(!embed||(embed&&![...embed.querySelectorAll(`img[class='cursor_pointer']`)].filter(img=>img.src==image?.src))){
               linkElement.style.display='none'
             }
@@ -28,9 +29,10 @@
         const textElement = message.querySelector(`[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_initial jc_initial']`).children[1].firstChild.querySelector(`div[class='wb_break-word [&_.math]:ov-x_auto [&_.math]:ov-y_hidden [&_.math]:max-h_100vh']`)
         const text = textElement?.textContent
         const image = message.querySelector(`img[class=cursor_pointer]`)
+        const video = message.querySelector(`video[class*='cursor']`)
         const embed = message.children[1]?.children[1]?.querySelector(`div[class='d_flex flex-d_column flex-g_1 m_0 ai_initial jc_initial min-w_0 gap_var(--gap-md)']`)
 
-        if((linkElement&&link==text)&&image?.tagName=='IMG'&&!linkElement.alt){
+        if((linkElement&&link==text)&&(image?.tagName=='IMG'&&!linkElement.alt||video&&!linkElement.alt)){
             if(!embed||(embed&&![...embed.querySelectorAll(`img[class='cursor_pointer']`)].filter(img=>img.src==image?.src))){
               linkElement.style.display='none'
             }
@@ -43,9 +45,10 @@
       const textElement = reply.querySelector(`p[class='[&>code]:flex-sh_0 [&>code]:p_1px_4px [&>code]:bdr_var(--borderRadius-md) [&>code]:c_#c9d1d9 [&>code]:bg_#0d1117']`)
       const text = textElement?.textContent
       const image = reply.querySelector(`img[class='cursor_pointer']`)
+      const video = reply.querySelector(`video[class*='cursor']`)
       const embed = reply.querySelector(`div[class='d_flex flex-d_column flex-g_1 m_0 ai_initial jc_initial min-w_0 gap_var(--gap-md)']`)
 
-      if(linkElement&&link==text&&image?.tagName=='IMG'&&!linkElement.alt){
+      if((linkElement&&link==text)&&(image?.tagName=='IMG'&&!linkElement.alt||video&&!linkElement.alt)){
           if(!embed||(embed&&![...embed.querySelectorAll(`img[class='cursor_pointer']`)].filter(img=>img.src==image?.src))){
             linkElement.style.display='none'
           }
