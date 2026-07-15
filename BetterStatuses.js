@@ -4,7 +4,7 @@
   let validemojis = [];
   let invalidemojis = [];
 
-  async function createImage(statuselement,emoji,fuckshit){
+  async function createImage(div,emoji){
     if(invalidemojis.includes(emoji)) return;
     const img = document.createElement('img')
     img.className=`obj-f_contain d_inline-block w_var(--emoji-size) h_var(--emoji-size) m_0_0.05em_0_0.1em va_-0.3em c_transparent [&:before]:content_'_' [&:before]:d_block [&:before]:pos_absolute [&:before]:h_50px [&:before]:w_50px [&:before]:bg-i_url(ishere.jpg) emoji`
@@ -22,27 +22,15 @@
     }
 
     if(img.src){
-        statuselement.textContent=statuselement.textContent.replace(`:${emoji}:`,'')
-        const div = document.createElement('div')
-
-        const clone = statuselement.cloneNode(true)
-
-        const text = document.createElement('text')
-        text.textContent=statuselement.textContent
-        div.appendChild(clone)
-
-        switch(fuckshit){
-          case'before':
-            div.insertBefore(img,clone)
-          break;
-          case'after':
-            div.appendChild(img)
-          break;
-        }
-
-        statuselement.parentElement.appendChild(div)
-        statuselement.remove()
+        div.appendChild(img)
     }
+  }
+
+  function createSpan(div,text){
+    const span = document.createElement('span')
+    span.className='ov-wrap_anywhere lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 us_text'
+    span.textContent=text+' '
+    div.appendChild(span)
   }
 
   function addReplyButton(statuscard){
@@ -122,7 +110,8 @@
           let status = ''
           const regex = /[A-Z0-9]{26}/;
           for(const child of statuscard.lastChild.children){
-            status = status+child.textContent||`:${regex.exec(child.src)[0]}:`
+            if(child.src)status = status+`:${regex.exec(child.src)[0]}:`
+            else status = status+child.textContent??`:${regex.exec(child.src)[0]}:`
           }
 
           if(!status){
@@ -161,7 +150,7 @@
     }
   }
 
-  function betterStatuses() {
+  async function betterStatuses() {
     const userpopup = document.getElementsByClassName('will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)').item(0)
     const biguserpopup = document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)').item(0)
 
@@ -178,14 +167,17 @@
       const status = statuselement.textContent
 
       const regex = /:[A-Z0-9]{26}:/;
-      if(regex.test(status)){
-        const emoji = regex.exec(status)[0].replaceAll(':','')
-        if(status.startsWith(regex.exec(status)[0])){
-            createImage(statuselement,emoji,'before')
+      const div = document.createElement('div')
+      statuselement.parentElement.appendChild(div)
+      statuselement.remove()
+
+      for(const word of status.split(' ')){
+        if(regex.test(word)){
+          const emoji = regex.exec(word)[0].replaceAll(':','')
+          await createImage(div,emoji)
+        }else{
+          createSpan(div,word)
         }
-        if(status.endsWith(regex.exec(status)[0])){
-          createImage(statuselement,emoji,'after')
-        }  
       }
 
       addReplyButton(statuscard)
@@ -203,14 +195,17 @@
       const status = statuselement.textContent
 
       const regex = /:[A-Z0-9]{26}:/;
-      if(regex.test(status)){
-        const emoji = regex.exec(status)[0].replaceAll(':','')
-        if(status.startsWith(regex.exec(status)[0])){
-            createImage(statuselement,emoji,'before')
+      const div = document.createElement('div')
+      statuselement.parentElement.appendChild(div)
+      statuselement.remove()
+
+      for(const word of status.split(' ')){
+        if(regex.test(word)){
+          const emoji = regex.exec(word)[0].replaceAll(':','')
+          await createImage(div,emoji)
+        }else{
+          createSpan(div,word)
         }
-        if(status.endsWith(regex.exec(status)[0])){
-          createImage(statuselement,emoji,'after')
-        } 
       }
 
       addReplyButton(statuscard)
