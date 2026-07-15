@@ -368,7 +368,7 @@
         child.onclick=()=>{
           let textinput = document.getElementsByClassName('md-text').item(0)
           if(textinput){
-            textinput.innerText=textinput.innerText+` ${child.children[1].src}`
+            textinput.innerText=textinput.innerText+` ${child.dataset.favUrl}`
           }else{
             const editor = document.getElementsByClassName('cm-editor ͼ1 ͼ2 ͼ5 ͼ4 ͼ8 ͼ6 ͼ7').item(0)
             textinput = document.createElement('span')
