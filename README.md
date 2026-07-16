@@ -208,6 +208,14 @@ Also note that the button will not show if you click onto a group chat as soon a
 
 Removes annoying tooltips (eg toggle main sidebar)
 
+# Pronouns
+
+Adds client support for setting and viewing pronouns. Supports both global and per server pronouns
+
+To set global pronouns, go into your profile settings (the same place you go to set a pfp)
+
+To set per server pronouns, right click on the server you want to set your pronouns in and click "edit identity" (or long press if you're on avia mobile)
+
 # RoleIcons (REDUNDANT)
 
 Adds client side support for adding and displaying role icons. This plugin is now redundant because its functionality exists in normal stoat
