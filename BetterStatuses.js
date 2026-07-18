@@ -188,6 +188,7 @@
           e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
           &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
           &&[...e.querySelectorAll(`span`)].length==2
+          &&!e.querySelector(`img[aria-label]`)
       )
         
       if(!statuscard) return;
