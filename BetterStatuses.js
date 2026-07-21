@@ -1,3 +1,9 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterStatuses.js
+  @VERSION: 1.0
+*/
+
+
 (function () {
   if (window.__BETTER_STATUSES__) return;
   window.__BETTER_STATUSES__ = true;
@@ -125,6 +131,12 @@
           setTimeout(() => {
             editor.parentElement.parentElement.parentElement.parentElement.nextSibling.click()
           }, 100);
+          /*(const event = new KeyboardEvent('keydown',{
+              key:'Enter'
+          })
+          for(let i =0; i<4; i++){ //this currently doesn't work in avia mobile due to ShiftNewLine blocking it
+            editor.dispatchEvent(event)
+          }*/
         }
       }
 
@@ -150,67 +162,87 @@
     }
   }
 
+  //ty ava for taking the time to make this
+  function enforceStatusLabel() {
+      const cards = document.querySelectorAll('[class*="asp_1"]');
+      for (const card of cards) {
+
+          if (!card.querySelector("span.us_text")) continue;
+          const header = card.querySelector(":scope > span.fw_550");
+          if (!header) continue;
+
+          if (header.textContent === "Status") continue;
+
+
+          if (!/[^\x00-\x7F]/.test(header.textContent)) continue;
+          header.textContent = "Status";
+      }
+  }
+
   async function betterStatuses() {
-    const userpopup = document.getElementsByClassName('will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)').item(0)
-    const biguserpopup = document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)').item(0)
+      enforceStatusLabel()
+      const userpopup = document.getElementsByClassName('will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)').item(0)
+      const biguserpopup = document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)').item(0)
 
-    if(userpopup){
-      const statuscard = [...userpopup.firstChild.children].find(e=>
-          e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
-          &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
-          &&[...e.querySelectorAll(`span`)].length==2
-          &&!e.querySelector(`img[aria-label]`)
-      )
-        
-      if(!statuscard) return;
-      const statuselement = statuscard.lastChild
-      const status = statuselement.textContent
+      if(userpopup){
+        const statuscard = [...userpopup.firstChild.children].find(e=>
+            e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
+            &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
+            &&[...e.querySelectorAll(`span`)].length==2
+            &&!e.querySelector(`img[aria-label]`)
+            &&e.firstChild.textContent=='Status'
+        )
+          
+        if(!statuscard) return;
+        const statuselement = statuscard.lastChild
+        const status = statuselement.textContent
 
-      const regex = /:[A-Z0-9]{26}:/;
-      const div = document.createElement('div')
-      statuselement.parentElement.appendChild(div)
-      statuselement.remove()
+        const regex = /:[A-Z0-9]{26}:/;
+        const div = document.createElement('div')
+        statuselement.parentElement.appendChild(div)
+        statuselement.remove()
 
-      for(const word of status.split(' ')){
-        if(regex.test(word)){
-          const emoji = regex.exec(word)[0].replaceAll(':','')
-          await createImage(div,emoji)
-        }else{
-          createSpan(div,word)
+        for(const word of status.split(' ')){
+          if(regex.test(word)){
+            const emoji = regex.exec(word)[0].replaceAll(':','')
+            await createImage(div,emoji)
+          }else{
+            createSpan(div,word)
+          }
         }
+
+        addReplyButton(statuscard)
       }
 
-      addReplyButton(statuscard)
-    }
+      if(biguserpopup){
+        enforceStatusLabel()
+        const statuscard = [...biguserpopup.firstChild.firstChild.children].find(e=>
+            e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
+            &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
+            &&[...e.querySelectorAll(`span`)].length==2
+            &&!e.querySelector(`img[aria-label]`)
+            &&e.firstChild.textContent=='Status'
+        )
+        if(!statuscard) return;
+        const statuselement = statuscard.lastChild
+        const status = statuselement.textContent
 
-    if(biguserpopup){
-      const statuscard = [...biguserpopup.firstChild.firstChild.children].find(e=>
-          e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
-          &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
-          &&[...e.querySelectorAll(`span`)].length==2
-          &&!e.querySelector(`img[aria-label]`)
-      )
-        
-      if(!statuscard) return;
-      const statuselement = statuscard.lastChild
-      const status = statuselement.textContent
+        const regex = /:[A-Z0-9]{26}:/;
+        const div = document.createElement('div')
+        statuselement.parentElement.appendChild(div)
+        statuselement.remove()
 
-      const regex = /:[A-Z0-9]{26}:/;
-      const div = document.createElement('div')
-      statuselement.parentElement.appendChild(div)
-      statuselement.remove()
-
-      for(const word of status.split(' ')){
-        if(regex.test(word)){
-          const emoji = regex.exec(word)[0].replaceAll(':','')
-          await createImage(div,emoji)
-        }else{
-          createSpan(div,word)
+        for(const word of status.split(' ')){
+          if(regex.test(word)){
+            const emoji = regex.exec(word)[0].replaceAll(':','')
+            await createImage(div,emoji)
+          }else{
+            createSpan(div,word)
+          }
         }
-      }
 
-      addReplyButton(statuscard)
-    }
+        addReplyButton(statuscard)
+      }
   }
 
   const observer = new MutationObserver(() => {
