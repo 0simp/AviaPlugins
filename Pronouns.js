@@ -1,3 +1,8 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/Pronouns.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__PRONOUNS__) return;
   window.__PRONOUNS__ = true;
