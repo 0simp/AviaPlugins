@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/Pronouns.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
