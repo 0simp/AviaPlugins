@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/Pronouns.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
@@ -40,10 +40,11 @@
             const json = await res.json()
             if(json.pronouns){
               const userpopup = document.querySelector(`div[class='will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)'],div[class='p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)']`)
-              if(userpopup){
+              if(userpopup&&!document.getElementById(('aviapronouns'))){
                 const usernameparent = userpopup.querySelector(`div[class='ov-wrap_anywhere lh_1em fs_0.875rem ls_0.015625rem fw_400 d_flex gap_var(--gap-xs) flex-d_column']`)
                 const pronounselement = document.createElement('div')
                 pronounselement.textContent=json.pronouns
+                pronounselement.id='aviapronouns'
                 usernameparent.appendChild(pronounselement)
 
                 const pronounscard = [...document.querySelectorAll(`div[class='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1']`)]
@@ -56,10 +57,11 @@
                 const json = await res.json()
                 if(json.pronouns){
                   const userpopup = document.querySelector(`div[class='will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)'],div[class='p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)']`)
-                  if(userpopup){
+                  if(userpopup&&!document.getElementById(('aviapronouns'))){
                     const usernameparent = userpopup.querySelector(`div[class='ov-wrap_anywhere lh_1em fs_0.875rem ls_0.015625rem fw_400 d_flex gap_var(--gap-xs) flex-d_column']`)
                     const pronounselement = document.createElement('div')
                     pronounselement.textContent=json.pronouns
+                    pronounselement.id='aviapronouns'
                     usernameparent.appendChild(pronounselement)
 
                     const pronounscard = [...document.querySelectorAll(`div[class='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1']`)]
