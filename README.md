@@ -210,11 +210,19 @@ Removes annoying tooltips (eg toggle main sidebar)
 
 # Pronouns
 
-Adds client support for setting and viewing pronouns. Supports both global and per server pronouns
+Moves pronouns to under the username in user profiles and hides them in chat
 
-To set global pronouns, go into your profile settings (the same place you go to set a pfp)
+**WITHOUT THE PLUGIN**:
 
-To set per server pronouns, right click on the server you want to set your pronouns in and click "edit identity" (or long press if you're on avia mobile)
+<img src='https://cdn.stoatusercontent.com/attachments/UStQHThh-RMHGnb6FC8LE-bSlE6BAs2kUFlcoDvELd/original'>
+
+<img src='https://cdn.stoatusercontent.com/attachments/cUPQBPP0swNZH67hSRGqLaA26SFwsH9ofzAKevMDPC/original'>
+
+**WITH THE PLUGIN:**
+
+<img src='https://cdn.stoatusercontent.com/attachments/l2_clsqYf2EE9L6E1_KiJqWH2usGn8FmcfKcudAwBa/original'>
+
+<img src='https://cdn.stoatusercontent.com/attachments/h30PRprDU-Nbzc451XbGwx4s_OappHioEQJh1VmpBg/original'>
 
 # RoleIcons (REDUNDANT)
 
