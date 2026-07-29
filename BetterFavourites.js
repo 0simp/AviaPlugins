@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterFavourites.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
@@ -172,6 +172,7 @@
     });
 
     const floating = document.getElementById('floating')
+    if(!floating||!floating.lastChild) return;
     const overlay = floating.lastChild.firstChild
     if(!overlay) return;
     const img = overlay.querySelector(`img`)
