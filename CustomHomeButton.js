@@ -1,11 +1,15 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/CustomHomeButton.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__CUSTOM_HOME_BUTTON__) return;
   window.__CUSTOM_HOME_BUTTON__ = true;
 
   function apply() {
     if(!document.getElementsByClassName('homebutton').item(0)){
-        const homebuttonelement = document.getElementsByClassName('w_100% h_100% d_flex ai_center jc_center fw_600 fs_0.75rem fill_var(--md-sys-color-on-surface) c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low)')
-        .item(0)
+        const homebuttonelement = document.querySelector(`path[d='M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z']`)?.parentElement.parentElement
         if(homebuttonelement){
             homebuttonelement.removeChild(homebuttonelement.firstChild)
             homebuttonelement.setAttribute('class','homebutton')  
