@@ -1,13 +1,18 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/ShrinkEmojis.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__SHRINK_EMOJIS__) return;
   window.__SHRINK_EMOJIS__ = true;
 
   function apply() {
-    const list = document.querySelectorAll('img[alt]')
-    list.forEach(item=>{
-      if(item.parentElement.parentElement.className!='fs_12px ov_hidden word-wrap_break-word'&&item.parentElement.parentElement.className&&item.parentElement.className.includes('--emoji-size-large')||(item.parentElement.className==='d_inline-block'&&item.parentElement.parentElement.className.includes('--emoji-size-large'))){
-        item.style.setProperty('height','40px')
-        item.style.setProperty('width','40px')
+    const emojis = document.querySelectorAll('img[alt]')
+    emojis.forEach(emoji=>{
+      if(emoji.width>40){
+        emoji.style.setProperty('height','40px')
+        emoji.style.setProperty('width','40px')
       }
     })
   }
@@ -30,4 +35,3 @@
     requestAnimationFrame(init);
   }
 })();
-//test
