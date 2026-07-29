@@ -1,3 +1,8 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterFavourites.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__BETTER_FAVOURITES__) return;
   window.__BETTER_FAVOURITES__ = true;
@@ -46,7 +51,7 @@
         button.style.color=getFavorites().some(f=>f.url==url)? "#f5c518" : "#fff"
         if(!balls){
           toast.textContent = 'Removed from favourites'
-          button.appendChild(toast);
+          button.parentElement.appendChild(toast);
           requestAnimationFrame(() => toast.style.opacity = "1");
           setTimeout(() => {
               toast.style.opacity = "0";
@@ -77,7 +82,7 @@
     }
     if(!balls){
       toast.textContent = 'Added to favourites'
-      button.appendChild(toast);
+      button.parentElement.appendChild(toast);
       requestAnimationFrame(() => toast.style.opacity = "1");
           setTimeout(() => {
             toast.style.opacity = "0";
@@ -87,10 +92,11 @@
   }
 
   function apply() {
-    document.querySelectorAll('img.cursor_pointer').forEach(img=>{ //add favourites button to images in chat
-      let message = img.parentElement.parentElement.parentElement.parentElement.parentElement
-      if(!message.id){
-        message= img.parentElement.parentElement.parentElement.parentElement.parentElement.parentElement
+    [...document.querySelectorAll(`img`)].filter(img=>!img.getAttribute('draggable')&&img.src).forEach(img=>{ //add favourites button to images in chat
+      let message = null;
+      const regex = /[A-Z0-9]{26}/;
+      if(regex.test(img.closest(`[id]`)?.id)){
+        message = img.closest(`[id]`)
       }
       
       const card = document.createElement('div')
@@ -160,17 +166,23 @@
       card.appendChild(clone)
       card.appendChild(starBtn)
 
-      if(!message.querySelector(`div[class='fuckshit'][data-src='${img.src}']`)){
+      if(message&&!message.querySelector(`div[class='fuckshit'][data-src='${img.src}']`)){
         img.parentElement.replaceChild(card,img)
       }
     });
 
-    const bars = [...document.getElementsByClassName('z_999 d_flex gap_var(--gap-md) p_var(--gap-md) bdr_var(--borderRadius-lg) bg_var(--md-sys-color-surface) c_var(--md-sys-color-on-surface)')]
-    const bar = bars.find(bar=>bar.firstChild?.tagName=='BUTTON')
+    const floating = document.getElementById('floating')
+    const overlay = floating.lastChild.firstChild
+    if(!overlay) return;
+    const img = overlay.querySelector(`img`)
+    const zoomoutspan = [...overlay.querySelectorAll("span.material-symbols-outlined")]
+    .find(s => s.textContent.trim() === "zoom_out");
+    if(!(img&&zoomoutspan)) return;
+    const zoomoutbutton = zoomoutspan.closest('button')
+    const bar = zoomoutbutton.parentElement
     if(bar){
       if(![...bar.children].find(child=>[...child.children].find(child=>child.textContent=='star'))&&bar.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
-        const copylinkbtn = document.createElement('button')
-        copylinkbtn.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px'
+        const copylinkbtn = zoomoutbutton.cloneNode()
 
         const mdripple = document.createElement('md-ripple')
         mdripple.ariaHidden=true
@@ -185,7 +197,7 @@
 
         copylinkbtn.onclick = function(){
           let text = 'Copied!'
-          navigator.clipboard.writeText(bar.parentElement.parentElement.parentElement.children[1].src).catch(err=>{
+          navigator.clipboard.writeText(img.src).catch(err=>{
             text = 'Couldn\'t copy'
           })
 
@@ -205,7 +217,7 @@
           });
           toast.textContent=text
 
-          copylinkbtn.appendChild(toast);
+          bar.appendChild(toast);
           requestAnimationFrame(() => toast.style.opacity = "1");
               setTimeout(() => {
                 toast.style.opacity = "0";
@@ -213,8 +225,7 @@
             }, 2000);
         }
 
-        const favouriteButton = document.createElement('button')
-        favouriteButton.setAttribute('class','lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px')
+        const favouriteButton = zoomoutbutton.cloneNode()
         favouriteButton.innerHTML = `
             <md-ripple aria-hidden="true"></md-ripple>
             <span aria-hidden="true" class="material-symbols-outlined fs_inherit fw_undefined!" style="display: block; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0;">star</span>
