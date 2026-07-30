@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/ShrinkEmojis.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
@@ -10,7 +10,7 @@
   function apply() {
     const emojis = document.querySelectorAll('img[alt]')
     emojis.forEach(emoji=>{
-      if(emoji.width>40){
+      if(emoji.width>40&&emoji.width==emoji.height){
         emoji.style.setProperty('height','40px')
         emoji.style.setProperty('width','40px')
       }
