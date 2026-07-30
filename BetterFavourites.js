@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterFavourites.js
-  @VERSION: 1.2
+  @VERSION: 1.2.1
 */
 
 (function () {
@@ -382,7 +382,6 @@
       
       for(const child of panel.children[2].firstChild.children){
         child.onclick=()=>{
-          console.log(child)
           let textinput = document.getElementsByClassName('md-text').item(0)
           if(textinput){
             textinput.innerText=textinput.innerText+` ${child.dataset.favUrl}`
