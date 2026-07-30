@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterFavourites.js
-  @VERSION: 1.1
+  @VERSION: 1.2
 */
 
 (function () {
@@ -171,78 +171,82 @@
       }
     });
 
-    const floating = document.getElementById('floating')
-    if(!floating||!floating.lastChild) return;
-    const overlay = floating.lastChild.firstChild
-    if(!overlay) return;
-    const img = overlay.querySelector(`img`)
-    const zoomoutspan = [...overlay.querySelectorAll("span.material-symbols-outlined")]
-    .find(s => s.textContent.trim() === "zoom_out");
-    if(!(img&&zoomoutspan)) return;
-    const zoomoutbutton = zoomoutspan.closest('button')
-    const bar = zoomoutbutton.parentElement
-    if(bar){
-      if(![...bar.children].find(child=>[...child.children].find(child=>child.textContent=='star'))&&bar.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
-        const copylinkbtn = zoomoutbutton.cloneNode()
+    function addButtonToImageToolbar(){
+      const floating = document.getElementById('floating')
+      if(!floating||!floating.lastChild) return;
+      const overlay = floating.lastChild.firstChild
+      if(!overlay) return;
+      const img = overlay.querySelector(`img`)
+      const zoomoutspan = [...overlay.querySelectorAll("span.material-symbols-outlined")]
+      .find(s => s.textContent.trim() === "zoom_out");
+      if(!(img&&zoomoutspan)) return;
+      const zoomoutbutton = zoomoutspan.closest('button')
+      const bar = zoomoutbutton.parentElement
+      if(bar){
+        if(![...bar.children].find(child=>[...child.children].find(child=>child.textContent=='star'))&&bar.parentElement.parentElement.parentElement.children[1].tagName==='IMG'){
+          const copylinkbtn = zoomoutbutton.cloneNode()
 
-        const mdripple = document.createElement('md-ripple')
-        mdripple.ariaHidden=true
+          const mdripple = document.createElement('md-ripple')
+          mdripple.ariaHidden=true
 
-        const copylinkspan = document.createElement('span')
-        copylinkspan.className='material-symbols-outlined fs_inherit fw_undefined!'
-        copylinkspan.style.fontFeatureSettings='"FILL" 0, "wght" 400, "GRAD" 0'
-        copylinkspan.textContent='link'
+          const copylinkspan = document.createElement('span')
+          copylinkspan.className='material-symbols-outlined fs_inherit fw_undefined!'
+          copylinkspan.style.fontFeatureSettings='"FILL" 0, "wght" 400, "GRAD" 0'
+          copylinkspan.textContent='link'
 
-        copylinkbtn.appendChild(mdripple)
-        copylinkbtn.appendChild(copylinkspan)
+          copylinkbtn.appendChild(mdripple)
+          copylinkbtn.appendChild(copylinkspan)
 
-        copylinkbtn.onclick = function(){
-          let text = 'Copied!'
-          navigator.clipboard.writeText(img.src).catch(err=>{
-            text = 'Couldn\'t copy'
-          })
+          copylinkbtn.onclick = function(){
+            let text = 'Copied!'
+            navigator.clipboard.writeText(img.src).catch(err=>{
+              text = 'Couldn\'t copy'
+            })
 
-          const toast = document.createElement('div')
-          Object.assign(toast.style, {
-              position: "absolute",
-              bottom: "6px",
-              left: "50%",
-              transform: "translateX(-50%)",
-              background: "rgba(0,0,0,0.85)",
-              padding: "6px 10px",
-              borderRadius: "8px",
-              fontSize: "11px",
-              opacity: "0",
-              transition: "opacity 0.2s",
-              pointerEvents: "none",
-          });
-          toast.textContent=text
+            const toast = document.createElement('div')
+            Object.assign(toast.style, {
+                position: "absolute",
+                bottom: "6px",
+                left: "50%",
+                transform: "translateX(-50%)",
+                background: "rgba(0,0,0,0.85)",
+                padding: "6px 10px",
+                borderRadius: "8px",
+                fontSize: "11px",
+                opacity: "0",
+                transition: "opacity 0.2s",
+                pointerEvents: "none",
+            });
+            toast.textContent=text
 
-          bar.appendChild(toast);
-          requestAnimationFrame(() => toast.style.opacity = "1");
-              setTimeout(() => {
-                toast.style.opacity = "0";
-                setTimeout(() => toast.remove(), 200);
-            }, 2000);
-        }
-
-        const favouriteButton = zoomoutbutton.cloneNode()
-        favouriteButton.innerHTML = `
-            <md-ripple aria-hidden="true"></md-ripple>
-            <span aria-hidden="true" class="material-symbols-outlined fs_inherit fw_undefined!" style="display: block; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0;">star</span>
-        `
-        favouriteButton.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
-
-        favouriteButton.onclick = async function(e){
-          await tryToAdd(favouriteButton,`${imgurl}`)
-          if(buttonelement){
-            buttonelement.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
+            bar.appendChild(toast);
+            requestAnimationFrame(() => toast.style.opacity = "1");
+                setTimeout(() => {
+                  toast.style.opacity = "0";
+                  setTimeout(() => toast.remove(), 200);
+              }, 2000);
           }
-        } 
-        bar.insertBefore(copylinkbtn,bar.lastChild)
-        bar.appendChild(favouriteButton)
+
+          const favouriteButton = zoomoutbutton.cloneNode()
+          favouriteButton.innerHTML = `
+              <md-ripple aria-hidden="true"></md-ripple>
+              <span aria-hidden="true" class="material-symbols-outlined fs_inherit fw_undefined!" style="display: block; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0;">star</span>
+          `
+          favouriteButton.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
+
+          favouriteButton.onclick = async function(e){
+            await tryToAdd(favouriteButton,`${imgurl}`)
+            if(buttonelement){
+              buttonelement.style.color=getFavorites().some(f=>f.url==imgurl)? "#f5c518" : "#fff"
+            }
+          } 
+          bar.insertBefore(copylinkbtn,bar.lastChild)
+          bar.appendChild(favouriteButton)
+        }
       }
     }
+
+    addButtonToImageToolbar()
 
     const panel = document.getElementById('avia-favorites-panel')
     if(panel){
@@ -378,6 +382,7 @@
       
       for(const child of panel.children[2].firstChild.children){
         child.onclick=()=>{
+          console.log(child)
           let textinput = document.getElementsByClassName('md-text').item(0)
           if(textinput){
             textinput.innerText=textinput.innerText+` ${child.dataset.favUrl}`
