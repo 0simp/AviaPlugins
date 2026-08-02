@@ -1,9 +1,16 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/ChunkyMembers.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__CHUNKY_MEMBERS__) return;
   window.__CHUNKY_MEMBERS__ = true;
 
   function chunkyMembers() {
-    const memberlist = document.getElementsByClassName('will-change_transform scr-bar-c_var(--md-sys-color-primary)_transparent ov-y_auto ov-x_hidden ov_hidden! scr-bar-g_stable flex-sh_0 w_var(--layout-width-channel-sidebar) bdr_var(--borderRadius-lg)').item(0)
+    const memberlistvirtualcontainer = document.querySelector(`div[class*='virtual-container']:has(div>div>svg>circle[fill*='var(--brand-presence'])`)
+    if(!memberlistvirtualcontainer) return;
+    const memberlist = memberlistvirtualcontainer.offsetParent
     if(!memberlist) return;
     if(!memberlist.style.width||Number(memberlist.style.width.replace('px',''))<memberlist.previousSibling.clientWidth){
       memberlist.style.width = `${memberlist.clientWidth+memberlist.previousSibling.clientWidth}px`
