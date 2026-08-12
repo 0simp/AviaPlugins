@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/NoAnnoyingTooltips.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
@@ -20,6 +20,8 @@
     ||el.firstChild.firstChild.alt
     ||regex.test(el.textContent)
     ||el.textContent.includes(username)).forEach(el=>{
+      if(document.querySelector(`[aria-label='${el.textContent.trim()}']`)&&
+      document.querySelector(`[aria-label='${el.textContent.trim()}']`).querySelector(`img[alt]`)) return;
       el.remove()
     });
   }
