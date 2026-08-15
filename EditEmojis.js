@@ -1,3 +1,8 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/EditEmojis.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__EDIT_EMOJIS__) return;
   window.__EDIT_EMOJIS__ = true;
@@ -59,7 +64,7 @@
   }
 
   function updateAutoComplete(){
-    const emojiautocomplete = document.getElementsByClassName('cm-tooltip-autocomplete autocomplete-tooltip autocomplete-tooltip-emoji will-change_transform scr-bar-c_var(--md-sys-color-primary)_transparent ov-y_auto ov-x_hidden cm-tooltip cm-tooltip-above').item(0)
+    const emojiautocomplete = document.querySelector(`div[class*='cm-tooltip-autocomplete autocomplete-tooltip autocomplete-tooltip-emoji']`)
     if(emojiautocomplete){
         for(const emoji of emojiautocomplete.firstChild.children){
             const regex = /[A-Z0-9]{26}/;
@@ -71,7 +76,7 @@
   }
 
   function updateEmojiList(){
-    const emojis = document.querySelectorAll(`a[class='pos_relative gap_16px p_13px bdr_var(--borderRadius-md) us_none cursor_pointer trs_background-color_0.1s_ease-in-out d_flex ai_center flex-d_row c_var(--color) fill_var(--color) bg_var(--md-sys-color-secondary-container) --color_var(--md-sys-color-on-secondary-container)']:has(img[src*='https://cdn.stoatusercontent.com/emojis'])`)
+    const emojis = document.querySelectorAll(`a:has(img[src*='cdn.stoatusercontent.com/emojis'])`)
     emojis.forEach(emoji=>{
         const img = emoji.querySelector(`img`)
         const regex = /[A-Z0-9]{26}/;
@@ -86,9 +91,11 @@
 
   async function editEmojis() {
     capturedToken = await getToken()
-    const image = document.getElementsByClassName('c_var(--md-sys-color-on-surface-variant) lh_1.25rem fs_0.875rem ls_0.015625rem fw_400').item(0)
-    if(!image) return;
-    const emojiid = image.firstChild.firstChild.firstChild.firstChild.firstChild.src.substring(image.firstChild.firstChild.firstChild.firstChild.firstChild.src.lastIndexOf('/')+1)
+    const emojidialog = document.querySelector(`div[class='dialog']:has(img[src*='stoatusercontent.com/emojis'])`)
+    if(!emojidialog) return;
+
+    const image = emojidialog.querySelector(`img[src*='stoatusercontent.com/emojis']`)
+    const emojiid = image.src.substring(image.src.lastIndexOf('/')+1)
 
     const textfield = document.createElement('mdui-text-field')
     textfield.id='emojiname'
@@ -104,24 +111,18 @@
         }
     }
 
-    const savebutton = document.createElement('button')
+    const closebutton = emojidialog.firstChild.lastChild.lastChild
+
+    const savebutton = closebutton.cloneNode(true)
     savebutton.disabled=true
-    savebutton.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 pos_relative px_16px flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-medium)_all c_var(--color) fill_var(--color) h_40px bdr_var(--borderRadius-full) --color_var(--md-sys-color-primary)'
-
-    const mdripple = document.createElement('md-ripple')
-    mdripple.ariaHidden=true
-    savebutton.appendChild(mdripple)
-
-    const text = document.createElement('text')
-    text.textContent='Save'
-    savebutton.appendChild(text)
+    savebutton.lastChild.textContent='Save'
 
     savebutton.onclick = async function(){
         const success = await editEmoji(emojiid,textfield.value)
         if(success==true){
             textfield.value=''
             savebutton.previousSibling.click()
-            const emoji = document.querySelector(`a[class='pos_relative gap_16px p_13px bdr_var(--borderRadius-md) us_none cursor_pointer trs_background-color_0.1s_ease-in-out d_flex ai_center flex-d_row c_var(--color) fill_var(--color) bg_var(--md-sys-color-secondary-container) --color_var(--md-sys-color-on-secondary-container)']:has(img[src*='${response._id}'])`)
+            const emoji = document.querySelector(`a:has(img[src*='${response._id}'])`)
             if(emoji){
                 emoji.lastChild.firstChild.firstChild.firstChild.innerHTML = `:${response.name}<!---->:`
             }
@@ -152,8 +153,8 @@
     }
 
     if(!document.getElementById('emojiname')){
-        image.parentElement.insertBefore(textfield,image.nextSibling)
-        image.parentElement.lastChild.appendChild(savebutton)
+        emojidialog.firstChild.insertBefore(textfield,emojidialog.firstChild.lastChild)
+        emojidialog.firstChild.lastChild.appendChild(savebutton)
     }
   }
 
