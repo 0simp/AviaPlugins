@@ -1,3 +1,8 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/SilentLeaveGCs.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__SILENT_LEAVE_GCS__) return;
   window.__SILENT_LEAVE_GCS__ = true;
@@ -15,20 +20,34 @@
     return originalFetch(resource,config);
   };
 
+  function createCheckbox(popup){
+    if(document.getElementById('silentleavegc')) return;
+    const checkbox = document.createElement('mdui-checkbox')
+    checkbox.id='silentleavegc'
+    checkbox.name='silent'
+    checkbox.value='on'
+    checkbox.textContent='Don\'t notify others that you\'ve left'
+    popup.insertBefore(checkbox,popup.lastChild)
+  }
+
   function silentLeaveGCs() {
-    const gcleavepopup = [...document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)')].find(e=>
-        !e.querySelector(`mdui-checkbox`)&&
-        e.querySelector(`span[class='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px']`).textContent?.includes('Leave')&&
-        !e.querySelector(`span[class='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px']`).textContent?.includes('#')&&
-        !e.querySelector(`span[class='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px']`).textContent?.includes('Delete')
-    )
-    if(gcleavepopup){
-        const checkbox = document.createElement('mdui-checkbox')
-        checkbox.id='silentleavegc'
-        checkbox.name='silent'
-        checkbox.value='on'
-        checkbox.textContent='Don\'t notify others that you\'ve left'
-        gcleavepopup.insertBefore(checkbox,gcleavepopup.lastChild)
+    const gcleavebutton = document.querySelector(`a:has(>svg>path[d='m17 8-1.41 1.41L17.17 11H9v2h8.17l-1.58 1.58L17 16l4-4zM5 5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h7v-2H5z'])`)
+    const copylinkbutton = document.querySelector(`a:has(svg>path[d='M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92s2.92-1.31 2.92-2.92-1.31-2.92-2.92-2.92M18 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1M6 13c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1m12 7.02c-.55 0-1-.45-1-1s.45-1 1-1 1 .45 1 1-.45 1-1 1'])`)
+    if(gcleavebutton&&copylinkbutton){
+      gcleavebutton.onclick = function(){
+        const gcleavepopup = document.getElementsByClassName('dialog').item(0)
+        if(gcleavepopup){
+          createCheckbox(gcleavepopup.firstChild)
+        }else{
+          const interval = setInterval(() => {
+            const gcleavepopup = document.getElementsByClassName('dialog').item(0)
+            if(gcleavepopup){
+              createCheckbox(gcleavepopup.firstChild)
+              clearInterval(interval)
+            } 
+          }, 1);
+        }
+      }
     }
   }
 
