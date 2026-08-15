@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/Pronouns.js
-  @VERSION: 1.2
+  @VERSION: 1.3
 */
 
 (function () {
@@ -53,6 +53,7 @@
     messages.forEach(message=>{
       if(hidepronouns){
         const time = message.querySelector('time')
+        if(!time) return;
         const target = time.closest('div').previousSibling
         try {
           const colours = getComputedStyle(target).getPropertyValue('color').replace('rgb','').replace('(','').replace(')','').split(', ')
