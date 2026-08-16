@@ -34,9 +34,9 @@ Prevents download buttons from opening new tabs. If your browser supports it (al
 
 Improves avia's built in favourites system by adding a button to the image viewer to add the image to favourites, a refresh button to the favourites panel (click to make images/gifs added via the add favourites button show up) and making clicking on an image/gif put the link into the chat bar instead of copying it to the clipboard. This plugin is just a combination of AddToFavourites,FavsToChat and a new refresh button. 
 
-# BetterImageViewer
+# BetterImageViewer (DISCONTINUED)
 
-Improves stoat's image viewer by adding a button to view the image in a new tab. Also fixes the bar thing with all the buttons on it going off the screen on phones
+Improves stoat's image viewer by adding a button to view the image in a new tab. Also fixes the bar thing with all the buttons on it going off the screen on phones. This plugin has been discontinued because im sick and fucking tired of constantly dealing with nonsensical javascript BULLSHIT AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
 
 **EXAMPLE:**
 
@@ -80,9 +80,9 @@ right:16px;
 }
 ```
 
-# ClickSounds
+# ClickSounds (DISCONTINUED)
 
-Plays a sound effect whenever you click on a button.
+Plays a sound effect whenever you click on a button. This plugin has been discontinued because it served no practical purpose and the less shit I have to maintian the better
 
 **UI FOR SETTING THE CLICK SOUND (accessed via user settings):**
 
@@ -147,9 +147,9 @@ Adds client side support for renaming emojis.
 
 <img src='https://cdn.stoatusercontent.com/attachments/LueCbA5ZrhQPhunndpWQvH_nCAo8cyGLJg1roiT64E/original'>
 
-# EmojiSounds
+# EmojiSounds (DISCONTINUED)
 
-Allows you to set sounds to be played when certain emojis are sent in chat
+Allows you to set sounds to be played when certain emojis are sent in chat. This plugin has been discontinued because it served no practical purpose and the less shit I have to maintian the better
 
 **HOW TO USE:**
 
