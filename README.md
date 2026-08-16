@@ -34,9 +34,9 @@ Prevents download buttons from opening new tabs. If your browser supports it (al
 
 Improves avia's built in favourites system by adding a button to the image viewer to add the image to favourites, a refresh button to the favourites panel (click to make images/gifs added via the add favourites button show up) and making clicking on an image/gif put the link into the chat bar instead of copying it to the clipboard. This plugin is just a combination of AddToFavourites,FavsToChat and a new refresh button. 
 
-# BetterImageViewer (DISCONTINUED)
+# BetterImageViewer
 
-Improves stoat's image viewer by adding a button to view the image in a new tab. Also fixes the bar thing with all the buttons on it going off the screen on phones. This plugin has been discontinued because im sick and fucking tired of constantly dealing with nonsensical javascript BULLSHIT AHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH
+Improves stoat's image viewer by adding a button to view the image in a new tab. Also fixes the bar thing with all the buttons on it going off the screen on phones
 
 **EXAMPLE:**
 
