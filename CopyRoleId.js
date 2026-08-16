@@ -1,3 +1,8 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/CopyRoleId.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__COPY_ROLE_ID__) return;
   window.__COPY_ROLE_ID__ = true;
@@ -82,38 +87,16 @@
 
   function CopyRoleId() {
     if(document.baseURI.includes('/server')){
-
-      const userpopup = document.getElementsByClassName('will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)').item(0)
-      if(userpopup){
-        const target = userpopup.firstChild.firstChild.children[1].children[1]
-        if(target.textContent==target.lastChild.textContent){
-          username = target.textContent
-        }else{
-          username = target.lastChild.textContent
-        }
+      const usernameelement = document.querySelector(`[aria-label='Click to copy username']`)
+      if(usernameelement){
+        username = usernameelement.textContent
       }
 
-      const biguserpopup = [...document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)')].filter(e=>!e.querySelector(`button[class='ov-wrap_anywhere lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 pos_relative px_16px flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-medium)_all c_var(--color) fill_var(--color) h_40px bdr_var(--borderRadius-full) --color_var(--md-sys-color-primary)']`))[0]
-      if(biguserpopup){
-        const target = biguserpopup.firstChild.firstChild.firstChild.children[1].children[1]
-        if(target.textContent==target.lastChild.textContent){
-          username = target.textContent
-        }else{
-          username = target.lastChild.textContent
-        }
-      }
+      const modal = [...document.getElementsByClassName('dialog')].find(e=>e.textContent.includes(`${username.substring(0,username.length-5)}'s`)
+      &&e.querySelector(`div:has(>div>div>div[style*='background'])`))
 
-      const modal = [...document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)')].filter(e=>e.querySelector(`button[class='ov-wrap_anywhere lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 pos_relative px_16px flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-medium)_all c_var(--color) fill_var(--color) h_40px bdr_var(--borderRadius-full) --color_var(--md-sys-color-primary)']`))[0]
-      if(modal&&modal.children[1]?.firstChild?.firstChild?.nextSibling?.style.background){
-          
-      }else{
-        if(modal&&modal.children[1]?.firstChild?.firstChild?.firstChild?.children[1]?.style?.background){
-           
-        }else return;
-      }
-
-      if(modal.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)){
-        modal.querySelectorAll(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`).forEach(element=>{
+      if(!modal) return;
+      modal.querySelectorAll(`div:has(>div[style*='background'])`).forEach(e=>{
           const button = document.createElement('button')
           button.style.cursor='pointer'
           button.textContent='Copy role ID'
@@ -162,11 +145,10 @@
                 setTimeout(() => toast.remove(), 200);
             }, 2000);
           }
-          if(!element.querySelector(`button`)){
-            element.appendChild(button)
+          if(!e.querySelector(`button`)){
+            e.appendChild(button)
           }
-        });
-      }
+      })
     }
   }
 
