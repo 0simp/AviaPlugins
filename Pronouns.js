@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/Pronouns.js
-  @VERSION: 1.3
+  @VERSION: 1.4
 */
 
 (function () {
@@ -61,7 +61,7 @@
           const g = Number(colours[1])
           const b = Number(colours[2])
           const hex = rgbToHex(r,g,b)
-          if(hex==getComputedStyle(document.body).getPropertyValue('--md-sys-color-outline')
+          if(hex==getComputedStyle(document.querySelector('#root')).getPropertyValue('--md-sys-color-outline').toLowerCase()
           &&target.textContent&&!target.querySelector(`[aria-label]`)){
             time.closest('div').previousSibling.style.display='none'
           }
