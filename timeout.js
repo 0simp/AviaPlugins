@@ -1,7 +1,12 @@
+/*
+  @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/timeout.js
+  @VERSION: 1.0
+*/
+
 (function () {
   if (window.__TIMEOUT__) return;
   window.__TIMEOUT__ = true;
-  let value = null;
+  let value = new Date(Date.now()+3600000).toISOString()
 
   let capturedToken = null;
   let fetchedUsers = [];
@@ -42,8 +47,7 @@
     if(!capturedToken) return;
     if(!document.baseURI.includes('/server')) return;
 
-    const contextMenu = document.getElementsByClassName('d_flex flex-d_column p_var(--gap-md)_0 ov_hidden bdr_var(--borderRadius-xs) bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface) fill_var(--md-sys-color-on-surface) bx-sh_0_0_3px_var(--md-sys-color-shadow) us_none UserContextMenu')
-    .item(0)
+    const contextMenu = document.querySelector(`div[class*='UserContextMenu']`)
     if(!contextMenu){
       if(document.body.style.getPropertyValue('overflow')){
         document.body.style.removeProperty('overflow')
@@ -52,31 +56,27 @@
     } 
     document.body.style.overflow='hidden'
 
-    const kickmembersvg = contextMenu.querySelector(`path[d='M14 8c0-2.21-1.79-4-4-4S6 5.79 6 8s1.79 4 4 4 4-1.79 4-4m-2 0c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2M2 18v2h16v-2c0-2.66-5.33-4-8-4s-8 1.34-8 4m2 0c.2-.71 3.3-2 6-2 2.69 0 5.77 1.28 6 2zm13-8h6v2h-6z']`)
-    const banmembersvg = contextMenu.querySelector(`path[d='M7 11v2h10v-2zm5-9C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2m0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8']`)
+    const kickmemberbutton = [...contextMenu.querySelectorAll(`a:has(>div>span)`)].find(e=>e.querySelector('span').textContent=='person_remove')
+    const banmemberbutton = [...contextMenu.querySelectorAll('a:has(>div>span)')].find(e=>e.querySelector('span').textContent=='do_not_disturb_on')
 
-    if(((kickmembersvg&&kickmembersvg.parentElement.parentElement.nextSibling.firstChild.firstChild.getAttribute('d')!='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2M4 12c0-4.42 3.58-8 8-8 1.85 0 3.55.63 4.9 1.69L5.69 16.9A7.9 7.9 0 0 1 4 12m8 8c-1.85 0-3.55-.63-4.9-1.69L18.31 7.1A7.9 7.9 0 0 1 20 12c0 4.42-3.58 8-8 8')
-    ||banmembersvg)&&!document.getElementById('timeout')){
-        const timeoutButton = document.createElement('a')
+    if(((kickmemberbutton&&kickmemberbutton.nextSibling.querySelector('span').textContent!='block')
+    ||banmemberbutton)&&!document.getElementById('timeout')){
+        let targetbutton;
+        if(banmemberbutton){
+          targetbutton = banmemberbutton
+        }else{
+          targetbutton = kickmemberbutton
+        }
+
+        const timeoutButton = targetbutton.cloneNode(true)
         timeoutButton.id='timeout'
-        timeoutButton.className='d_flex gap_var(--gap-md) ai_center p_var(--gap-md)_var(--gap-lg) [&:hover]:bg_color-mix(in_srgb,_var(--md-sys-color-on-surface)_8%,_transparent) [&_span]:flex-g_1 [&_span]:mt_1px cursor_pointer fill_var(--md-sys-color-error) c_var(--md-sys-color-error) tt_capitalize'
-        
-        const icon = document.createElement('span')
-        icon.className='material-symbols-outlined fs_inherit fw_undefined!'
-        icon.style='display: block; font-size:16px; font-variation-settings: &quot;FILL&quot; 0, &quot;wght&quot; 400, &quot;GRAD&quot; 0;'
-        icon.textContent='alarm'
-
-        const text = document.createElement('span')
-        text.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
-        text.textContent='Timeout member'
-
-        timeoutButton.appendChild(icon)
-        timeoutButton.appendChild(text)
+        timeoutButton.firstChild.firstChild.textContent = 'alarm'
+        timeoutButton.lastChild.textContent = 'Timeout member'
 
         timeoutButton.onclick = async function(){
-          const copyidsvg = document.querySelector(`path[d='M20 7h-5V4c0-1.1-.9-2-2-2h-2c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2m-9 0V4h2v5h-2zm9 13H4V9h5c0 1.1.9 2 2 2h2c1.1 0 2-.9 2-2h5z']`)
-          if(copyidsvg){
-              await copyidsvg.parentElement.parentElement.click()
+          const copyidbutton = [...document.querySelectorAll(`a:has(>div>span)`)].find(e=>e.querySelector('span').textContent=='badge')
+          if(copyidbutton){
+              await copyidbutton.click()
               navigator.clipboard.readText().then(async text=>{
                   if(!fetchedUsers.find(user=>user._id==text)){
                       const user = await apiReq(`https://stoat.chat/api/users/${text}`,'GET')
@@ -84,48 +84,188 @@
                   }
                   const user = fetchedUsers.find(user=>user._id==text)
 
-                  const style = document.createElement('div')
-                  style.style='opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
+                  const overlay = document.createElement('div')
+                  Object.assign(overlay.style,{
+                    background: 'rgba(0, 0, 0, 0.6);',
+                    maxHeight: '100%',
+                    right: '0rem',
+                    left: '0rem',
+                    top: '0rem',
+                    bottom: '0rem',
+                    paddingBottom: '0px',
+                    zIndex: '998',
+                    position: 'fixed',
+                    animationDuration: '.1s',
+                    animationName: 'scrimFadeIn',
+                    zIndex: '998',
+                    animationFillMode: 'forwards',
+                    position: 'fixed',
+                    transition: 'var(--transitions-medium) all'
+                  })
+
+                  const dialogparent = document.createElement('div')
+                  Object.assign(dialogparent.style,{
+                    height: '100%',
+                    width: '100%',
+                    overflowY: 'auto',
+                    pointerEvents: 'all',
+                    display: 'grid',
+                    webkitUserSelect: 'none',
+                    userSelect: 'none',
+                    placeItems: 'center',
+                    padding: '80px'
+                  })
+
+                  const dialog = document.createElement('div')
+                  dialog.className = 'dialog'
+                  dialog.style = 'opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
                         
                   const popup = document.createElement('div')
-                  popup.className='p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)'
+                  Object.assign(popup.style,{
+                    maxWidth: '560px',
+                    minWidth: '280px',
+                    color: 'var(--md-sys-color-on-surface)',
+                    flexDirection: 'column',
+                    display: 'flex',
+                    borderRadius: '28px',
+                    padding: '24px',
+                    background: 'var(--md-sys-color-surface-container-high)'
+                  })
 
                   const span = document.createElement('span')
-                  span.className='lh_2rem fs_1.5rem ls_0 fw_400 mbe_16px'
+                  Object.assign(span.style,{
+                    fontSize: '1.5rem',
+                    lineHeight: '2rem',
+                    letterSpacing: '0px',
+                    fontWeight: '400',
+                    marginBlockEnd: '16px'
+                  })
                   span.textContent='Timeout Member'
 
                   const div = document.createElement('div')
-                  div.className='c_var(--md-sys-color-on-surface-variant) lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
+                  Object.assign(div.style,{
+                    letterSpacing: '0.015625rem',
+                    lineHeight: '1.25rem',
+                    fontWeight: '400',
+                    overflowWrap: 'anywhere',
+                    fontSize: '0.875rem',
+                    color: 'var(--md-sys-color-on-surface-variant)'
+                  })
 
-                  const divchild = document.createElement('div')
-                  divchild.className='d_flex flex-d_column flex-g_initial m_0 ai_center jc_initial gap_var(--gap-md)'
+                  const form = document.createElement('form')
+
+                  const formchild = document.createElement('div')
+                  Object.assign(formchild.style,{
+                    justifyContent: 'initial',
+                    alignItems: 'center',
+                    flexDirection: 'column',
+                    display: 'flex',
+                    gap: 'var(--gap-md)',
+                    margin: '0rem'
+                  })
 
                   const svg = document.createElement('svg')
                   svg.setAttribute('viewBox','0 0 32 32')
                   svg.className='flex-sh_0 us_none cursor_inherit'
-                  svg.style='width: 64px; height: 64px;'
-                  svg.innerHTML=`<g><foreignObject x="0" y="0" width="32" height="32" class="trs_var(--transitions-fast)_filter"><div class="ov_hidden w_100% h_100% bdr_var(--borderRadius-circle)"><img src="https://cdn.stoatusercontent.com/avatars/${user.avatar._id}/original" draggable="false" class="w_100% h_100% obj-f_cover"></div></foreignObject></g>`
+                  Object.assign(svg.style,{
+                    width: '64px',
+                    height: '64px',
+                    cursor: 'inherit',
+                    flexShrink: '0',
+                    webkitUserSelect: 'none',
+                    userSelect: 'none',
+
+                  })
+                  formchild.appendChild(svg)
+                 
+                  const g = document.createElement('g')
+                  svg.appendChild(g)
+
+                  const foreignObject = document.createElement('foreignObject')
+                  foreignObject.setAttribute('x','0')
+                  foreignObject.setAttribute('y','0')
+                  foreignObject.setAttribute('width','32')
+                  foreignObject.setAttribute('height','32')
+                  foreignObject.style = 'transition: var(--transitions-fast) filter;'
+                  g.appendChild(foreignObject)
+
+                  const imgparent = document.createElement('div')
+                  Object.assign(imgparent.style,{
+                    height: '100%',
+                    width: '100%',
+                    borderRadius: 'var(--borderRadius-circle)',
+                    overflow: 'hidden'
+                  })
+                  foreignObject.appendChild(imgparent)
+
+                  const img = document.createElement('img')
+                  img.setAttribute('draggable','false')
+                  Object.assign(img.style,{
+                    height: '100%',
+                    width: '100%',
+                    objectFit: 'cover'
+                  })
+                  img.src = `https://cdn.stoatusercontent.com/avatars/${user.avatar._id}/original`
+                  imgparent.appendChild(img)
 
                   const span2 = document.createElement('span')
-                  span2.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400'
+                  Object.assign(span2.style,{
+                    letterSpacing: '0.015625rem',
+                    lineHeight: '1.25rem',
+                    fontWeight: '400',
+                    overflowWrap: 'anywhere',
+                    fontSize: '0.875rem'
+                  })
                   span2.textContent=`You are about to timeout ${user.username}`
+                  formchild.appendChild(span2)
 
-                  const durationbutton = document.createElement('button')
-                  durationbutton.className='d_flex ai_center jc_space-between w_100% min-h_56px p_8px_16px bdr_4px_4px_0_0 bd_none bd-b_1px_solid_var(--md-sys-color-outline) bg_var(--md-sys-color-surface-container-highest) c_var(--md-sys-color-on-surface) cursor_pointer pos_relative ta_left fs_16px ff_inherit trs_border-color_0.2s [&:hover]:bd-b-c_var(--md-sys-color-on-surface) [&:focus]:ring_none [&:focus]:bd-b-c_var(--md-sys-color-primary) [&:focus]:bd-b-w_2px'
+                  const durationbutton = document.createElement('div')
+                  Object.assign(durationbutton.style,{
+                    minHeight: '56px',
+                    width: '100%',
+                    fontSize: '16px',
+                    textAlign: 'left',
+                    fontFamily: 'inherit',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    color: 'var(--md-sys-color-on-surface)',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    display: 'flex',
+                    transition: 'border-color 0.2s',
+                    bordoerBottom: '1px solid var(--md-sys-color-outline)',
+                    borderRadius: '4px 4px 0px 0px',
+                    padding: '8px 16px',
+                    background: 'var(--md-sys-color-surface-container-highest)',
+                    border: 'none'
+                  })
+                  formchild.appendChild(durationbutton)
 
                   const durationlabel = document.createElement('label')
-                  durationlabel.className='pos_absolute trs_ease-in-out_0.2s left_16px c_var(--md-sys-color-on-surface-variant) pointer-events_none trf-o_left_top top_8px fs_12px trf_translateY(0)'
+                  Object.assign(durationlabel.style,{
+                    top: '8px',
+                    left: '16px',
+                    transform: 'translateY(0px)',
+                    fontSize: '12px',
+                    transformOrigin: 'left top',
+                    position: 'absolute',
+                    pointerEvents: 'none',
+                    color: 'var(--md-sys-color-on-surface-variant)',
+                    transition: '0.2s ease-in-out'
+                  });
                   durationlabel.textContent='Duration'
                   durationbutton.appendChild(durationlabel)
 
                   const durationspan = document.createElement('span')
-                  durationspan.className='flex_1 ov_hidden tov_ellipsis white-space_nowrap pt_16px'
+                  Object.assign(durationspan.style,{
+                    paddingTop: '16px',
+                    textOverflow: 'ellipsis',
+                    whiteSpace: 'nowrap',
+                    overflow: 'hidden',
+                    flex: '1 1 0%'
+                  })
                   durationspan.textContent='1 hour'
                   durationbutton.appendChild(durationspan)
-
-                  const durationbuttonmdripple = document.createElement('md-ripple')
-                  durationbuttonmdripple.ariaHidden=true
-                  durationbutton.appendChild(durationbuttonmdripple)
 
                   const durationbuttonspan = document.createElement('span')
                   durationbuttonspan.className='material-symbols-outlined fs_inherit fw_undefined!'
@@ -143,7 +283,18 @@
                     style.style=`position: absolute; top: ${y+60}px; left: ${x}px; z-index: 1000; opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY)); min-width: 266px;`
 
                     const selectmenu = document.createElement('div')
-                    selectmenu.className='d_flex flex-d_column max-h_40vh ov-y_auto scr-bar-w_none bdr_4px bg_var(--md-sys-color-surface-container) c_var(--md-sys-color-on-surface) bx-sh_0_2px_8px_rgba(0,_0,_0,_0.2) p_8px_0 [&_mdui-menu-item]:cursor_pointer [&_mdui-menu-item]:p_0px_1.5rem [&_mdui-menu-item]:trs_background_0.2s [&_mdui-menu-item]:h_3rem [&_mdui-menu-item]:[&:hover]:bg_color-mix(in_srgb,_var(--md-sys-color-on-surface)_8%,_transparent)'
+                    Object.assign(selectmenu.style,{
+                      maxHeight: '40vh',
+                      overflowY: 'auto',
+                      boxShadow: '0 2px 8px #0003',
+                      scrollbarWidth: 'none',
+                      color: 'var(--md-sys-color-on-surface)',
+                      flexDirection: 'column',
+                      display: 'flex',
+                      borderRadius: '4px',
+                      padding: '8px 0',
+                      background: 'var(--md-sys-color-surface-container)'
+                    })
 
                     const oneminute = document.createElement('mdui-menu-item')
                     oneminute.value=60000
@@ -242,7 +393,7 @@
                     }
                   }
 
-                  durationbutton.onclick = function(){
+                  durationbutton.$$click = function(){
                       toggleMenu()
                   }
 
@@ -264,17 +415,65 @@
                         }, 3000);
                       }
                   }
+                  formchild.appendChild(custom)
 
                   const buttons = document.createElement('div')
-                  buttons.className='gap_8px d_flex jc_end mbs_24px'
+                  Object.assign(buttons.style,{
+                    marginBlockStart: '24px',
+                    justifyContent: 'end',
+                    display: 'flex',
+                    gap: '8px'
+                  })
 
                   const cancelbutton = document.createElement('button')
-                  cancelbutton.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 pos_relative px_16px flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-medium)_all c_var(--color) fill_var(--color) h_40px bdr_var(--borderRadius-full) --color_var(--md-sys-color-primary)'
+                  Object.assign(cancelbutton.style,{
+                    height:' 40px',
+                    letterSpacing: '0.015625rem',
+                    lineHeight: '1.25rem',
+                    fontWeight: '400',
+                    fontFamily: 'inherit',
+                    overflowWrap: 'anywhere',
+                    fontSize: '0.875rem',
+                    fill: 'var(--md-sys-color-primary)',
+                    color: 'var(--md-sys-color-primary)',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    flexShrink: '0',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    transition: 'var(--transitions-medium) all',
+                    borderRadius: 'var(--borderRadius-full)',
+                    paddingInline: '16px',
+                    border: 'none' 
+                  })
                   cancelbutton.innerHTML=`<md-ripple aria-hidden="true"></md-ripple>Cancel`
+                  buttons.appendChild(cancelbutton)
                 
                   const timeoutbutton = document.createElement('button')
-                  timeoutbutton.className='lh_1.25rem fs_0.875rem ls_0.015625rem fw_400 pos_relative px_16px flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-medium)_all c_var(--color) fill_var(--color) h_40px bdr_var(--borderRadius-full) --color_var(--md-sys-color-primary)'
+                  Object.assign(timeoutbutton.style,{
+                    height:' 40px',
+                    letterSpacing: '0.015625rem',
+                    lineHeight: '1.25rem',
+                    fontWeight: '400',
+                    fontFamily: 'inherit',
+                    overflowWrap: 'anywhere',
+                    fontSize: '0.875rem',
+                    fill: 'var(--md-sys-color-primary)',
+                    color: 'var(--md-sys-color-primary)',
+                    position: 'relative',
+                    cursor: 'pointer',
+                    flexShrink: '0',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    display: 'flex',
+                    transition: 'var(--transitions-medium) all',
+                    borderRadius: 'var(--borderRadius-full)',
+                    paddingInline: '16px',
+                    border: 'none' 
+                  })
                   timeoutbutton.innerHTML=`<md-ripple aria-hidden="true"></md-ripple>Timeout`
+                  buttons.appendChild(timeoutbutton)
                   timeoutbutton.onclick = async function(){
                     if(document.getElementById('customtimeoutduration').value){
                       value = new Date(Date.now()+Number(document.getElementById('customtimeoutduration').value*1000)).toISOString()
@@ -309,43 +508,32 @@
                     cancelbutton.click()
                   }
 
-                  style.appendChild(popup)
+                  overlay.appendChild(dialogparent)
+                  dialogparent.appendChild(dialog)
+                  dialog.appendChild(popup)
                   popup.appendChild(span)
                   popup.appendChild(div)
-                  div.appendChild(divchild)
-                  divchild.appendChild(svg)
-                  divchild.appendChild(span2)
-                  divchild.appendChild(durationbutton)
-                  divchild.appendChild(custom)
+                  div.appendChild(form)
+                  form.appendChild(formchild)
                   popup.appendChild(buttons)
-                  buttons.appendChild(cancelbutton)
-                  buttons.appendChild(timeoutbutton)
 
                   const floating = document.getElementById('floating')
-                  const thing = document.createElement('div')
-                  thing.className='top_0 left_0 right_0 bottom_0 pos_fixed z_100 max-h_100% d_grid us_none place-items_center pointer-events_all anim-n_scrimFadeIn anim-dur_0.1s anim-fm_forwards trs_var(--transitions-medium)_all p_80px ov-y_auto --background_rgba(0,_0,_0,_0.6)'
-                  thing.style='--background: rgba(0, 0, 0, 0.6);'
-                  floating.lastChild.appendChild(thing)
-                  thing.appendChild(style)
-                  thing.onclick = function(e){
-                    if(e.target==thing){
+                  floating.lastChild.appendChild(overlay)
+
+                  overlay.onclick = function(e){
+                    if(e.target==overlay||e.target==dialogparent){
                       if(menuopen) toggleMenu()
-                      thing.remove()
+                      overlay.remove()
                     }
                   }
 
                   cancelbutton.onclick = function(){
-                    thing.remove()
+                    overlay.remove()
                   }
               })
           }
       }
-
-      if(kickmembersvg){
-          contextMenu.insertBefore(timeoutButton,kickmembersvg.parentElement.parentElement)
-      }else{
-          contextMenu.insertBefore(timeoutButton,banmembersvg.parentElement.parentElement)
-      }
+      contextMenu.insertBefore(timeoutButton,targetbutton.nextSibling)
     }
   }
 
