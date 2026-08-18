@@ -1,8 +1,7 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterStatuses.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
-
 
 (function () {
   if (window.__BETTER_STATUSES__) return;
@@ -13,7 +12,18 @@
   async function createImage(div,emoji){
     if(invalidemojis.includes(emoji)) return;
     const img = document.createElement('img')
-    img.className=`obj-f_contain d_inline-block w_var(--emoji-size) h_var(--emoji-size) m_0_0.05em_0_0.1em va_-0.3em c_transparent [&:before]:content_'_' [&:before]:d_block [&:before]:pos_absolute [&:before]:h_50px [&:before]:w_50px [&:before]:bg-i_url(ishere.jpg) emoji`
+    Object.assign(img.style,{
+      textOverflow: 'ellipsis',
+      whiteSpace: 'nowrap',
+      overflow: 'hidden',
+      height: 'var(--emoji-size)',
+      width: 'var(--emoji-size)',
+      verticalAlign: '-.3em',
+      display: 'inline-block',
+      color: 'rgb(0 0 0/0)',
+      objectFit: 'contain',
+      margin: '0 .05em 0 .1em'
+    })
 
     if(!validemojis.includes(emoji)){
         const res = await fetch(`https://cdn.stoatusercontent.com/emojis/${emoji}`)
@@ -40,16 +50,15 @@
   }
 
   function addReplyButton(statuscard){
-    const username = statuscard.parentElement.firstChild.lastChild.lastChild.lastChild.textContent
+    const username = document.querySelector(`div[aria-label='Click to copy username']`).textContent
     const statusheader = statuscard.firstChild
     const clone = statusheader.cloneNode(true)
 
     const newheader = document.createElement('div')
 
     const replybutton = document.createElement('button')
-    replybutton.className='ov-wrap_anywhere lh_1.25rem fs_0.875rem ls_0.015625rem fw_500 pos_relative asp_1/1 flex-sh_0 d_flex ai_center jc_center ff_inherit cursor_pointer bd_none trs_var(--transitions-fast)_all c_var(--colour) fill_var(--colour) --colour_var(--md-sys-color-on-surface-variant) bdr_var(--borderRadius-full) h_40px px_8px'
     replybutton.id='statusreplybutton'
-    replybutton.style='position: absolute; top: 4px; right: 4px;'
+    replybutton.style='position: absolute; top: 4px; right: 4px; cursor: pointer;'
 
     const mdripple = document.createElement('md-ripple')
     mdripple.ariaHidden=true
@@ -64,18 +73,60 @@
 
     replybutton.onclick = function(){
       const overlay = document.createElement('div')
-      overlay.className='top_0 left_0 right_0 bottom_0 pos_fixed z_998 max-h_100% d_grid us_none place-items_center pointer-events_all anim-n_scrimFadeIn anim-dur_0.1s anim-fm_forwards trs_var(--transitions-medium)_all p_80px phone:p_30px ov-y_auto --background_rgba(0,_0,_0,_0.6) dialog_scrim'
-      overlay.style='--background: rgba(0, 0, 0, 0.6);'
+      Object.assign(overlay.style,{
+        background: 'rgba(0, 0, 0, 0.6);',
+        maxHeight: '100%',
+        right: '0rem',
+        left: '0rem',
+        top: '0rem',
+        bottom: '0rem',
+        paddingBottom: '0px',
+        zIndex: '998',
+        position: 'fixed',
+        animationDuration: '.1s',
+        animationName: 'scrimFadeIn',
+        animationFillMode: 'forwards',
+        position: 'fixed',
+        transition: 'var(--transitions-medium) all'
+      })
 
-      const overlay2 = document.createElement('div')
-      overlay2.className='dialog'
+      const dialogparent = document.createElement('div')
+      Object.assign(dialogparent.style,{
+        height: '100%',
+        width: '100%',
+        overflowY: 'auto',
+        pointerEvents: 'all',
+        display: 'grid',
+        webkitUserSelect: 'none',
+        userSelect: 'none',
+        placeItems: 'center',
+        padding: '80px'
+      })
 
+      const dialog = document.createElement('div')
+      dialog.className = 'dialog'
+      dialog.style = 'opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
 
       const replydialog = document.createElement('div')
-      replydialog.style='padding: 24px; min-width: 300px; max-width: 460px; width: 100%; border-radius: 28px; display: flex; flex-direction: column; color: var(--md-sys-color-on-surface); background: var(--md-sys-color-surface-container-high); box-sizing: border-box; gap: var(--gap-md, 12px);'
+      Object.assign(replydialog.style,{
+        maxWidth: '560px',
+        minWidth: '280px',
+        color: 'var(--md-sys-color-on-surface)',
+        flexDirection: 'column',
+        display: 'flex',
+        borderRadius: '28px',
+        padding: '24px',
+        background: 'var(--md-sys-color-surface-container-high)'
+      })
 
       const span = document.createElement('span')
-      span.style='line-height: 2rem; font-size: 1.5rem; letter-spacing: 0px; font-weight: 400; color: var(--md-sys-color-on-surface);'
+      Object.assign(span.style,{
+        fontSize: '1.5rem',
+        lineHeight: '2rem',
+        letterSpacing: '0px',
+        fontWeight: '400',
+        marginBlockEnd: '16px'
+      })
       span.textContent=`Reply to ${username}'s status`
 
       const div = document.createElement('div')
@@ -147,8 +198,8 @@
       div.appendChild(input)
       replydialog.appendChild(div)
       replydialog.appendChild(buttonsparent)
-      overlay.appendChild(overlay2)
-      overlay2.appendChild(replydialog)
+      overlay.appendChild(dialogparent)
+      dialogparent.appendChild(replydialog)
 
       const floating = document.getElementById('floating')
       floating.lastChild.appendChild(overlay)
@@ -162,68 +213,15 @@
     }
   }
 
-  //ty ava for taking the time to make this
-  function enforceStatusLabel() {
-      const cards = document.querySelectorAll('[class*="asp_1"]');
-      for (const card of cards) {
-
-          if (!card.querySelector("span.us_text")) continue;
-          const header = card.querySelector(":scope > span.fw_550");
-          if (!header) continue;
-
-          if (header.textContent === "Status") continue;
-
-
-          if (!/[^\x00-\x7F]/.test(header.textContent)) continue;
-          header.textContent = "Status";
-      }
-  }
-
   async function betterStatuses() {
-      enforceStatusLabel()
-      const userpopup = document.getElementsByClassName('will-change_transform scr-bar-w_none [&::-webkit-scrollbar]:d_none ov-y_scroll c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high) bx-sh_0_0_3px_var(--md-sys-color-shadow) w_340px h_400px bdr_var(--borderRadius-xl)').item(0)
-      const biguserpopup = document.getElementsByClassName('p_24px min-w_280px max-w_560px bdr_28px d_flex flex-d_column c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-high)').item(0)
-
-      if(userpopup){
-        const statuscard = [...userpopup.firstChild.children].find(e=>
-            e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
-            &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
-            &&[...e.querySelectorAll(`span`)].length==2
-            &&!e.querySelector(`img[aria-label]`)
-            &&e.firstChild.textContent=='Status'
-        )
-          
-        if(!statuscard) return;
-        const statuselement = statuscard.lastChild
-        const status = statuselement.textContent
-
-        const regex = /:[A-Z0-9]{26}:/;
-        const div = document.createElement('div')
-        statuselement.parentElement.appendChild(div)
-        statuselement.remove()
-
-        for(const word of status.split(' ')){
-          if(regex.test(word)){
-            const emoji = regex.exec(word)[0].replaceAll(':','')
-            await createImage(div,emoji)
-          }else{
-            createSpan(div,word)
-          }
-        }
-
-        addReplyButton(statuscard)
-      }
-
-      if(biguserpopup){
-        enforceStatusLabel()
-        const statuscard = [...biguserpopup.firstChild.firstChild.children].find(e=>
-            e.className=='pos_relative min-w_0 h_100% w_100% us_none c_var(--md-sys-color-on-surface) bg_var(--md-sys-color-surface-container-low) p_var(--gap-lg) bdr_var(--borderRadius-lg) d_flex gap_var(--gap-sm) flex-d_column ov_hidden asp_1/1'
-            &&!e.querySelector(`div[class='d_flex flex-d_row flex-g_initial flex-wrap_initial gap_var(--gap-md) ai_center jc_initial']`)
-            &&[...e.querySelectorAll(`span`)].length==2
-            &&!e.querySelector(`img[aria-label]`)
-            &&e.firstChild.textContent=='Status'
-        )
-        if(!statuscard) return;
+      const copyusername = document.querySelector(`div[aria-label='Click to copy username']`)
+      if(!copyusername) return;
+      const userpopup = copyusername.offsetParent.offsetParent
+      const joinedcard = [...userpopup.querySelectorAll(`div`)].find(e=>e.children[1]?.firstChild?.textContent=='Stoat')
+      if(joinedcard&&(!joinedcard.previousSibling?.querySelector('div')||joinedcard.previousSibling?.querySelector(`[aria-label]`))&&!joinedcard.previousSibling?.querySelector('button')){
+        let statuscard = joinedcard.previousSibling
+        if(statuscard.querySelector(`[aria-label]`)) statuscard = statuscard.previousSibling
+        if(!statuscard||statuscard.querySelector('md-ripple')) return;
         const statuselement = statuscard.lastChild
         const status = statuselement.textContent
 
