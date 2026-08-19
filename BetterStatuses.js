@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/BetterStatuses.js
-  @VERSION: 1.1
+  @VERSION: 1.2
 */
 
 (function () {
@@ -72,40 +72,29 @@
     replybutton.appendChild(span)
 
     replybutton.onclick = function(){
-      const overlay = document.createElement('div')
-      Object.assign(overlay.style,{
-        background: 'rgba(0, 0, 0, 0.6);',
-        maxHeight: '100%',
-        right: '0rem',
-        left: '0rem',
-        top: '0rem',
-        bottom: '0rem',
-        paddingBottom: '0px',
-        zIndex: '998',
-        position: 'fixed',
-        animationDuration: '.1s',
-        animationName: 'scrimFadeIn',
-        animationFillMode: 'forwards',
-        position: 'fixed',
-        transition: 'var(--transitions-medium) all'
-      })
+      const backdrop = document.createElement('div')
+      backdrop.style.cssText = `
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      position: fixed;
+      z-index: 999982;
+      max-height: 100%;
+      display: grid;
+      user-select: none;
+      place-items: center;
+      pointer-events: all;
+      padding: 80px;
+      overflow-y: auto;
+      background: rgba(0, 0, 0, 0.6);`;
 
-      const dialogparent = document.createElement('div')
-      Object.assign(dialogparent.style,{
-        height: '100%',
-        width: '100%',
-        overflowY: 'auto',
-        pointerEvents: 'all',
-        display: 'grid',
-        webkitUserSelect: 'none',
-        userSelect: 'none',
-        placeItems: 'center',
-        padding: '80px'
-      })
+      backdrop.onclick = function(e){
+        if(e.target==backdrop) backdrop.remove()
+      }
 
-      const dialog = document.createElement('div')
-      dialog.className = 'dialog'
-      dialog.style = 'opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
+      const opacity1 = document.createElement('div')
+      opacity1.style='opacity: 1;'
 
       const replydialog = document.createElement('div')
       Object.assign(replydialog.style,{
@@ -154,7 +143,7 @@
       cancelbutton.textContent='Cancel'
 
       cancelbutton.onclick = function(){
-        overlay.remove()
+        backdrop.remove()
       }
 
       const sendbutton = document.createElement('button')
@@ -198,11 +187,10 @@
       div.appendChild(input)
       replydialog.appendChild(div)
       replydialog.appendChild(buttonsparent)
-      overlay.appendChild(dialogparent)
-      dialogparent.appendChild(replydialog)
+      backdrop.appendChild(opacity1)
+      opacity1.appendChild(replydialog)
 
-      const floating = document.getElementById('floating')
-      floating.lastChild.appendChild(overlay)
+      document.body.appendChild(backdrop)
     }
 
     newheader.appendChild(clone)
