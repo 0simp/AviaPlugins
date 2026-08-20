@@ -1,6 +1,6 @@
 /*
   @UPDATEURL: https://codeberg.org/0simp/AviaPlugins/raw/branch/main/timeout.js
-  @VERSION: 1.0
+  @VERSION: 1.1
 */
 
 (function () {
@@ -84,41 +84,30 @@
                   }
                   const user = fetchedUsers.find(user=>user._id==text)
 
-                  const overlay = document.createElement('div')
-                  Object.assign(overlay.style,{
-                    background: 'rgba(0, 0, 0, 0.6);',
-                    maxHeight: '100%',
-                    right: '0rem',
-                    left: '0rem',
-                    top: '0rem',
-                    bottom: '0rem',
-                    paddingBottom: '0px',
-                    zIndex: '998',
-                    position: 'fixed',
-                    animationDuration: '.1s',
-                    animationName: 'scrimFadeIn',
-                    zIndex: '998',
-                    animationFillMode: 'forwards',
-                    position: 'fixed',
-                    transition: 'var(--transitions-medium) all'
-                  })
+                  const backdrop = document.createElement('div')
+                  backdrop.style.cssText = `
+                  top: 0;
+                  left: 0;
+                  right: 0;
+                  bottom: 0;
+                  position: fixed;
+                  z-index: 999982;
+                  max-height: 100%;
+                  display: grid;
+                  user-select: none;
+                  place-items: center;
+                  pointer-events: all;
+                  padding: 80px;
+                  overflow-y: auto;
+                  background: rgba(0, 0, 0, 0.6);`;
 
-                  const dialogparent = document.createElement('div')
-                  Object.assign(dialogparent.style,{
-                    height: '100%',
-                    width: '100%',
-                    overflowY: 'auto',
-                    pointerEvents: 'all',
-                    display: 'grid',
-                    webkitUserSelect: 'none',
-                    userSelect: 'none',
-                    placeItems: 'center',
-                    padding: '80px'
-                  })
+                  backdrop.onclick = function(e){
+                    if(e.target==backdrop) backdrop.remove()
+                  }
 
-                  const dialog = document.createElement('div')
-                  dialog.className = 'dialog'
-                  dialog.style = 'opacity: 1; --motion-translateY: 0px; transform: translateY(var(--motion-translateY));'
+                  const opacity1 = document.createElement('div')
+                  opacity1.style='opacity: 1;'
+                  backdrop.appendChild(opacity1)
                         
                   const popup = document.createElement('div')
                   Object.assign(popup.style,{
@@ -131,6 +120,7 @@
                     padding: '24px',
                     background: 'var(--md-sys-color-surface-container-high)'
                   })
+                  opacity1.appendChild(popup)
 
                   const span = document.createElement('span')
                   Object.assign(span.style,{
@@ -205,7 +195,11 @@
                     width: '100%',
                     objectFit: 'cover'
                   })
-                  img.src = `https://cdn.stoatusercontent.com/avatars/${user.avatar._id}/original`
+                  if(user.avatar){
+                    img.src = `https://cdn.stoatusercontent.com/avatars/${user.avatar._id}/original`
+                  }else{
+                    img.src = `https://stoat.chat/api/users/${text}/default_avatar`
+                  }
                   imgparent.appendChild(img)
 
                   const span2 = document.createElement('span')
@@ -382,12 +376,11 @@
                     selectmenu.appendChild(remove)
                     style.appendChild(selectmenu)
                     if(!menuopen){
-                      const floating = document.getElementById('floating')
-                      floating.lastChild.appendChild(style)
+                      opacity1.appendChild(style)
                       menuopen = true
                       durationbuttonspan.textContent='arrow_drop_up'
                     }else{
-                      floating.lastChild.lastChild.remove()
+                      opacity1.lastChild.remove()
                       menuopen = false
                       durationbuttonspan.textContent='arrow_drop_down'
                     }
@@ -508,27 +501,16 @@
                     cancelbutton.click()
                   }
 
-                  overlay.appendChild(dialogparent)
-                  dialogparent.appendChild(dialog)
-                  dialog.appendChild(popup)
                   popup.appendChild(span)
                   popup.appendChild(div)
                   div.appendChild(form)
                   form.appendChild(formchild)
                   popup.appendChild(buttons)
 
-                  const floating = document.getElementById('floating')
-                  floating.lastChild.appendChild(overlay)
-
-                  overlay.onclick = function(e){
-                    if(e.target==overlay||e.target==dialogparent){
-                      if(menuopen) toggleMenu()
-                      overlay.remove()
-                    }
-                  }
+                  document.body.appendChild(backdrop)
 
                   cancelbutton.onclick = function(){
-                    overlay.remove()
+                    backdrop.remove()
                   }
               })
           }
